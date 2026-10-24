@@ -26,7 +26,7 @@ export default function WritingCard({ post, variant = "standard" }) {
         <article className={`${styles.card} ${styles[variant] || ""}`}>
             <Link className={styles.cover} href={`/posts/${encodeURIComponent(post.slug)}`} tabIndex={-1} aria-hidden="true">
                 <Image
-                    src={post.img || "/images/library-reading-room.jpg"}
+                    src={post.img || "/images/hero image 2.jpg"}
                     alt=""
                     fill
                     sizes={variant === "feature" ? "(max-width: 760px) 100vw, 55vw" : "(max-width: 760px) 100vw, 33vw"}

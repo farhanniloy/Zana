@@ -1,5 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
+import { ClosingNote } from "@/components/footer/Footer";
 import prisma from "@/utils/connect";
 import Featured from "@/components/featured/Featured";
 import WritingCard from "@/components/writing/WritingCard";
@@ -97,11 +98,11 @@ export default async function HomeEditorial() {
                         <Image src="/images/notebook 6.jpg" alt="A coffee cup beside handwritten journal pages" fill sizes="(max-width: 760px) 50vw, 25vw" />
                     </div>
                     <div className={styles.notebookImage}>
-                        <Image src="/images/notebook 7.jpg" alt="A pile of aged handwritten pages on a dark desk" fill sizes="(max-width: 760px) 50vw, 25vw" />
+                        <Image src="/images/notebook 7.jpg" alt="An open handwritten journal on a dark wooden desk" fill sizes="(max-width: 760px) 50vw, 25vw" />
                     </div>
                 </div>
                 <div className={styles.notebookRoom}>
-                    <Image src="/images/hero image 2.jpg" alt="An old library writing desk lit by candles" fill sizes="(max-width: 760px) 100vw, 40vw" />
+                    <Image src="/images/notebook 3.jpg" alt="A page from a handwritten notebook" fill sizes="(max-width: 760px) 100vw, 40vw" />
                 </div>
                 <div className={styles.notebookEntries}>
                     {notebook.length > 0 ? (
@@ -139,6 +140,7 @@ export default async function HomeEditorial() {
                     <Link href="/about" className={styles.textLink}>More about me <span aria-hidden="true">→</span></Link>
                 </div>
             </section>
+            <ClosingNote />
         </main>
     );
 }

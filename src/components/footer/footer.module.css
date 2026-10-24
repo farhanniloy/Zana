@@ -10,13 +10,13 @@
 
 .closingNote {
     position: relative;
-    grid-column: 1 / -1;
     display: grid;
     gap: 8px;
     justify-items: center;
     align-content: center;
     box-sizing: border-box;
     min-height: 128px;
+    margin-top: 48px;
     padding: 34px 18px 30px;
     border-bottom: 1px solid rgba(151, 113, 70, .24);
     background:
@@ -96,10 +96,6 @@
         grid-column: 1 / -1;
     }
 
-    .closingNote {
-        grid-column: 1 / -1;
-    }
-
     .footerLinks,
     .socialLinks {
         justify-content: flex-start;
@@ -119,6 +115,7 @@
 
     .closingNote {
         min-height: 112px;
+        margin-top: 36px;
         padding: 26px 12px 22px;
     }
 
