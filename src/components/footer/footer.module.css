@@ -15,17 +15,19 @@
     justify-items: center;
     align-content: center;
     box-sizing: border-box;
-    min-height: 128px;
-    margin-top: 48px;
-    padding: 34px 18px 30px;
+    min-height: 144px;
+    margin-top: 50px;
+    padding: 38px 24px 34px;
+    border-top: 1px solid rgba(151, 113, 70, .24);
     border-bottom: 1px solid rgba(151, 113, 70, .24);
     background:
-        linear-gradient(90deg, rgba(35, 17, 8, .5), rgba(58, 32, 16, .36) 50%, rgba(32, 15, 7, .52)),
+        linear-gradient(180deg, #1c140e 0%, rgba(28, 20, 14, .12) 30%, rgba(28, 20, 14, .12) 70%, #1c140e 100%),
+        linear-gradient(90deg, rgba(28, 20, 14, .62), rgba(58, 38, 23, .28) 50%, rgba(28, 20, 14, .68)),
         url('/wood-planks.png'),
-        #24170f;
-    background-size: auto, cover, auto;
-    background-position: center, center 48%, center;
-    background-repeat: no-repeat, no-repeat, repeat;
+        #1c140e;
+    background-size: auto, auto, cover, auto;
+    background-position: center, center, center 48%, center;
+    background-repeat: no-repeat, no-repeat, no-repeat, repeat;
     color: var(--textColor);
     text-align: center;
 }
@@ -35,12 +37,12 @@
     z-index: 0;
     inset: 0;
     background:
-        repeating-linear-gradient(0deg, transparent 0 5px, rgba(17, 9, 5, .22) 6px, transparent 7px 12px),
-        repeating-linear-gradient(1deg, rgba(202, 154, 97, .08) 0 1px, transparent 2px 19px),
+        radial-gradient(ellipse at center, transparent 28%, rgba(17, 9, 5, .22) 100%),
+        repeating-linear-gradient(0deg, transparent 0 5px, rgba(17, 9, 5, .14) 6px, transparent 7px 12px),
         url('/grain.svg') repeat;
     background-size: auto, auto, 150px 150px;
     content: "";
-    opacity: .5;
+    opacity: .36;
     mix-blend-mode: soft-light;
     pointer-events: none;
 }
@@ -114,9 +116,9 @@
     }
 
     .closingNote {
-        min-height: 112px;
+        min-height: 124px;
         margin-top: 36px;
-        padding: 26px 12px 22px;
+        padding: 28px 14px 24px;
     }
 
     .footerLinks,

@@ -102,7 +102,7 @@ export default async function HomeEditorial() {
                     </div>
                 </div>
                 <div className={styles.notebookRoom}>
-                    <Image src="/images/notebook 3.jpg" alt="A page from a handwritten notebook" fill sizes="(max-width: 760px) 100vw, 40vw" />
+                    <Image src="/images/hero image 2.jpg" alt="A warmly lit reading room filled with books" fill sizes="(max-width: 760px) 100vw, 40vw" />
                 </div>
                 <div className={styles.notebookEntries}>
                     {notebook.length > 0 ? (
