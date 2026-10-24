@@ -39,8 +39,8 @@
 .links,
 .mobileLink {
     color: var(--textColor2);
-    font: 11px/1.3 var(--serif);
-    letter-spacing: .065em;
+    font: 500 13px/1.3 var(--serif);
+    letter-spacing: .075em;
     text-transform: uppercase;
     transition: color .18s ease;
 }

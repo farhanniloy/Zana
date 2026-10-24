@@ -102,37 +102,70 @@
     src: url('/fonts/source-sans-3-500.ttf') format('truetype');
 }
 
+@font-face {
+    font-family: 'Cormorant Garamond';
+    font-style: normal;
+    font-weight: 400;
+    font-display: swap;
+    src: url('/fonts/cormorant-garamond-400.ttf') format('truetype');
+}
+
+@font-face {
+    font-family: 'Cormorant Garamond';
+    font-style: normal;
+    font-weight: 500;
+    font-display: swap;
+    src: url('/fonts/cormorant-garamond-500.ttf') format('truetype');
+}
+
+@font-face {
+    font-family: 'Cormorant Garamond';
+    font-style: italic;
+    font-weight: 400;
+    font-display: swap;
+    src: url('/fonts/cormorant-garamond-italic-400.ttf') format('truetype');
+}
+
+@font-face {
+    font-family: 'Special Elite';
+    font-style: normal;
+    font-weight: 400;
+    font-display: swap;
+    src: url('/fonts/special-elite-400.ttf') format('truetype');
+}
+
 :root {
     color-scheme: dark;
-    --bg: #17130f;
-    --textColor: #e8dfce;
-    --newTextColor: #e8dfce;
-    --textColor2: #c8b79c;
-    --strtextColor: #b4976a;
-    --softBg: #211a14;
-    --softTextColor: #bba98d;
-    --surface: #211a14;
-    --surface-hover: #302319;
-    --surface-border: rgba(180, 151, 106, .25);
+    --bg: #1c140e;
+    --textColor: #e4d2b1;
+    --newTextColor: #e4d2b1;
+    --textColor2: #c5ac84;
+    --strtextColor: #9d7953;
+    --softBg: #1c140d;
+    --softTextColor: #a98a62;
+    --surface: #1c140d;
+    --surface-hover: #332317;
+    --surface-border: rgba(151, 113, 70, .3);
     --surface-shadow: rgba(0, 0, 0, .24);
-    --post-surface: #211a14;
-    --mobile-menu-bg: #1d1712;
-    --button-surface: #403025;
-    --button-hover: #59412f;
-    --button-text: #e8dfce;
-    --featured-button-bg: #403025;
-    --featured-button-text: #e8dfce;
-    --featured-button-border: rgba(180, 151, 106, .35);
-    --featured-button-hover-bg: #59412f;
-    --featured-button-hover-text: #f3ead9;
-    --coffee: #2a2018;
-    --walnut: #403025;
-    --leather: #6b4f3b;
-    --bronze: #8c6b4f;
-    --parchment: #b4976a;
-    --ivory: #e8dfce;
-    --serif: 'Iowan Old Style', 'Baskerville', 'Palatino Linotype', 'Book Antiqua', Georgia, serif;
+    --post-surface: #1c140d;
+    --mobile-menu-bg: #1c140d;
+    --button-surface: #49331f;
+    --button-hover: #60452b;
+    --button-text: #e4d2b1;
+    --featured-button-bg: #49331f;
+    --featured-button-text: #e4d2b1;
+    --featured-button-border: rgba(151, 113, 70, .38);
+    --featured-button-hover-bg: #60452b;
+    --featured-button-hover-text: #e4d2b1;
+    --coffee: #2c1f14;
+    --walnut: #49331f;
+    --leather: #60452b;
+    --bronze: #82603c;
+    --parchment: #b39870;
+    --ivory: #e4d2b1;
+    --serif: 'Cormorant Garamond', 'Iowan Old Style', 'Baskerville', 'Palatino Linotype', Georgia, serif;
     --sans: 'IBM Plex Sans', 'Source Sans 3', 'Segoe UI', sans-serif;
+    --typewriter: 'Special Elite', 'Courier New', monospace;
     --content-width: 1160px;
 }
 
@@ -181,7 +214,7 @@ body {
     overflow-x: hidden;
     background: var(--bg);
     color: var(--textColor);
-    font-family: var(--sans);
+    font-family: var(--serif);
     font-size: 16px;
     line-height: 1.65;
     transition: background-color .2s ease, color .2s ease;
@@ -226,9 +259,48 @@ img {
     position: relative;
     min-height: 100vh;
     background:
-        radial-gradient(ellipse at 50% 0%, rgba(107, 79, 59, .13), transparent 48%),
+        radial-gradient(ellipse at 18% 9%, rgba(104, 69, 39, .1), transparent 36%),
+        radial-gradient(ellipse at 82% 38%, rgba(77, 48, 28, .07), transparent 42%),
+        radial-gradient(ellipse at 50% 70%, transparent 30%, rgba(5, 3, 2, .4) 100%),
+        linear-gradient(115deg, rgba(52, 36, 24, .14), transparent 44%, rgba(5, 3, 2, .26)),
         var(--bg);
     color: var(--textColor);
+}
+
+.light .container {
+    background:
+        radial-gradient(ellipse at 18% 9%, rgba(118, 86, 61, .12), transparent 36%),
+        radial-gradient(ellipse at 82% 38%, rgba(74, 48, 32, .07), transparent 42%),
+        radial-gradient(ellipse at 50% 70%, transparent 30%, rgba(42, 32, 24, .1) 100%),
+        linear-gradient(115deg, rgba(255, 249, 237, .28), transparent 44%, rgba(74, 48, 32, .06)),
+        var(--bg);
+}
+
+.container::before {
+    position: fixed;
+    z-index: 1000;
+    inset: 0;
+    background: url('/grain.svg') repeat;
+    background-size: 220px 220px;
+    content: "";
+    opacity: .48;
+    pointer-events: none;
+    mix-blend-mode: soft-light;
+}
+
+.light .container::before {
+    opacity: .2;
+}
+
+@media (max-width: 640px) {
+    .container::before {
+        background-size: 280px 280px;
+        opacity: .27;
+    }
+
+    .light .container::before {
+        opacity: .14;
+    }
 }
 
 .complexBackground {

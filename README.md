@@ -21,12 +21,19 @@ or GitHub, remote media, and external links still require a network connection.
 
 ## Listening room
 
-The homepage player uses the public Spotify embed; it does not need API credentials.
-Set `NEXT_PUBLIC_SPOTIFY_FEATURED_URL` to a Spotify track, album, playlist, artist,
-episode, or show URL for the featured player and playlist page. For several records,
-set `NEXT_PUBLIC_SPOTIFY_PLAYLIST_URLS` to comma-separated Spotify URLs and optionally
-set matching labels in `NEXT_PUBLIC_SPOTIFY_PLAYLIST_TITLES`. Leave these unset to
-show the honest configuration fallback rather than a fake player.
+The homepage uses Spotify's official Embed iFrame API for its compact listening-room
+controls; the playlist page uses Spotify's full playlist embed. Both use Spotify's
+real player and need no API credentials. The homepage controls require a network
+connection to Spotify's Embed iFrame API and fall back to a visible official track
+embed if the API cannot load. The
+homepage defaults to the first track in the listening-room playlist. Set
+`NEXT_PUBLIC_SPOTIFY_FEATURED_TRACK_URL` to choose another track there, and optionally
+set `NEXT_PUBLIC_SPOTIFY_FEATURED_TRACK_TITLE` and
+`NEXT_PUBLIC_SPOTIFY_FEATURED_TRACK_ARTIST` for its displayed metadata. The legacy
+`NEXT_PUBLIC_SPOTIFY_FEATURED_URL` remains supported for track or playlist links.
+For one or more playlist embeds, set `NEXT_PUBLIC_SPOTIFY_PLAYLIST_URLS` to
+comma-separated playlist URLs and optionally set matching labels with
+`NEXT_PUBLIC_SPOTIFY_PLAYLIST_TITLES`.
 
 ## Getting Started
 
@@ -44,8 +51,13 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
 
 You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
 
-The journal's typography and illustrations are bundled locally in `public/`, so the
+The journal's typography and images are bundled locally in `public/`, so the
 reading experience does not depend on a third-party font or image service.
+The supplied journal photographs live in `public/images/`; the local preview
+seed uses those same assets for its writing covers. Cormorant Garamond and
+Special Elite are self-hosted from Google Fonts and distributed under their
+respective open font licenses. Review the original image licenses and credits
+before redistributing the bundled photographs outside this project.
 
 ## Learn More
 

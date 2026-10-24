@@ -1,12 +1,18 @@
 import Image from "next/image";
 import Link from "next/link";
+import { FaFacebookF, FaGithub, FaLinkedinIn, FaXTwitter } from "react-icons/fa6";
 import prisma from "@/utils/connect";
 import Featured from "@/components/featured/Featured";
 import WritingCard from "@/components/writing/WritingCard";
-import SpotifyEmbed from "@/components/spotify/SpotifyEmbed";
+import SpotifyCompactPlayer from "@/components/spotify/SpotifyCompactPlayer";
+import {
+    getFeaturedSpotifyTrackMetadata,
+    getFeaturedSpotifyTrackUrl,
+} from "@/utils/spotifyConfig";
 import styles from "./homeEditorial.module.css";
 
-const featuredPlaylist = process.env.NEXT_PUBLIC_SPOTIFY_FEATURED_URL || "";
+const featuredTrack = getFeaturedSpotifyTrackUrl();
+const featuredTrackMetadata = getFeaturedSpotifyTrackMetadata(featuredTrack);
 
 const getWriting = () =>
     prisma.post.findMany({
@@ -17,7 +23,7 @@ const getWriting = () =>
                 { categories: { some: { categorySlug: "notebook" } } },
             ],
         },
-        take: 3,
+        take: 6,
         orderBy: { createdAt: "desc" },
         include: {
             categories: {
@@ -45,59 +51,60 @@ const formatDate = (date) =>
 
 export default async function HomeEditorial() {
     const [writings, notebook] = await Promise.all([getWriting(), getNotebook()]);
-    const [featured, ...recentWritings] = writings;
 
     return (
         <main className={styles.home}>
             <Featured />
 
             <section className={styles.listening} aria-labelledby="listening-title">
-                <div className={styles.listeningIntro}>
-                    <span className={styles.sectionIndex}>01 / THE LISTENING ROOM</span>
-                    <h2 id="listening-title">Now playing</h2>
-                    <p>A little music for the pages that take their time.</p>
-                    <Link href="/playlist" className={styles.textLink}>Visit the playlist shelf <span aria-hidden="true">→</span></Link>
-                </div>
-                <div className={styles.player}>
-                    <SpotifyEmbed url={featuredPlaylist} title="Featured Spotify listening room" compact />
-                </div>
+                <SpotifyCompactPlayer
+                    url={featuredTrack}
+                    title={`Featured Spotify track: ${featuredTrackMetadata.title}`}
+                    metadata={featuredTrackMetadata}
+                />
             </section>
 
             <section className={styles.section} aria-labelledby="writings-title">
                 <div className={styles.sectionHeading}>
                     <div>
-                        <span className={styles.sectionIndex}>02 / THE WRITING DESK</span>
+                        <span className={styles.sectionIndex}><span aria-hidden="true">+</span> WRITINGS</span>
                         <h2 id="writings-title">Writings</h2>
                     </div>
                     <Link href="/blog" className={styles.textLink}>All writings <span aria-hidden="true">→</span></Link>
                 </div>
-                {featured ? (
-                    <>
-                        <WritingCard post={featured} variant="feature" />
-                        {recentWritings.length > 0 && (
-                            <div className={styles.writingGrid}>
-                                {recentWritings.map((post) => <WritingCard post={post} key={post.id} />)}
-                            </div>
-                        )}
-                    </>
+                {writings.length > 0 ? (
+                    <div className={styles.writingGrid}>
+                        {writings.map((post) => <WritingCard post={post} variant="home" key={post.id} />)}
+                    </div>
                 ) : (
                     <p className={styles.emptyState}>The desk is quiet for now. New writing will find its place here.</p>
                 )}
             </section>
 
             <section className={styles.notebook} aria-labelledby="notebook-title">
-                <div className={styles.notebookArt}>
-                    <Image
-                        src="/reading-room.svg"
-                        alt="An illustrated lamplit reading room with an open notebook"
-                        fill
-                        sizes="(max-width: 760px) 100vw, 50vw"
-                    />
-                </div>
-                <div className={styles.notebookCopy}>
-                    <span className={styles.sectionIndex}>03 / LOOSE PAGES</span>
+                <div className={styles.notebookIntroBlock}>
+                    <span className={styles.sectionIndex}><span aria-hidden="true">+</span> NOTEBOOK</span>
                     <h2 id="notebook-title">The notebook</h2>
-                    <p className={styles.notebookIntro}>Small observations, unfinished thoughts, and things worth keeping close.</p>
+                    <p className={styles.notebookIntro}>A collection of thoughts, quotes, and little reminders to stay soft.</p>
+                </div>
+                <div className={styles.notebookCollage} aria-label="Reading and writing photographs">
+                    <div className={styles.notebookImage}>
+                        <Image src="/images/notebook 1.jpg" alt="A collection of handwritten journal pages and sketches" fill sizes="(max-width: 760px) 50vw, 25vw" />
+                    </div>
+                    <div className={styles.notebookImage}>
+                        <Image src="/images/notebook 4.jpg" alt="A bundle of handwritten letters tied with string" fill sizes="(max-width: 760px) 50vw, 25vw" />
+                    </div>
+                    <div className={styles.notebookImage}>
+                        <Image src="/images/notebook 6.jpg" alt="A coffee cup beside handwritten journal pages" fill sizes="(max-width: 760px) 50vw, 25vw" />
+                    </div>
+                    <div className={styles.notebookImage}>
+                        <Image src="/images/notebook 7.jpg" alt="A pile of aged handwritten pages on a dark desk" fill sizes="(max-width: 760px) 50vw, 25vw" />
+                    </div>
+                </div>
+                <div className={styles.notebookRoom}>
+                    <Image src="/images/hero image 2.jpg" alt="An old library writing desk lit by candles" fill sizes="(max-width: 760px) 100vw, 40vw" />
+                </div>
+                <div className={styles.notebookEntries}>
                     {notebook.length > 0 ? (
                         <ul className={styles.noteList}>
                             {notebook.map((note) => (
@@ -124,13 +131,19 @@ export default async function HomeEditorial() {
                     />
                 </div>
                 <div className={styles.aboutCopy}>
-                    <span className={styles.sectionIndex}>04 / A NOTE ABOUT THE AUTHOR</span>
+                    <span className={styles.sectionIndex}><span aria-hidden="true">+</span> ABOUT</span>
                     <h2 id="about-title">Writer. Dreamer. Observer.</h2>
                     <p>
                         I work where artificial intelligence meets security research, and keep this
                         space for the ideas, questions, and small discoveries that gather along the way.
                     </p>
-                    <Link href="/about" className={styles.textLink}>A little more about me <span aria-hidden="true">→</span></Link>
+                    <nav className={styles.authorSocials} aria-label="Author social profiles">
+                        <a href="https://github.com/niloy-farhan" target="_blank" rel="noopener noreferrer" aria-label="GitHub"><FaGithub aria-hidden="true" /></a>
+                        <a href="https://www.linkedin.com/in/niloy-farhan-6067b422b/" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn"><FaLinkedinIn aria-hidden="true" /></a>
+                        <a href="https://twitter.com/MrFarhanNiloy" target="_blank" rel="noopener noreferrer" aria-label="X"><FaXTwitter aria-hidden="true" /></a>
+                        <a href="https://facebook.com/nulll.me" target="_blank" rel="noopener noreferrer" aria-label="Facebook"><FaFacebookF aria-hidden="true" /></a>
+                        <Link href="/about" className={styles.textLink}>More about me <span aria-hidden="true">→</span></Link>
+                    </nav>
                 </div>
             </section>
         </main>

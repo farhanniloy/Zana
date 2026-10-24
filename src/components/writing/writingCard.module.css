@@ -3,7 +3,7 @@
     flex-direction: column;
     min-width: 0;
     border: 1px solid var(--surface-border);
-    background: color-mix(in srgb, var(--surface) 88%, transparent);
+    background: color-mix(in srgb, var(--post-surface) 88%, transparent);
 }
 
 .cover {
@@ -16,13 +16,13 @@
 
 .image {
     object-fit: cover;
-    filter: sepia(.38) saturate(.68) brightness(.72);
+    filter: sepia(.32) saturate(.7) brightness(.76) contrast(1.04);
     transition: transform .45s ease, filter .45s ease;
 }
 
 .card:hover .image {
     transform: scale(1.035);
-    filter: sepia(.25) saturate(.78) brightness(.82);
+    filter: sepia(.24) saturate(.78) brightness(.86) contrast(1.02);
 }
 
 .copy {
@@ -30,7 +30,7 @@
     flex: 1;
     flex-direction: column;
     align-items: flex-start;
-    padding: 20px 21px 18px;
+    padding: 17px 17px 16px;
 }
 
 .meta {
@@ -44,9 +44,9 @@
 }
 
 .title {
-    margin: 10px 0 8px;
+    margin: 8px 0 6px;
     color: var(--textColor);
-    font: 500 25px/1.12 var(--serif);
+    font: 500 clamp(20px, 2vw, 25px)/1.05 var(--serif);
 }
 
 .title a:hover {
@@ -58,7 +58,7 @@
     overflow: hidden;
     margin: 0;
     color: var(--textColor2);
-    font: 15px/1.65 var(--serif);
+    font: 14px/1.55 var(--serif);
     -webkit-box-orient: vertical;
     -webkit-line-clamp: 3;
 }
@@ -72,8 +72,8 @@
 
 .tags a {
     color: var(--parchment);
-    font: 10px/1.4 var(--sans);
-    letter-spacing: .12em;
+    font: 9px/1.4 var(--typewriter);
+    letter-spacing: .03em;
     text-transform: uppercase;
 }
 
@@ -122,6 +122,33 @@
 
 .feature .excerpt {
     -webkit-line-clamp: 5;
+}
+
+.home .cover {
+    aspect-ratio: 1.5;
+}
+
+.home .copy {
+    padding: 13px 14px 14px;
+}
+
+.home .title {
+    margin: 6px 0 5px;
+    font-size: clamp(20px, 1.8vw, 23px);
+}
+
+.home .excerpt {
+    font-size: 13px;
+    -webkit-line-clamp: 2;
+}
+
+.home .tags {
+    margin-top: 10px;
+}
+
+.home .readLink {
+    padding-top: 12px;
+    font-size: 13px;
 }
 
 @media (max-width: 760px) {

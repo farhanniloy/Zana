@@ -1,9 +1,18 @@
+import Image from "next/image";
 import Link from "next/link";
 import styles from "./featured.module.css";
 
 export default function Featured() {
     return (
         <section className={styles.hero} aria-labelledby="home-title">
+            <Image
+                className={styles.heroImage}
+                src="/images/hero image 34.jpg"
+                alt=""
+                fill
+                priority
+                sizes="(max-width: 640px) 100vw, 1100px"
+            />
             <div className={styles.heroText}>
                 <span className={styles.welcome}>welcome,</span>
                 <h1 id="home-title">I write<br />things.</h1>

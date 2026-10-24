@@ -10,23 +10,25 @@
 }
 
 .listening {
-    display: grid;
-    grid-template-columns: minmax(220px, .7fr) minmax(0, 1.3fr);
-    gap: 28px;
-    align-items: center;
-    padding: 29px 25px;
-    background: linear-gradient(90deg, rgba(64, 48, 37, .28), rgba(42, 32, 24, .38));
+    padding: 23px 24px 25px;
+    background: #49331f;
 }
 
 .sectionIndex {
     display: block;
     color: var(--parchment);
-    font: 10px/1.5 var(--sans);
-    letter-spacing: .16em;
+    font: 500 11px/1.5 var(--serif);
+    letter-spacing: .1em;
     text-transform: uppercase;
 }
 
-.listening h2,
+.sectionIndex > span {
+    display: inline-block;
+    margin-right: 7px;
+    color: var(--bronze);
+    font: 400 15px/1 var(--serif);
+}
+
 .sectionHeading h2,
 .notebook h2,
 .about h2 {
@@ -36,7 +38,6 @@
     letter-spacing: -.02em;
 }
 
-.listeningIntro p,
 .notebookIntro,
 .aboutCopy p {
     max-width: 370px;
@@ -45,12 +46,8 @@
     font: 15px/1.7 var(--serif);
 }
 
-.player {
-    min-width: 0;
-}
-
 .section {
-    padding: 36px 22px 42px;
+    padding: 34px 22px 38px;
 }
 
 .sectionHeading {
@@ -78,9 +75,9 @@
 
 .writingGrid {
     display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 18px;
-    margin-top: 18px;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 15px;
+    margin-top: 2px;
 }
 
 .emptyState {
@@ -92,26 +89,74 @@
 
 .notebook {
     display: grid;
-    grid-template-columns: 1.05fr .95fr;
-    gap: clamp(24px, 5vw, 58px);
-    align-items: center;
-    padding: 38px 22px 42px;
+    grid-template-columns: minmax(0, 1.08fr) minmax(0, .92fr);
+    grid-template-rows: auto auto auto;
+    gap: 14px clamp(24px, 5vw, 58px);
+    align-items: stretch;
+    padding: 32px 22px 36px;
+    border-top: 1px solid var(--surface-border);
+    background:
+        radial-gradient(ellipse at 18% 22%, rgba(130, 91, 52, .16), transparent 48%),
+        linear-gradient(112deg, rgba(61, 43, 27, .96), rgba(47, 33, 21, .95));
 }
 
-.notebookArt {
+.notebookCollage {
+    grid-column: 1;
+    grid-row: 1;
+    display: grid;
+    grid-template-columns: 1.2fr .8fr;
+    grid-template-rows: repeat(2, minmax(112px, 1fr));
+    gap: 6px;
+    min-width: 0;
+    min-height: 300px;
+    padding: 6px;
+    border: 1px solid var(--surface-border);
+    background: rgba(24, 16, 10, .48);
+}
+
+.notebookImage {
     position: relative;
-    min-height: 330px;
+    overflow: hidden;
+    background: var(--coffee);
+}
+
+.notebookImage:first-child {
+    grid-row: span 2;
+}
+
+.notebookImage img,
+.notebookRoom img {
+    object-fit: cover;
+    filter: sepia(.36) saturate(.68) brightness(.74) contrast(1.06);
+    transition: filter .35s ease, transform .5s ease;
+}
+
+.notebookImage:hover img,
+.notebookRoom:hover img {
+    filter: sepia(.28) saturate(.76) brightness(.84) contrast(1.04);
+    transform: scale(1.025);
+}
+
+.notebookRoom {
+    grid-column: 2;
+    grid-row: 1 / span 3;
+    position: relative;
+    min-height: 430px;
+    align-self: stretch;
     overflow: hidden;
     border: 1px solid var(--surface-border);
     background: var(--coffee);
 }
 
-.notebookArt img {
-    object-fit: cover;
-    filter: sepia(.36) saturate(.65) brightness(.77);
+.notebookIntroBlock {
+    grid-column: 1;
+    grid-row: 2;
+    min-width: 0;
 }
 
-.notebookCopy {
+.notebookEntries {
+    grid-column: 1;
+    grid-row: 3;
     min-width: 0;
 }
 
@@ -133,6 +178,10 @@
     padding: 11px 0;
     border-top: 1px solid var(--surface-border);
     font-family: var(--serif);
+}
+
+.notebookCopy h2 {
+    font-size: clamp(29px, 3.5vw, 42px);
 }
 
 .noteList a {
@@ -167,7 +216,7 @@
 
 .portrait img {
     object-fit: cover;
-    filter: sepia(.45) contrast(.92);
+    filter: sepia(.3) saturate(.72) brightness(.82) contrast(.96);
 }
 
 .about h2 {
@@ -180,16 +229,45 @@
     margin: 14px 0 17px;
 }
 
+.authorSocials {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 10px;
+}
+
+.authorSocials > a:not(.textLink) {
+    display: grid;
+    width: 32px;
+    height: 32px;
+    place-items: center;
+    border: 1px solid var(--surface-border);
+    color: var(--parchment);
+    font-size: 14px;
+    transition: color .2s ease, border-color .2s ease, background-color .2s ease;
+}
+
+.authorSocials > a:not(.textLink):hover {
+    border-color: var(--bronze);
+    background: rgba(118, 86, 61, .15);
+    color: var(--ivory);
+}
+
+.authorSocials .textLink {
+    margin-left: 5px;
+}
+
 @media (max-width: 760px) {
-    .listening,
-    .notebook,
     .about {
         grid-template-columns: 1fr;
     }
 
     .listening {
-        gap: 16px;
-        padding: 24px 18px;
+        padding: 18px 16px 20px;
+    }
+
+    .writingGrid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
     }
 
     .section {
@@ -197,12 +275,50 @@
     }
 
     .notebook {
-        gap: 22px;
-        padding: 30px 0;
+        grid-template-columns: minmax(0, 1fr);
+        grid-template-rows: auto auto auto;
+        gap: 16px;
+        min-width: 0;
+        padding: 20px 16px 22px;
+        border: 1px solid var(--surface-border);
+        box-sizing: border-box;
     }
 
-    .notebookArt {
-        min-height: 260px;
+    .notebookIntroBlock {
+        grid-column: 1;
+        grid-row: 2;
+    }
+
+    .notebookCollage {
+        grid-column: 1;
+        grid-row: 1;
+        width: 100%;
+        max-width: 100%;
+        min-height: 0;
+        height: clamp(210px, 62vw, 280px);
+        grid-template-columns: 1.2fr .8fr;
+        grid-template-rows: repeat(2, minmax(0, 1fr));
+        box-sizing: border-box;
+    }
+
+    .notebookImage {
+        min-width: 0;
+    }
+
+    .notebookRoom {
+        display: none;
+    }
+
+    .notebookImage:nth-child(4) {
+        display: none;
+    }
+
+    .notebookEntries {
+        grid-column: 1;
+        grid-row: 3;
+        width: 100%;
+        max-width: 100%;
+        min-width: 0;
     }
 
     .about {
@@ -225,6 +341,47 @@
 
     .writingGrid {
         grid-template-columns: 1fr;
+    }
+
+    .writingGrid > article {
+        display: grid;
+        grid-template-columns: 112px minmax(0, 1fr);
+    }
+
+    .writingGrid > article > a:first-child {
+        height: 100%;
+        min-height: 160px;
+        aspect-ratio: auto;
+    }
+
+    .writingGrid > article > div {
+        padding: 14px;
+    }
+
+    .writingGrid > article h3 {
+        font-size: 21px;
+    }
+
+    .writingGrid > article p {
+        -webkit-line-clamp: 2;
+    }
+
+    .notebook { gap: 13px; }
+
+    .notebookCollage {
+        width: 100%;
+        max-width: 100%;
+        height: clamp(200px, 68vw, 250px);
+        gap: 5px;
+        padding: 5px;
+    }
+
+    .notebookIntroBlock,
+    .notebookEntries,
+    .notebookCopy {
+        max-width: 100%;
+        min-width: 0;
+        overflow-wrap: anywhere;
     }
 
     .noteList li {

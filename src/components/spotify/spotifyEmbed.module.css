@@ -1,28 +1,256 @@
 .embedCard {
     min-width: 0;
-    padding: 12px;
+    padding: 0;
+    border: 0;
+    background: transparent;
+}
+
+.listeningPlayer {
+    position: relative;
+    display: grid;
+    gap: 12px;
+    padding: 0;
+}
+
+.nowPlaying {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    color: var(--parchment);
+    font: 9px/1.3 var(--typewriter);
+    letter-spacing: .07em;
+}
+
+.nowPlaying > span {
+    color: #c1a071;
+    font-size: 8px;
+}
+
+.nowPlaying a {
+    color: inherit;
+    text-decoration: none;
+    transition: color .2s ease;
+}
+
+.nowPlaying a:hover,
+.trackDetails h2 a:hover {
+    color: var(--ivory);
+}
+
+.trackRow {
+    display: grid;
+    grid-template-columns: 82px minmax(0, 1fr) minmax(150px, 190px);
+    gap: 16px;
+    align-items: center;
+    min-width: 0;
+}
+
+.trackArtwork {
+    position: relative;
+    display: block;
+    width: 82px;
+    aspect-ratio: 1;
+    overflow: hidden;
     border: 1px solid var(--surface-border);
-    background: rgba(23, 19, 15, .74);
+    background: var(--coffee);
+}
+
+.trackArtwork img {
+    object-fit: cover;
+    filter: sepia(.08) saturate(.86) brightness(.85) contrast(1.04);
+    transition: filter .2s ease;
+}
+
+.trackArtwork:hover img {
+    filter: sepia(.04) saturate(.94) brightness(.96) contrast(1.02);
+}
+
+.trackDetails {
+    min-width: 0;
+}
+
+.trackDetails h2 {
+    overflow: hidden;
+    margin: 0;
+    color: var(--textColor);
+    font: 500 20px/1.08 var(--serif);
+    letter-spacing: 0;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.trackDetails h2 a {
+    color: inherit;
+    text-decoration: none;
+}
+
+.trackDetails > p {
+    overflow: hidden;
+    margin: 4px 0 8px;
+    color: var(--textColor2);
+    font: 12px/1.2 var(--serif);
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.trackControls {
+    display: flex;
+    min-height: 21px;
+    align-items: center;
+    gap: 16px;
+}
+
+.transportButton {
+    display: grid;
+    width: 18px;
+    height: 18px;
+    place-items: center;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    color: var(--parchment);
+    cursor: pointer;
+}
+
+.transportButton:hover:not(:disabled) {
+    color: var(--ivory);
+}
+
+.transportButton:disabled {
+    cursor: wait;
+    opacity: .48;
+}
+
+.transportButton svg {
+    width: 14px;
+    height: 14px;
+    fill: currentColor;
+}
+
+.transportButton:first-child svg {
+    fill: none;
+    stroke: currentColor;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    stroke-width: 1.35;
+}
+
+.brandWave {
+    display: inline-flex;
+    height: 17px;
+    align-items: center;
+    gap: 2px;
+    color: var(--parchment);
+    opacity: .78;
+}
+
+.brandWave > span {
+    display: block;
+    width: 2px;
+    background: currentColor;
+}
+
+.spotifyBrand {
+    display: grid;
+    justify-items: end;
+    gap: 9px;
+}
+
+.spotifyBrand > a {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--parchment);
+    font: 12px/1.2 var(--serif);
+    text-decoration: none;
+}
+
+.spotifyBrand > a:hover {
+    color: var(--ivory);
+}
+
+.spotifyBrand > a svg {
+    width: 17px;
+    height: 17px;
+}
+
+.brandWave {
+    height: 17px;
+    gap: 2px;
+}
+
+.brandWave > svg {
+    width: 17px;
+    height: 17px;
+    margin-right: 3px;
+}
+
+.apiHost {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+}
+
+.apiHost > div,
+.apiHost iframe {
+    width: 1px !important;
+    height: 1px !important;
+    border: 0 !important;
+}
+
+.fallbackFrame {
+    overflow: hidden;
+    border-radius: 12px;
+    background: var(--softBg);
+}
+
+.fallbackFrame iframe {
+    display: block;
+    width: 100%;
+    height: 152px;
+    border: 0;
+    border-radius: 12px;
+    background: var(--softBg);
+}
+
+.controlError {
+    margin: 4px 0 0;
+    color: var(--softTextColor);
+    font: 12px/1.4 var(--serif);
+}
+
+.frame {
+    overflow: hidden;
+    border-radius: 12px;
+    background: var(--softBg);
 }
 
 .iframe {
     display: block;
     width: 100%;
-    min-height: 152px;
+    height: 352px;
     border: 0;
-    border-radius: 10px;
-    background: #211a14;
+    border-radius: 12px;
+    background: var(--softBg);
+}
+
+.iframeTarget {
+    width: 100%;
+    height: 152px;
 }
 
 .compact .iframe {
-    min-height: 152px;
+    height: 152px;
 }
 
 .openLink {
     display: inline-flex;
     gap: 7px;
     align-items: center;
-    margin: 11px 3px 1px;
+    margin: 7px 1px 0;
     color: var(--parchment);
     font: 12px/1.4 var(--serif);
 }
@@ -44,4 +272,47 @@
     color: var(--parchment);
     font: 12px/1.4 'IBM Plex Sans', sans-serif;
     overflow-wrap: anywhere;
+}
+
+@media (max-width: 600px) {
+    .trackRow {
+        grid-template-columns: 52px minmax(0, 1fr) 82px;
+        gap: 10px 11px;
+    }
+
+    .spotifyBrand {
+        grid-column: 3;
+        grid-row: 1;
+        display: grid;
+        width: 100%;
+        align-items: center;
+        justify-content: space-between;
+        gap: 8px;
+    }
+
+    .trackArtwork {
+        width: 52px;
+    }
+
+    .trackDetails h2 {
+        font-size: 17px;
+    }
+
+    .trackDetails > p {
+        margin-bottom: 6px;
+        font-size: 11px;
+    }
+
+    .spotifyBrand > a { gap: 5px; font-size: 10px; }
+}
+
+@media (max-width: 380px) {
+    .trackRow {
+        grid-template-columns: 46px minmax(0, 1fr) 74px;
+        gap: 8px;
+    }
+
+    .trackArtwork { width: 46px; }
+    .spotifyBrand > a { gap: 3px; font-size: 9px; }
+    .brandWave { gap: 1px; }
 }

@@ -8,6 +8,29 @@
     color: var(--softTextColor);
 }
 
+.closingNote {
+    grid-column: 1 / -1;
+    display: grid;
+    gap: 5px;
+    justify-items: center;
+    padding: 20px 14px;
+    border: 1px solid rgba(118, 86, 61, .28);
+    background:
+        radial-gradient(ellipse at 50% 0%, rgba(118, 86, 61, .14), transparent 66%),
+        #211a15;
+    color: var(--textColor);
+    text-align: center;
+}
+
+.closingNote p {
+    font: italic clamp(19px, 2.5vw, 26px)/1.35 var(--typewriter);
+}
+
+.closingNote cite {
+    color: var(--parchment);
+    font: 12px/1.4 var(--serif);
+}
+
 .logo {
     color: var(--textColor);
     font: 500 24px/1 var(--serif);
@@ -43,6 +66,10 @@
     }
 
     .signature {
+        grid-column: 1 / -1;
+    }
+
+    .closingNote {
         grid-column: 1 / -1;
     }
 

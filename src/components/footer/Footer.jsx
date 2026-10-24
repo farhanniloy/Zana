@@ -11,6 +11,10 @@ const socialLinks = [
 export default function Footer() {
     return (
         <footer className={styles.footer}>
+            <blockquote className={styles.closingNote}>
+                <p>“Fill your paper with the breathing of your heart.”</p>
+                <cite>— William Wordsworth</cite>
+            </blockquote>
             <div className={styles.signature}>
                 <Link href="/" className={styles.logo}>nil.</Link>
                 <p>Pages, thoughts, and small things worth keeping.</p>
