@@ -1,0 +1,35 @@
+.card {
+    display: grid;
+    gap: 14px;
+    max-width: 600px;
+    padding: clamp(22px, 5vw, 38px);
+    border: 1px solid var(--surface-border);
+    background: var(--surface);
+    color: var(--softTextColor);
+    font: 15px/1.7 var(--serif);
+}
+
+.card h2 {
+    margin: 0;
+    color: var(--textColor);
+    font: 500 32px/1.1 var(--serif);
+}
+
+.card > a {
+    width: fit-content;
+    color: var(--textColor);
+}
+
+.card > a:hover {
+    color: var(--parchment);
+}
+
+.card .primary {
+    display: inline-flex;
+    gap: 12px;
+    align-items: center;
+    padding: 10px 13px;
+    border: 1px solid var(--surface-border);
+    color: var(--parchment);
+    overflow-wrap: anywhere;
+}

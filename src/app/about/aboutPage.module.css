@@ -1,0 +1,121 @@
+.container {
+    display: grid;
+    grid-template-columns: minmax(260px, .85fr) minmax(0, 1.15fr);
+    gap: clamp(30px, 7vw, 80px);
+    align-items: center;
+    width: min(100%, 1000px);
+    min-height: 70vh;
+    margin: 0 auto;
+    padding: 50px 0 66px;
+}
+
+.portrait {
+    position: relative;
+    min-height: 470px;
+    overflow: hidden;
+    border: 1px solid var(--surface-border);
+    background: var(--coffee);
+}
+
+.portrait img {
+    object-fit: cover;
+    filter: sepia(.5) contrast(.95) brightness(.85);
+}
+
+.portrait span {
+    position: absolute;
+    right: 13px;
+    bottom: 12px;
+    z-index: 1;
+    padding: 4px 8px;
+    background: rgba(23, 19, 15, .78);
+    color: var(--ivory);
+    font: 11px var(--serif);
+}
+
+.copy {
+    max-width: 560px;
+}
+
+.kicker {
+    color: var(--parchment);
+    font: 10px/1.4 var(--sans);
+    letter-spacing: .17em;
+    text-transform: uppercase;
+}
+
+.copy h1 {
+    margin: 10px 0 5px;
+    color: var(--textColor);
+    font: 500 clamp(54px, 8vw, 94px)/.82 var(--serif);
+    letter-spacing: -.055em;
+}
+
+.copy h1 em {
+    color: var(--parchment);
+    font-weight: 400;
+}
+
+.lede {
+    margin: 22px 0 14px;
+    color: var(--parchment);
+    font: italic 21px/1.4 var(--serif);
+}
+
+.copy > p:not(.lede) {
+    margin: 0 0 13px;
+    color: var(--textColor2);
+    font: 16px/1.8 var(--serif);
+}
+
+.details {
+    display: grid;
+    gap: 5px;
+    margin: 21px 0;
+    color: var(--softTextColor);
+    font: 13px/1.6 var(--serif);
+}
+
+.details a:hover,
+.social a:hover {
+    color: var(--parchment);
+}
+
+.social {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    padding: 13px 0 17px;
+    border-top: 1px solid var(--surface-border);
+    color: var(--softTextColor);
+    font: 12px var(--serif);
+}
+
+.contact {
+    display: inline-flex;
+    gap: 10px;
+    align-items: center;
+    padding: 9px 13px;
+    border: 1px solid var(--surface-border);
+    background: var(--button-surface);
+    color: var(--button-text);
+    font: 13px var(--serif);
+}
+
+.contact:hover {
+    background: var(--button-hover);
+}
+
+@media (max-width: 760px) {
+    .container {
+        grid-template-columns: 1fr;
+        gap: 27px;
+        padding: 32px 0 50px;
+    }
+
+    .portrait {
+        width: min(100%, 460px);
+        min-height: auto;
+        aspect-ratio: 1 / 1.05;
+    }
+}

@@ -1,0 +1,26 @@
+.container {
+    width: min(100%, 1000px);
+    min-height: 50vh;
+    margin: 0 auto;
+    padding: 42px 0 64px;
+}
+
+.container h1 {
+    margin: 0 0 7px;
+    color: var(--textColor);
+    font: 500 clamp(36px, 6vw, 58px)/1.1 var(--serif);
+}
+
+.container > p {
+    margin-bottom: 25px;
+    color: var(--softTextColor);
+    font: 15px/1.7 var(--serif);
+}
+
+.post {
+    margin-bottom: 12px;
+    padding: 16px;
+    border: 1px solid var(--surface-border);
+    background: var(--surface);
+    color: var(--textColor);
+}

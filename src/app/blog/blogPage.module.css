@@ -1,0 +1,38 @@
+.container {
+    width: min(100%, 1080px);
+    margin: 0 auto;
+    padding: 47px 0 58px;
+}
+
+.header {
+    max-width: 700px;
+    margin-bottom: 30px;
+    padding: 0 0 25px;
+    border-bottom: 1px solid var(--surface-border);
+}
+
+.kicker {
+    color: var(--parchment);
+    font: 10px/1.4 var(--sans);
+    letter-spacing: .18em;
+    text-transform: uppercase;
+}
+
+.header h1 {
+    margin: 8px 0 5px;
+    color: var(--textColor);
+    font: 500 clamp(40px, 7vw, 68px)/1 var(--serif);
+    letter-spacing: -.04em;
+    text-transform: capitalize;
+}
+
+.header p {
+    color: var(--softTextColor);
+    font: 16px/1.7 var(--serif);
+}
+
+@media (max-width: 640px) {
+    .container {
+        padding: 34px 0 40px;
+    }
+}

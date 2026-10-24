@@ -1,0 +1,100 @@
+/* New pagination styles — compact, accessible */
+.container{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:12px;
+    width:100%;
+    margin:36px 0;
+}
+
+.leftControls, .rightControls{
+    display:flex;
+    gap:8px;
+    align-items:center;
+}
+
+.iconButton{
+    background:transparent;
+    color:var(--textColor);
+    border:1px solid var(--surface-border);
+    padding:6px 8px;
+    border-radius:6px;
+    cursor:pointer;
+    min-width:34px;
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+}
+
+.iconButton:disabled{
+    opacity:.45;
+    cursor:not-allowed;
+}
+
+.pages{
+    display:flex;
+    gap:8px;
+    align-items:center;
+    justify-content:center;
+    flex-wrap:wrap;
+}
+
+.pageButton{
+    background:transparent;
+    color:var(--textColor);
+    border:1px solid var(--surface-border);
+    padding:6px 10px;
+    border-radius:6px;
+    cursor:pointer;
+    min-width:36px;
+}
+
+.pageButton:hover{
+    background:rgba(255,255,255,0.02);
+}
+
+.pageButton.active{
+    background:var(--strtextColor);
+    color:var(--bg);
+    border-color:rgba(76,255,118,0.12);
+    font-weight:700;
+}
+
+.ellipsis{
+    color:var(--textColor);
+    padding:0 6px;
+}
+
+.summary{
+    display:flex;
+    align-items:center;
+    gap:6px;
+    color:var(--softTextColor);
+    font-family:'Fira Code', monospace;
+}
+.summary .current{
+    font-weight:700;
+    color:var(--textColor);
+}
+
+/* Mobile condensed bar */
+.mobileBar{
+    display:none;
+    align-items:center;
+    gap:12px;
+}
+.mobileLabelBar{ display:flex; align-items:center; gap:4px; }
+.mobileCurrent{ font-weight:700; color:var(--textColor); }
+.mobileTotal{ color:var(--softTextColor); }
+
+/* Desktop-specific visibility */
+.desktopPages{ display:flex; }
+
+@media (max-width:640px){
+    .container{ margin:24px 0; }
+    .pages.desktopPages{ display:none; }
+    .mobileBar{ display:flex; }
+    .summary{ display:none; }
+    .pageButton{ min-width:28px; padding:6px 6px; }
+}

@@ -1,0 +1,140 @@
+.card {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    border: 1px solid var(--surface-border);
+    background: color-mix(in srgb, var(--surface) 88%, transparent);
+}
+
+.cover {
+    position: relative;
+    display: block;
+    overflow: hidden;
+    aspect-ratio: 1.62;
+    background: var(--coffee);
+}
+
+.image {
+    object-fit: cover;
+    filter: sepia(.38) saturate(.68) brightness(.72);
+    transition: transform .45s ease, filter .45s ease;
+}
+
+.card:hover .image {
+    transform: scale(1.035);
+    filter: sepia(.25) saturate(.78) brightness(.82);
+}
+
+.copy {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 20px 21px 18px;
+}
+
+.meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    color: var(--softTextColor);
+    font-family: var(--serif);
+    font-size: 12px;
+    letter-spacing: .035em;
+}
+
+.title {
+    margin: 10px 0 8px;
+    color: var(--textColor);
+    font: 500 25px/1.12 var(--serif);
+}
+
+.title a:hover {
+    color: var(--parchment);
+}
+
+.excerpt {
+    display: -webkit-box;
+    overflow: hidden;
+    margin: 0;
+    color: var(--textColor2);
+    font: 15px/1.65 var(--serif);
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 3;
+}
+
+.tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 14px;
+}
+
+.tags a {
+    color: var(--parchment);
+    font: 10px/1.4 var(--sans);
+    letter-spacing: .12em;
+    text-transform: uppercase;
+}
+
+.tags a:hover {
+    text-decoration: underline;
+    text-underline-offset: 3px;
+}
+
+.readLink {
+    display: inline-flex;
+    gap: 8px;
+    align-items: center;
+    margin-top: auto;
+    padding-top: 18px;
+    color: var(--parchment);
+    font: italic 14px/1.4 var(--serif);
+}
+
+.readLink:hover span {
+    transform: translateX(3px);
+}
+
+.readLink span {
+    transition: transform .2s ease;
+}
+
+.feature {
+    display: grid;
+    grid-template-columns: 1.15fr 1fr;
+}
+
+.feature .cover {
+    height: 100%;
+    min-height: 300px;
+    aspect-ratio: auto;
+}
+
+.feature .copy {
+    justify-content: center;
+    padding: clamp(22px, 4vw, 44px);
+}
+
+.feature .title {
+    font-size: clamp(28px, 3vw, 40px);
+}
+
+.feature .excerpt {
+    -webkit-line-clamp: 5;
+}
+
+@media (max-width: 760px) {
+    .feature {
+        grid-template-columns: 1fr;
+    }
+
+    .feature .cover {
+        min-height: auto;
+        aspect-ratio: 1.75;
+    }
+
+    .copy {
+        padding: 18px;
+    }
+}

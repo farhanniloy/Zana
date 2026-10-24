@@ -1,0 +1,7 @@
+node_modules/
+.next/
+prisma/local.db
+prisma/local-auth.secret
+.env
+.env.*
+!.env.example

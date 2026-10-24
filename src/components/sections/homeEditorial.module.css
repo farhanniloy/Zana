@@ -1,0 +1,235 @@
+.home {
+    padding-bottom: 30px;
+}
+
+.listening,
+.section,
+.notebook,
+.about {
+    border-bottom: 1px solid var(--surface-border);
+}
+
+.listening {
+    display: grid;
+    grid-template-columns: minmax(220px, .7fr) minmax(0, 1.3fr);
+    gap: 28px;
+    align-items: center;
+    padding: 29px 25px;
+    background: linear-gradient(90deg, rgba(64, 48, 37, .28), rgba(42, 32, 24, .38));
+}
+
+.sectionIndex {
+    display: block;
+    color: var(--parchment);
+    font: 10px/1.5 var(--sans);
+    letter-spacing: .16em;
+    text-transform: uppercase;
+}
+
+.listening h2,
+.sectionHeading h2,
+.notebook h2,
+.about h2 {
+    margin: 5px 0 6px;
+    color: var(--textColor);
+    font: 500 clamp(27px, 3vw, 37px)/1.08 var(--serif);
+    letter-spacing: -.02em;
+}
+
+.listeningIntro p,
+.notebookIntro,
+.aboutCopy p {
+    max-width: 370px;
+    margin: 8px 0 12px;
+    color: var(--textColor2);
+    font: 15px/1.7 var(--serif);
+}
+
+.player {
+    min-width: 0;
+}
+
+.section {
+    padding: 36px 22px 42px;
+}
+
+.sectionHeading {
+    display: flex;
+    align-items: end;
+    justify-content: space-between;
+    gap: 20px;
+    margin-bottom: 20px;
+}
+
+.textLink {
+    display: inline-flex;
+    gap: 8px;
+    align-items: center;
+    color: var(--parchment);
+    font: italic 14px/1.4 var(--serif);
+    white-space: nowrap;
+}
+
+.textLink:hover {
+    color: var(--ivory);
+    text-decoration: underline;
+    text-underline-offset: 4px;
+}
+
+.writingGrid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 18px;
+    margin-top: 18px;
+}
+
+.emptyState {
+    padding: 22px;
+    border: 1px solid var(--surface-border);
+    color: var(--softTextColor);
+    font: italic 16px/1.6 var(--serif);
+}
+
+.notebook {
+    display: grid;
+    grid-template-columns: 1.05fr .95fr;
+    gap: clamp(24px, 5vw, 58px);
+    align-items: center;
+    padding: 38px 22px 42px;
+}
+
+.notebookArt {
+    position: relative;
+    min-height: 330px;
+    overflow: hidden;
+    border: 1px solid var(--surface-border);
+    background: var(--coffee);
+}
+
+.notebookArt img {
+    object-fit: cover;
+    filter: sepia(.36) saturate(.65) brightness(.77);
+}
+
+.notebookCopy {
+    min-width: 0;
+}
+
+.notebookIntro {
+    max-width: 420px;
+    margin-bottom: 18px;
+}
+
+.noteList {
+    margin: 0 0 18px;
+    padding: 0;
+    list-style: none;
+}
+
+.noteList li {
+    display: flex;
+    justify-content: space-between;
+    gap: 18px;
+    padding: 11px 0;
+    border-top: 1px solid var(--surface-border);
+    font-family: var(--serif);
+}
+
+.noteList a {
+    color: var(--textColor);
+}
+
+.noteList a:hover {
+    color: var(--parchment);
+}
+
+.noteList time {
+    flex: 0 0 auto;
+    color: var(--softTextColor);
+    font-size: 12px;
+}
+
+.about {
+    display: grid;
+    grid-template-columns: 290px 1fr;
+    gap: clamp(25px, 6vw, 70px);
+    align-items: center;
+    padding: 38px 22px 44px;
+}
+
+.portrait {
+    position: relative;
+    min-height: 290px;
+    overflow: hidden;
+    border: 1px solid var(--surface-border);
+    background: var(--coffee);
+}
+
+.portrait img {
+    object-fit: cover;
+    filter: sepia(.45) contrast(.92);
+}
+
+.about h2 {
+    max-width: 520px;
+    font-size: clamp(30px, 4vw, 47px);
+}
+
+.aboutCopy p {
+    max-width: 510px;
+    margin: 14px 0 17px;
+}
+
+@media (max-width: 760px) {
+    .listening,
+    .notebook,
+    .about {
+        grid-template-columns: 1fr;
+    }
+
+    .listening {
+        gap: 16px;
+        padding: 24px 18px;
+    }
+
+    .section {
+        padding: 30px 0;
+    }
+
+    .notebook {
+        gap: 22px;
+        padding: 30px 0;
+    }
+
+    .notebookArt {
+        min-height: 260px;
+    }
+
+    .about {
+        gap: 22px;
+        padding: 30px 0 35px;
+    }
+
+    .portrait {
+        width: min(100%, 360px);
+        min-height: 340px;
+    }
+}
+
+@media (max-width: 520px) {
+    .sectionHeading {
+        align-items: flex-start;
+        flex-direction: column;
+        gap: 9px;
+    }
+
+    .writingGrid {
+        grid-template-columns: 1fr;
+    }
+
+    .noteList li {
+        align-items: flex-start;
+        flex-direction: column;
+        gap: 3px;
+    }
+}

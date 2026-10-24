@@ -1,0 +1,11 @@
+.container{
+    display: grid;
+    place-items: center;
+    width: 34px;
+    height: 34px;
+    border: 1px solid var(--surface-border);
+    background: transparent;
+    color: var(--parchment);
+    cursor: pointer;
+    font: 18px/1 var(--serif);
+}

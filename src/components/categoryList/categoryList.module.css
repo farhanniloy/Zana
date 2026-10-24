@@ -1,0 +1,171 @@
+.container {
+    overflow: hidden;
+    width: 100%;
+    padding-bottom: 8px;
+}
+
+.title {
+    margin: 60px 0 24px;
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+    color: #f4f7e9;
+    font-family: 'Fira Code', monospace;
+    font-size: 15px;
+    font-weight: 700;
+    letter-spacing: .16em;
+    line-height: 1.2;
+    text-transform: lowercase;
+    white-space: nowrap;
+}
+
+.title::before {
+    content: "root@null:~$";
+    color: #a82f39;
+    font-size: 12px;
+    letter-spacing: .08em;
+}
+
+@media screen and (max-width: 768px) {
+    .title {
+        margin: 60px 0 24px;
+        font-size: 15px;
+    }
+}
+
+@media screen and (max-width: 640px) {
+    .title {
+        margin: 60px 0 24px;
+        font-size: 15px;
+    }
+}
+
+.categories {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 6px;
+    width: 100%;
+    max-height: calc(5 * 34px + 4 * 6px);
+    overflow-y: auto;
+    overflow-x: hidden;
+    padding: 0 0 4px;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+}
+
+.categories::-webkit-scrollbar {
+    display: none;
+}
+
+.category {
+    display: inline-flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 8px;
+    min-height: 34px;
+    width: 100%;
+    max-width: 100%;
+    padding: 5px 12px 5px 10px;
+    border-radius: 3px;
+    border: none;
+    background: rgba(118, 123, 130, 0.20);
+    color: var(--textColor); /* ensure category text uses theme text color */
+    font-family: 'Fira Code', 'SFMono-Regular', 'Consolas', 'Liberation Mono', monospace;
+    font-size: 0.76rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    line-height: 1.2;
+    text-transform: lowercase;
+    transition: transform 0.2s ease, color 0.2s ease, letter-spacing 0.2s ease, background 0.2s ease;
+}
+
+.category:hover {
+   /* subtler overlay: keep original hue but more transparent than initial 0.20 */
+   background: rgba(118, 123, 130, 0.12);
+   transform: translateX(2px);
+   color: #fdfdff;
+   letter-spacing: 0.1em;
+}
+
+.category:hover .icon {
+    color: #7db7ff;
+    transform: scale(1.08);
+}
+
+.category:focus-visible {
+    outline: 2px solid rgba(146, 163, 255, 0.75);
+    outline-offset: 2px;
+}
+
+.category:active {
+    background: rgba(118, 123, 130, 0.20);
+}
+
+.icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    font-size: 0.95rem;
+    line-height: 1;
+    gap:6px;
+}
+
+/* filesystem slash like /home/user */
+.fsSlash{
+    font-family: 'Fira Code', monospace;
+    color: var(--strtextColor);
+    font-size: 0.95rem;
+    line-height:1;
+}
+
+.folderIcon{
+    color: var(--textColor2);
+    width: 1em;
+    height: 1em;
+}
+
+.icon svg {
+    width: 1em;
+    height: 1em;
+    display: block;
+    fill: currentColor;
+}
+
+.titleText{
+    color: var(--textColor);
+}
+@media screen and (max-width: 768px) {
+    .categories {
+        max-height: calc(5 * 30px + 4 * 6px);
+        gap: 5px;
+    }
+
+    .category {
+        min-height: 30px;
+        padding: 4px 10px 4px 8px;
+        font-size: 0.8rem;
+    }
+
+    .icon {
+        font-size: 0.82rem;
+    }
+}
+
+@media screen and (max-width: 640px) {
+    .categories {
+        max-height: calc(5 * 28px + 4 * 5px);
+        gap: 5px;
+    }
+
+    .category {
+        min-height: 28px;
+        padding: 4px 9px 4px 7px;
+        font-size: 0.74rem;
+    }
+
+    .icon {
+        font-size: 0.74rem;
+    }
+}

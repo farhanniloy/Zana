@@ -1,0 +1,21 @@
+.links {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 10px;
+}
+
+.link,
+.logout {
+    padding: 4px 0;
+    border: 0;
+    background: transparent;
+    color: var(--textColor2);
+    cursor: pointer;
+    font: 11px/1.4 var(--serif);
+}
+
+.link:hover,
+.logout:hover {
+    color: var(--parchment);
+}

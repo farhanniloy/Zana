@@ -1,0 +1,760 @@
+/* New write page design — rebuilt from scratch (Polished Transparent) */
+
+
+/* Page container centered */
+.container{
+  max-width: 1180px;
+  margin: 28px auto 64px;
+  padding: 36px 48px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  font-family: 'Fira Code', monospace;
+}
+
+/* Header with title and publish */
+.header{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+}
+
+.header h1{
+  margin:0;
+  font-size:28px;
+  color:var(--textColor);
+  font-weight:700;
+  font-family: 'Fira Code', monospace;
+  letter-spacing: 0.6px;
+}
+
+.header::after{
+  content:"Draft your next idea";
+  display:block;
+  margin-top:6px;
+  color:var(--softTextColor);
+  font-family:'Montserrat', sans-serif;
+  font-size:13px;
+  letter-spacing:.2px;
+}
+
+.headerRight{
+  display:flex;
+  gap:10px;
+  align-items:center;
+}
+
+.publishInline{
+  background:var(--strtextColor);
+  color:var(--bg);
+  padding:8px 14px;
+  border-radius:10px;
+  border:none;
+  cursor:pointer;
+}
+
+/* Top input area */
+.titleRow{
+  display:flex;
+  flex-direction:column;
+  gap:10px;
+}
+
+.titleWrap{
+  display:flex;
+  gap:12px;
+  align-items:center;
+}
+
+.input{
+  flex:1;
+  width:100%;
+  font-size:30px;
+  padding:17px 20px;
+  border-radius:12px;
+  border:1px solid var(--surface-border);
+  background:rgba(2, 16, 10, .55);
+  color:var(--textColor);
+  font-family: 'Fira Code', monospace;
+  outline:none;
+  transition:border-color .2s, box-shadow .2s;
+}
+
+.input:focus, .textAreaSummary:focus, .select:focus, .dateInput:focus{
+  border-color:var(--strtextColor);
+  box-shadow:0 0 0 3px rgba(166, 255, 170, .1);
+}
+
+.textAreaSummary{
+  width:100%;
+  resize:vertical;
+  font-size:14px;
+  padding:10px 12px;
+  border-radius:8px;
+  border:1px solid var(--surface-border);
+  background:rgba(2, 16, 10, .55);
+  color:var(--textColor);
+  font-family: 'Montserrat', sans-serif;
+}
+
+.slugField{
+  display:flex;
+  flex-direction:column;
+  gap:7px;
+  margin-top:-10px;
+}
+
+.slugField label{
+  color:var(--softTextColor);
+  font-size:12px;
+  font-weight:700;
+  letter-spacing:1px;
+  text-transform:uppercase;
+}
+
+.slugInput{
+  width:100%;
+  min-height:42px;
+  padding:10px 13px;
+  border:1px solid var(--surface-border);
+  border-radius:9px;
+  background:rgba(2, 16, 10, .55);
+  color:var(--textColor);
+  font-family:'Fira Code', monospace;
+  font-size:14px;
+  outline:none;
+}
+
+.slugInput:focus{
+  border-color:var(--strtextColor);
+  box-shadow:0 0 0 3px rgba(166, 255, 170, .1);
+}
+
+.slugField span{
+  color:var(--softTextColor);
+  font-family:'Montserrat', sans-serif;
+  font-size:12px;
+}
+
+.categorySection{
+  display:grid;
+  grid-template-columns:minmax(240px, 1fr) minmax(300px, 1.25fr);
+  gap:18px;
+  align-items:end;
+  padding:20px;
+  border:1px solid var(--surface-border);
+  border-radius:14px;
+  background:linear-gradient(135deg, rgba(4,24,15,.72), rgba(2,12,8,.45));
+}
+
+.categorySelector, .dateSelector{
+  display:flex;
+  flex-direction:column;
+  gap:9px;
+}
+
+.categorySelector label, .dateSelector label{
+  color:var(--softTextColor);
+  font-size:12px;
+  font-weight:700;
+  letter-spacing:1px;
+  text-transform:uppercase;
+}
+
+.select, .dateInput{
+  width:100%;
+  min-height:46px;
+  padding:10px 13px;
+  border:1px solid var(--surface-border);
+  border-radius:9px;
+  background:rgba(0,0,0,.3);
+  color:var(--textColor);
+  font-family:'Fira Code', monospace;
+  font-size:14px;
+  outline:none;
+  box-sizing: border-box; /* ensure padding included in width */
+}
+
+/* Ensure date inputs keep a usable width so year field isn't hidden on narrower layouts */
+.dateInput{
+  min-width:180px;
+  width:100%;
+  box-sizing: border-box;
+}
+
+.select[multiple]{
+  min-height:120px;
+}
+
+.newCategoryField{
+  display:flex;
+  align-items:end;
+}
+
+.newCategoryField .input{
+  font-size:14px;
+  min-height:46px;
+  padding:10px 13px;
+}
+
+.dateSelector{
+  display:grid;
+  /* Give the label + input pairs more predictable widths so the year is visible
+     even when the overall container is narrower. The inputs are min-sized while
+     still being allowed to grow proportionally. */
+  grid-template-columns: auto minmax(180px, 1fr) auto minmax(180px, 1fr);
+  align-items:center;
+  gap:10px;
+}
+
+.dateSelector label{
+  white-space:nowrap;
+}
+
+.categorySection > input{
+  grid-column:1 / -1;
+  font-size:15px;
+}
+
+/* Layout for editor + side controls */
+.mainRow{
+  display:grid;
+  grid-template-columns: 64px 1fr; /* left controls + editor */
+  gap:18px;
+  align-items:start;
+}
+
+/* left vertical controls */
+.sideControls{
+  display:flex;
+  flex-direction:column;
+  gap:12px;
+  align-items:center;
+}
+
+.sideControls .controlButton{
+  width:44px; height:44px; border-radius:50%; border:1px solid rgba(255,255,255,0.06); display:flex; align-items:center; justify-content:center; background:transparent; cursor:pointer;
+}
+
+/* Editor panel */
+.editorPanel{
+  border-radius:12px;
+  overflow:hidden;
+  border:1px solid var(--surface-border);
+  background: linear-gradient(180deg, rgba(3,12,8,0.60), rgba(3,12,8,0.45));
+  backdrop-filter: blur(6px);
+}
+
+.editor{
+  position:relative;
+  overflow:hidden;
+  border:1px solid var(--surface-border);
+  border-radius:14px;
+  background:rgba(2, 13, 9, .65);
+  box-shadow:0 16px 45px rgba(0,0,0,.18);
+}
+
+.toolBar{
+  display:flex;
+  gap:8px;
+  align-items:center;
+  padding:12px 16px;
+  border-bottom:1px solid var(--surface-border);
+  background: rgba(2,14,10,0.55);
+}
+
+.button, .addButton{
+  width:42px;
+  height:42px;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  border:1px solid var(--surface-border);
+  border-radius:9px;
+  background:rgba(5, 25, 16, .8);
+  cursor:pointer;
+  transition:transform .2s, border-color .2s, background .2s;
+}
+
+.button:hover, .addButton:hover{
+  transform:translateY(-1px);
+  border-color:var(--strtextColor);
+  background:rgba(166,255,170,.1);
+}
+
+.add{
+  display:flex;
+  gap:10px;
+  padding:12px 16px;
+  border-bottom:1px solid var(--surface-border);
+  background:rgba(0,0,0,.14);
+}
+
+.toolButton{ width:36px; height:36px; border-radius:6px; display:flex; align-items:center; justify-content:center; border:1px solid var(--surface-border); background:transparent; cursor:pointer; }
+
+/* Quill container inside panel */
+.textArea{
+  padding:0 0 12px 0;
+  background: transparent;
+}
+
+.textArea{
+  min-height:400px;
+  display:block;
+  overflow:auto;
+  border:0;
+  border-radius:0;
+  background:transparent;
+}
+
+.editorToolbar{
+  display:flex;
+  flex-wrap:wrap;
+  gap:4px;
+  padding:8px 12px;
+  border:0;
+  border-top:1px solid rgba(255,255,255,0.04);
+  border-bottom:1px solid rgba(255,255,255,0.04);
+  background:transparent;
+}
+
+.editorToolbar button{
+  min-width:32px;
+  min-height:30px;
+  padding:3px 7px;
+  border:1px solid var(--surface-border);
+  border-radius:5px;
+  background:transparent;
+  color:var(--textColor);
+  cursor:pointer;
+  font-family:inherit;
+}
+
+.editorToolbar button:hover{
+  border-color:var(--strtextColor);
+  background:var(--surface-hover);
+}
+
+.editorToolbar .activeEditorButton{
+  border-color:var(--strtextColor);
+  background:var(--strtextColor);
+  color:var(--bg);
+}
+
+.editorToolbar select{
+  min-height:30px;
+  padding:3px 7px;
+  border:1px solid var(--surface-border);
+  border-radius:5px;
+  background:transparent;
+  color:var(--textColor);
+  cursor:pointer;
+  font-family:inherit;
+}
+
+.colorControl{
+  display:inline-flex;
+  align-items:center;
+  gap:4px;
+  min-height:30px;
+  padding:2px 5px;
+  border:1px solid var(--surface-border);
+  border-radius:5px;
+  color:var(--textColor);
+  cursor:pointer;
+}
+
+.colorControl span{
+  font-weight:700;
+  line-height:1;
+}
+
+.colorControl input{
+  width:22px;
+  height:22px;
+  padding:0;
+  border:0;
+  background:transparent;
+  cursor:pointer;
+}
+
+.textArea.rsw-ce{
+  min-height:400px;
+  padding:28px;
+  color:var(--textColor);
+  background:transparent;
+  line-height:1.6;
+  font-family:'Montserrat', sans-serif;
+  font-size:18px;
+}
+
+.textArea.rsw-ce ul,
+.textArea.rsw-ce ol{
+  margin:0 0 1em;
+  padding-left:1.7em;
+}
+
+.textArea.rsw-ce ul{
+  list-style:disc;
+}
+
+.textArea.rsw-ce ol{
+  list-style:decimal;
+}
+
+.textArea.rsw-ce li{
+  display:list-item;
+  margin:.2em 0;
+}
+
+.textArea.rsw-ce blockquote{
+  margin:1em 0;
+  padding:.65em 1em;
+  border-left:4px solid var(--strtextColor);
+  background:rgba(166,255,170,.08);
+  color:var(--softTextColor);
+}
+
+.textArea.rsw-ce pre{
+  margin:1em 0;
+  padding:14px 16px;
+  overflow-x:auto;
+  border:1px solid var(--surface-border);
+  border-radius:8px;
+  background:rgba(0,0,0,.35);
+  color:var(--textColor);
+  font-family:'Fira Code', monospace;
+  font-size:.85em;
+  line-height:1.5;
+  white-space:pre-wrap;
+}
+
+.textArea.rsw-ce h1,
+.textArea.rsw-ce h2,
+.textArea.rsw-ce h3,
+.textArea.rsw-ce h4,
+.textArea.rsw-ce h5,
+.textArea.rsw-ce h6{
+  margin:0 0 .7em;
+  color:var(--textColor);
+  font-family:'Fira Code', monospace;
+  line-height:1.25;
+}
+
+.textArea.rsw-ce h1{ font-size:2em; }
+.textArea.rsw-ce h2{ font-size:1.6em; }
+.textArea.rsw-ce h3{ font-size:1.3em; }
+.textArea.rsw-ce h4{ font-size:1.15em; }
+.textArea.rsw-ce h5{ font-size:1em; }
+.textArea.rsw-ce h6{ font-size:.9em; }
+
+.textArea.rsw-ce hr{
+  margin:1.5em 0;
+  border:0;
+  border-top:1px solid var(--surface-border);
+}
+
+.textArea.rsw-ce table{
+  width:100%;
+  margin:1em 0;
+  border-collapse:collapse;
+}
+
+.editorStatus{
+  display:flex;
+  justify-content:space-between;
+  gap:12px;
+  padding:8px 16px 12px;
+  border-top:1px solid rgba(255,255,255,.04);
+  color:var(--softTextColor);
+  font-family:'Fira Code', monospace;
+  font-size:11px;
+}
+
+.textArea.rsw-ce th,
+.textArea.rsw-ce td{
+  padding:8px;
+  border:1px solid var(--surface-border);
+  text-align:left;
+}
+
+.textArea .ql-editor{
+  min-height: 400px;
+  padding:28px;
+  color:var(--textColor);
+  background: transparent !important;
+  line-height:1.6;
+  font-family: 'Montserrat', sans-serif;
+  font-size:18px;
+}
+
+.modalBackdrop{
+  position:fixed;
+  inset:0;
+  z-index:20;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:20px;
+  background:rgba(0,0,0,.72);
+  backdrop-filter:blur(5px);
+}
+
+.modal{
+  width:min(560px, 100%);
+  display:flex;
+  flex-direction:column;
+  gap:18px;
+  padding:26px;
+  border:1px solid var(--surface-border);
+  border-radius:16px;
+  background:#06150e;
+  box-shadow:0 24px 80px rgba(0,0,0,.45);
+}
+
+.modal h3{
+  margin:0;
+  color:var(--textColor);
+  font-size:20px;
+}
+
+.mediaTypes{
+  display:flex;
+  gap:8px;
+  flex-wrap:wrap;
+}
+
+.typeButton, .primary, .secondary{
+  padding:10px 14px;
+  border:1px solid var(--surface-border);
+  border-radius:8px;
+  background:transparent;
+  color:var(--textColor);
+  cursor:pointer;
+  font-family:'Fira Code', monospace;
+}
+
+.typeButton.active, .primary{
+  background:var(--strtextColor);
+  color:var(--bg);
+}
+
+.modalActions{
+  display:flex;
+  justify-content:flex-end;
+  gap:10px;
+}
+
+.textArea.rsw-ce p{ margin:0 0 1em 0; }
+
+.textArea img{
+   max-width:100%;
+   height:auto;
+   cursor:pointer;
+}
+
+.imageSelection{
+   position:absolute;
+   pointer-events:none;
+   border:2px solid var(--strtextColor);
+   box-shadow:0 0 0 1px rgba(0,0,0,.35);
+   z-index:3;
+}
+
+.imageResizeHandle{
+   position:absolute;
+   right:-7px;
+   bottom:-7px;
+   width:14px;
+   height:14px;
+   padding:0;
+   border:2px solid var(--bg);
+   border-radius:50%;
+   background:var(--strtextColor);
+   cursor:nwse-resize;
+   pointer-events:auto;
+}
+
+.footerRow{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:12px;
+  padding-top:6px;
+}
+
+.publish{
+  background:var(--strtextColor);
+  color:var(--bg);
+  padding:10px 16px;
+  border:none;
+  border-radius:8px;
+  cursor:pointer;
+}
+
+/* Responsive */
+@media (max-width: 900px){
+  .mainRow{ grid-template-columns:48px 1fr; gap:12px; }
+  .input{ font-size:22px; }
+  .textArea .rsw-ce{ min-height:260px; padding:16px; }
+
+  /* At narrower desktop/tablet widths, stack the date label+input pairs into two columns
+     to avoid overly compressed date inputs (year dropdown getting clipped). */
+  .dateSelector{
+    grid-template-columns: 1fr 1fr;
+  }
+  .dateSelector .dateInput{
+    min-width:0;
+    width:100%;
+  }
+}
+
+@media (max-width:640px){
+  .container{ padding:22px 14px 44px; margin-top:10px; }
+  .header{ align-items:flex-start; flex-direction:column; }
+  .header h1{ font-size:24px; }
+  .input{ font-size:22px; }
+  .categorySection{ grid-template-columns:1fr; padding:15px; }
+  .dateSelector{ grid-template-columns:1fr 1fr; }
+  .dateSelector label{ margin-top:4px; }
+
+  /* Allow labels to wrap and sit above inputs on small screens so date parts are not clipped */
+  .dateSelector label{
+    white-space:normal;
+    display:block;
+  }
+
+  .container {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 38px 22px 64px;
+    color: var(--textColor);
+    font-family: var(--serif);
+  }
+
+  .header h1 {
+    color: var(--textColor);
+    font: 500 clamp(32px, 5vw, 48px)/1.1 var(--serif);
+    letter-spacing: -.03em;
+  }
+
+  .header::after {
+    color: var(--softTextColor);
+    font-family: var(--serif);
+  }
+
+  .input,
+  .textAreaSummary,
+  .slugInput,
+  .select,
+  .dateInput,
+  .textArea {
+    border: 1px solid var(--surface-border);
+    border-radius: 0;
+    background: var(--bg);
+    color: var(--textColor);
+    font-family: var(--serif);
+  }
+
+  .input {
+    font-size: clamp(21px, 4vw, 30px);
+  }
+
+  .input:focus,
+  .textAreaSummary:focus,
+  .select:focus,
+  .dateInput:focus,
+  .slugInput:focus {
+    border-color: var(--parchment);
+    box-shadow: 0 0 0 2px color-mix(in srgb, var(--parchment) 20%, transparent);
+  }
+
+  .categorySection,
+  .editor,
+  .editorToolbar,
+  .toolBar {
+    border: 1px solid var(--surface-border);
+    border-radius: 0;
+    background: var(--surface);
+  }
+
+  .categorySection {
+    background: color-mix(in srgb, var(--surface) 82%, transparent);
+  }
+
+  .publish,
+  .publishInline,
+  .primary,
+  .button,
+  .addButton,
+  .toolButton,
+  .secondary {
+    border: 1px solid var(--surface-border);
+    border-radius: 0;
+    background: var(--button-surface);
+    color: var(--button-text);
+    font-family: var(--serif);
+  }
+
+  .publish:hover,
+  .publishInline:hover,
+  .primary:hover,
+  .button:hover,
+  .addButton:hover,
+  .toolButton:hover,
+  .secondary:hover {
+    border-color: var(--parchment);
+    background: var(--button-hover);
+  }
+
+  .editorToolbar button,
+  .toolBar button {
+    border-color: var(--surface-border);
+    border-radius: 0;
+    background: transparent;
+    color: var(--textColor);
+  }
+
+  .editorToolbar button:hover,
+  .toolBar button:hover,
+  .activeEditorButton,
+  .active {
+    background: var(--button-surface);
+    color: var(--parchment);
+  }
+
+  .modal {
+    border: 1px solid var(--surface-border);
+    border-radius: 0;
+    background: var(--bg);
+    color: var(--textColor);
+  }
+
+  .modalBackdrop {
+    background: rgba(0, 0, 0, .72);
+  }
+
+  .loading,
+  .editorStatus {
+    color: var(--softTextColor);
+    font-family: var(--serif);
+  }
+
+  @media (max-width: 640px) {
+    .container {
+      padding: 28px 0 48px;
+    }
+  }
+
+  /* Make sure inputs take full column width on mobile */
+  .dateSelector .dateInput{
+    width:100%;
+    min-width:0; /* allow the grid to size columns on small screens */
+  }
+
+  .mainRow{ grid-template-columns: 1fr; }
+  .sideControls{ flex-direction:row; justify-content:flex-start; }
+  .titleWrap{ flex-direction:column; align-items:flex-start; gap:8px; }
+  .textArea .rsw-ce{ min-height:300px; padding:20px 16px; }
+}
