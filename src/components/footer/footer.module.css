@@ -1,39 +1,66 @@
 .footer {
     display: grid;
     grid-template-columns: 1fr auto auto;
-    gap: 26px;
+    gap: 56px 26px;
     align-items: center;
-    padding: 26px 0 20px;
-    border-top: 1px solid var(--surface-border);
+    margin-top: 48px;
+    padding: 0 0 20px;
     color: var(--softTextColor);
 }
 
 .closingNote {
+    position: relative;
     grid-column: 1 / -1;
     display: grid;
-    gap: 5px;
+    gap: 8px;
     justify-items: center;
-    padding: 20px 14px;
-    border: 1px solid rgba(118, 86, 61, .28);
+    align-content: center;
+    box-sizing: border-box;
+    min-height: 128px;
+    padding: 34px 18px 30px;
+    border-bottom: 1px solid rgba(151, 113, 70, .24);
     background:
-        radial-gradient(ellipse at 50% 0%, rgba(118, 86, 61, .14), transparent 66%),
-        #211a15;
+        linear-gradient(90deg, rgba(35, 17, 8, .5), rgba(58, 32, 16, .36) 50%, rgba(32, 15, 7, .52)),
+        url('/wood-planks.png'),
+        #24170f;
+    background-size: auto, cover, auto;
+    background-position: center, center 48%, center;
+    background-repeat: no-repeat, no-repeat, repeat;
     color: var(--textColor);
     text-align: center;
 }
 
+.closingNote::before {
+    position: absolute;
+    z-index: 0;
+    inset: 0;
+    background:
+        repeating-linear-gradient(0deg, transparent 0 5px, rgba(17, 9, 5, .22) 6px, transparent 7px 12px),
+        repeating-linear-gradient(1deg, rgba(202, 154, 97, .08) 0 1px, transparent 2px 19px),
+        url('/grain.svg') repeat;
+    background-size: auto, auto, 150px 150px;
+    content: "";
+    opacity: .5;
+    mix-blend-mode: soft-light;
+    pointer-events: none;
+}
+
 .closingNote p {
-    font: italic clamp(19px, 2.5vw, 26px)/1.35 var(--typewriter);
+    position: relative;
+    z-index: 1;
+    font: italic clamp(16px, 2vw, 22px)/1.4 var(--typewriter);
 }
 
 .closingNote cite {
+    position: relative;
+    z-index: 1;
     color: var(--parchment);
-    font: 12px/1.4 var(--serif);
+    font: 11px/1.4 var(--serif);
 }
 
 .logo {
     color: var(--textColor);
-    font: 500 24px/1 var(--serif);
+    font: 500 clamp(19px, 2vw, 24px)/1 var(--serif);
 }
 
 .signature p {
@@ -82,10 +109,21 @@
 @media (max-width: 520px) {
     .footer {
         grid-template-columns: 1fr;
-        gap: 17px;
+        gap: 40px;
+        margin-top: 32px;
     }
 
     .signature {
         grid-column: auto;
+    }
+
+    .closingNote {
+        min-height: 112px;
+        padding: 26px 12px 22px;
+    }
+
+    .footerLinks,
+    .socialLinks {
+        display: none;
     }
 }

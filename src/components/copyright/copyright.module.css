@@ -1,21 +1,29 @@
 .copyright {
+    display: block;
     padding-top: 0;
     padding-bottom: 15px;
     border-top: 1px solid var(--surface-border);
+    color: inherit;
+    text-decoration: none;
+    transition: background-color .2s ease, color .2s ease;
+}
+
+.copyright:hover,
+.copyright:focus-visible {
+    background-color: rgba(118, 86, 61, .12);
+    color: var(--parchment);
 }
 
 .text {
+    display: block;
+    padding: 12px 10px 0;
     text-align: center;
     font: 10px/1.5 var(--serif);
     color: var(--softTextColor);
     letter-spacing: .04em;
 }
 
-.text a {
-    color: var(--strtextColor);
-    transition: color .2s;
-}
-
-.text a:hover {
-    color: var(--strtextColor);
+.copyright:hover .text,
+.copyright:focus-visible .text {
+    color: var(--parchment);
 }

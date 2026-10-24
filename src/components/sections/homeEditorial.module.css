@@ -200,15 +200,19 @@
 
 .about {
     display: grid;
-    grid-template-columns: 290px 1fr;
-    gap: clamp(25px, 6vw, 70px);
+    grid-template-columns: minmax(0, .8fr) minmax(0, 1.2fr);
+    column-gap: clamp(25px, 6vw, 70px);
+    row-gap: 0;
     align-items: center;
-    padding: 38px 22px 44px;
+    padding: 60px 22px 44px;
 }
 
 .portrait {
+    grid-column: 1;
     position: relative;
-    min-height: 290px;
+    width: 100%;
+    min-width: 0;
+    aspect-ratio: 1;
     overflow: hidden;
     border: 1px solid var(--surface-border);
     background: var(--coffee);
@@ -229,37 +233,16 @@
     margin: 14px 0 17px;
 }
 
-.authorSocials {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    gap: 10px;
-}
-
-.authorSocials > a:not(.textLink) {
-    display: grid;
-    width: 32px;
-    height: 32px;
-    place-items: center;
-    border: 1px solid var(--surface-border);
-    color: var(--parchment);
-    font-size: 14px;
-    transition: color .2s ease, border-color .2s ease, background-color .2s ease;
-}
-
-.authorSocials > a:not(.textLink):hover {
-    border-color: var(--bronze);
-    background: rgba(118, 86, 61, .15);
-    color: var(--ivory);
-}
-
-.authorSocials .textLink {
-    margin-left: 5px;
+.aboutCopy {
+    grid-column: 2;
+    min-width: 0;
 }
 
 @media (max-width: 760px) {
     .about {
-        grid-template-columns: 1fr;
+        grid-template-columns: minmax(0, .9fr) minmax(0, 1.1fr);
+        gap: 12px 16px;
+        align-items: start;
     }
 
     .listening {
@@ -322,14 +305,32 @@
     }
 
     .about {
-        gap: 22px;
-        padding: 30px 0 35px;
+        gap: 12px 16px;
+        padding: 40px 12px 24px;
     }
 
     .portrait {
-        width: min(100%, 360px);
-        min-height: 340px;
+        width: 100%;
+        min-width: 0;
+        min-height: 0;
+        aspect-ratio: 1;
+        align-self: start;
     }
+
+    .aboutCopy {
+        min-width: 0;
+    }
+
+    .about h2 {
+        font-size: clamp(21px, 5.5vw, 30px);
+    }
+
+    .aboutCopy p {
+        margin: 8px 0 10px;
+        font-size: 13px;
+        line-height: 1.48;
+    }
+
 }
 
 @media (max-width: 520px) {

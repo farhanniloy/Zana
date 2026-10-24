@@ -12,11 +12,11 @@ export default function Footer() {
     return (
         <footer className={styles.footer}>
             <blockquote className={styles.closingNote}>
-                <p>“Fill your paper with the breathing of your heart.”</p>
-                <cite>— William Wordsworth</cite>
+                <p>“But how could you live and have no story to tell?”</p>
+                <cite>— Fyodor Dostoevsky</cite>
             </blockquote>
             <div className={styles.signature}>
-                <Link href="/" className={styles.logo}>nil.</Link>
+                <Link href="/" className={styles.logo}>Zana</Link>
                 <p>Pages, thoughts, and small things worth keeping.</p>
             </div>
             <nav className={styles.footerLinks} aria-label="Footer navigation">

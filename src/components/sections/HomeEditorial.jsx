@@ -1,6 +1,5 @@
 import Image from "next/image";
 import Link from "next/link";
-import { FaFacebookF, FaGithub, FaLinkedinIn, FaXTwitter } from "react-icons/fa6";
 import prisma from "@/utils/connect";
 import Featured from "@/components/featured/Featured";
 import WritingCard from "@/components/writing/WritingCard";
@@ -127,7 +126,7 @@ export default async function HomeEditorial() {
                         src="/farhan.jpeg"
                         alt="Portrait of Farhan Niloy"
                         fill
-                        sizes="(max-width: 640px) 100vw, 300px"
+                        sizes="(max-width: 760px) 40vw, (max-width: 1200px) 32vw, 400px"
                     />
                 </div>
                 <div className={styles.aboutCopy}>
@@ -137,13 +136,7 @@ export default async function HomeEditorial() {
                         I work where artificial intelligence meets security research, and keep this
                         space for the ideas, questions, and small discoveries that gather along the way.
                     </p>
-                    <nav className={styles.authorSocials} aria-label="Author social profiles">
-                        <a href="https://github.com/niloy-farhan" target="_blank" rel="noopener noreferrer" aria-label="GitHub"><FaGithub aria-hidden="true" /></a>
-                        <a href="https://www.linkedin.com/in/niloy-farhan-6067b422b/" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn"><FaLinkedinIn aria-hidden="true" /></a>
-                        <a href="https://twitter.com/MrFarhanNiloy" target="_blank" rel="noopener noreferrer" aria-label="X"><FaXTwitter aria-hidden="true" /></a>
-                        <a href="https://facebook.com/nulll.me" target="_blank" rel="noopener noreferrer" aria-label="Facebook"><FaFacebookF aria-hidden="true" /></a>
-                        <Link href="/about" className={styles.textLink}>More about me <span aria-hidden="true">→</span></Link>
-                    </nav>
+                    <Link href="/about" className={styles.textLink}>More about me <span aria-hidden="true">→</span></Link>
                 </div>
             </section>
         </main>

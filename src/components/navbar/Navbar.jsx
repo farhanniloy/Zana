@@ -42,8 +42,8 @@ export default function Navbar() {
 
     return (
         <header className={styles.container}>
-            <Link href="/" className={styles.logo} aria-label="Nil's Journal home">
-                <span>nil.</span>
+            <Link href="/" className={styles.logo} aria-label="Zana home">
+                <span>Zana</span>
                 <small>A personal journal</small>
             </Link>
 

@@ -283,23 +283,23 @@ img {
     background: url('/grain.svg') repeat;
     background-size: 220px 220px;
     content: "";
-    opacity: .48;
+    opacity: .51;
     pointer-events: none;
     mix-blend-mode: soft-light;
 }
 
 .light .container::before {
-    opacity: .2;
+    opacity: .22;
 }
 
 @media (max-width: 640px) {
     .container::before {
         background-size: 280px 280px;
-        opacity: .27;
+        opacity: .29;
     }
 
     .light .container::before {
-        opacity: .14;
+        opacity: .16;
     }
 }
 

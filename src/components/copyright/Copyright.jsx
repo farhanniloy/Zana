@@ -1,21 +1,22 @@
 import styles from "./copyright.module.css"
 import {FaCopyright} from "react-icons/fa6";
-import {FaGithub, FaGithubSquare} from "react-icons/fa";
-import Link from "next/link";
+import {FaGithub} from "react-icons/fa";
 
 const Copyright = () => {
     return(
-        <div className={styles.copyright}>
-            <p className={styles.text}>
-                <FaCopyright /> All rights reserved by <Link href="/u/nil"><strong>@nil</strong></Link>
+        <a
+            className={styles.copyright}
+            href="https://nilll.vercel.app"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="All rights reserved by @nil. View source."
+        >
+            <span className={styles.text}>
+                <FaCopyright aria-hidden="true" /> All rights reserved by <strong>@nil</strong>
                 <span> | </span>
-                <a href="https://github.com/niloy-farhan/fullstack-blog-for-null"
-                   target="_blank"
-                   rel="noopener noreferrer">
-                    <FaGithub /> source
-                </a>
-            </p>
-        </div>
+                <span><FaGithub aria-hidden="true" /> source</span>
+            </span>
+        </a>
     )
 }
 
