@@ -1,5 +1,4 @@
-# Zana's World
-
+# Zana
 A personal journal for essays, notebook entries, and ideas about philosophy,
 science, technology, and creative work. The site pairs a warm, bookish visual
 style with a working publishing backend: writing, comments, moderation, user
