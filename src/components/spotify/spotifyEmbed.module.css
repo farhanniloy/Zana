@@ -7,9 +7,17 @@
 
 .listeningPlayer {
     position: relative;
+    z-index: 2;
     display: grid;
     gap: 12px;
     padding: 0;
+    pointer-events: none;
+}
+
+.listeningPlayer a,
+.listeningPlayer button,
+.listeningPlayer iframe {
+    pointer-events: auto;
 }
 
 .nowPlaying {
@@ -125,14 +133,6 @@
     width: 14px;
     height: 14px;
     fill: currentColor;
-}
-
-.transportButton:first-child svg {
-    fill: none;
-    stroke: currentColor;
-    stroke-linecap: round;
-    stroke-linejoin: round;
-    stroke-width: 1.35;
 }
 
 .brandWave {

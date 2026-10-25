@@ -50,3 +50,69 @@ export function getSpotifyPlaylistUrls() {
         ? [legacyOverride]
         : [DEFAULT_SPOTIFY_PLAYLIST_URL];
 }
+
+export function getSpotifyPlaylistConfig(savedContent) {
+    if (savedContent) {
+        const parsed = JSON.parse(savedContent);
+        if (
+            parsed &&
+            Array.isArray(parsed.playlists) &&
+            parsed.playlists.length > 0 &&
+            parsed.playlists.every((playlist) =>
+                playlist &&
+                typeof playlist.id === "string" &&
+                typeof playlist.title === "string" &&
+                typeof playlist.description === "string" &&
+                resolveSpotifyPlaylist(playlist.url)
+            ) &&
+            parsed.playlists.some((playlist) => playlist.id === parsed.defaultId)
+        ) {
+            return parsed;
+        }
+    }
+
+    const titles = (process.env.NEXT_PUBLIC_SPOTIFY_PLAYLIST_TITLES || "")
+        .split(",")
+        .map((title) => title.trim());
+    const playlists = getSpotifyPlaylistUrls()
+        .map((url, index) => {
+            const spotify = resolveSpotifyPlaylist(url);
+            if (!spotify) return null;
+            return {
+                id: `legacy-${index}`,
+                title: titles[index] || (index === 0 ? "Late Night Thoughts" : `Listening note ${index + 1}`),
+                description: "Songs for the quiet hours and overthinking minds.",
+                url: spotify.openUrl,
+            };
+        })
+        .filter(Boolean);
+
+    if (!playlists.length) {
+        playlists.push({
+            id: "default-playlist",
+            title: "Late Night Thoughts",
+            description: "Songs for the quiet hours and overthinking minds.",
+            url: DEFAULT_SPOTIFY_PLAYLIST_URL,
+        });
+    }
+
+    return { playlists, defaultId: playlists[0].id };
+}
+
+function resolveSpotifyPlaylist(value) {
+    if (typeof value !== "string") return null;
+    const input = value.trim();
+    const uriMatch = input.match(/^spotify:playlist:([A-Za-z0-9]+)$/);
+    if (uriMatch) return { openUrl: `https://open.spotify.com/playlist/${uriMatch[1]}` };
+
+    try {
+        const url = new URL(input);
+        if (url.protocol !== "https:" || !["open.spotify.com", "www.open.spotify.com"].includes(url.hostname)) {
+            return null;
+        }
+        const [, id] = url.pathname.match(/^\/(?:embed\/)?playlist\/([A-Za-z0-9]+)/) || [];
+        return id ? { openUrl: `https://open.spotify.com/playlist/${id}` } : null;
+    } catch {
+        return null;
+    }
+}

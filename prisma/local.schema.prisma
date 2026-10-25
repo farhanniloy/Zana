@@ -117,3 +117,8 @@ model ModerationHistory {
   action          String
   details         String?
 }
+
+model PageContent {
+  slug    String @id
+  content String
+}

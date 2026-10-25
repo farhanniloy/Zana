@@ -121,3 +121,8 @@ model ModerationHistory {
   action          String   // e.g., "APPROVE_POST", "REJECT_POST", "CHANGE_ROLE"
   details         String?  // optional freeform details or reason
 }
+
+model PageContent {
+  slug    String @id
+  content String
+}

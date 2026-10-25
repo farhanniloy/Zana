@@ -3,7 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { SiSpotify } from "react-icons/si";
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import styles from "./spotifyEmbed.module.css";
 import { resolveSpotifyUrl } from "./spotifyUrl";
 
@@ -51,15 +51,52 @@ function PlayIcon({ paused }) {
     );
 }
 
-export default function SpotifyCompactPlayer({ url, title = "Listen on Spotify", metadata }) {
+export default function SpotifyCompactPlayer({ url, title = "Listen on Spotify", metadata, tracks = [] }) {
     const spotify = resolveSpotifyUrl(url);
     const spotifyOpenUrl = spotify?.openUrl;
     const playerRef = useRef(null);
     const controllerRef = useRef(null);
+    const pendingTrackIdRef = useRef(null);
+    const currentTrackIdRef = useRef(metadata?.id);
+    const autoAdvanceTrackIdRef = useRef(null);
+    const playbackProgressRef = useRef({ trackId: null, position: 0, duration: 0 });
+    const isPlayingRef = useRef(false);
+    const manualPauseRef = useRef(false);
     const [api, setApi] = useState(null);
     const [controllerReady, setControllerReady] = useState(false);
     const [isPlaying, setIsPlaying] = useState(false);
     const [apiError, setApiError] = useState(false);
+    const [currentTrack, setCurrentTrack] = useState(metadata);
+    const [currentTrackId, setCurrentTrackId] = useState(metadata?.id);
+
+    const playTrack = useCallback((track) => {
+        try {
+            const controller = controllerRef.current;
+            if (!controller) return;
+            pendingTrackIdRef.current = track.id;
+            controller.loadUri(track.uri);
+            controller.togglePlay();
+            currentTrackIdRef.current = track.id;
+            manualPauseRef.current = false;
+            setCurrentTrackId(track.id);
+            setCurrentTrack({
+                id: track.id,
+                title: track.title,
+                artist: metadata?.artist,
+                artworkUrl: track.artworkUrl,
+            });
+        } catch {
+            setApiError(true);
+            setControllerReady(false);
+        }
+    }, [metadata]);
+
+    const playNextTrack = useCallback(() => {
+        if (tracks.length < 2) return;
+
+        const currentIndex = tracks.findIndex((track) => track.id === currentTrackIdRef.current);
+        playTrack(tracks[(currentIndex + 1) % tracks.length]);
+    }, [playTrack, tracks]);
 
     useEffect(() => {
         let active = true;
@@ -98,9 +135,74 @@ export default function SpotifyCompactPlayer({ url, title = "Listen on Spotify",
 
                     controller = createdController;
                     controllerRef.current = createdController;
-                    createdController.addListener("playback_started", () => setIsPlaying(true));
+                    const updateCurrentTrack = (playingURI) => {
+                        const track = tracks.find((item) => item.uri === playingURI);
+                        if (track) {
+                            currentTrackIdRef.current = track.id;
+                            setCurrentTrackId(track.id);
+                            setCurrentTrack({
+                                id: track.id,
+                                title: track.title,
+                                artist: metadata?.artist,
+                                artworkUrl: track.artworkUrl,
+                            });
+                        }
+                    };
+                    createdController.addListener("playback_started", (event) => {
+                        const startedTrack = tracks.find((item) => item.uri === event.data.playingURI);
+                        if (startedTrack && playbackProgressRef.current.trackId !== startedTrack.id) {
+                            playbackProgressRef.current = {
+                                trackId: startedTrack.id,
+                                position: 0,
+                                duration: 0,
+                            };
+                            autoAdvanceTrackIdRef.current = null;
+                        }
+                        isPlayingRef.current = true;
+                        setIsPlaying(true);
+                        updateCurrentTrack(event.data.playingURI);
+                        if (startedTrack?.id === pendingTrackIdRef.current) {
+                            pendingTrackIdRef.current = null;
+                        }
+                    });
                     createdController.addListener("playback_update", (event) => {
+                        const { duration, isPaused, playingURI, position } = event.data;
+                        const loadedTrack = tracks.find((item) => item.uri === playingURI);
+                        const progress = playbackProgressRef.current;
+                        if (loadedTrack && progress.trackId !== loadedTrack.id) {
+                            playbackProgressRef.current = {
+                                trackId: loadedTrack.id,
+                                position: 0,
+                                duration: 0,
+                            };
+                            autoAdvanceTrackIdRef.current = null;
+                        }
+                        const trackProgress = playbackProgressRef.current;
+                        trackProgress.duration = duration || trackProgress.duration;
+                        trackProgress.position = Math.max(trackProgress.position, position || 0);
+
+                        const wasPlaying = isPlayingRef.current;
+                        isPlayingRef.current = !isPaused;
                         setIsPlaying(!event.data.isPaused);
+                        updateCurrentTrack(playingURI);
+                        if (loadedTrack?.id === pendingTrackIdRef.current && event.data.isPaused) {
+                            pendingTrackIdRef.current = null;
+                            createdController.togglePlay();
+                        }
+                        const reachedTrackEnd = trackProgress.duration > 0
+                            && trackProgress.position >= trackProgress.duration - 2000;
+                        const endedNaturally = !manualPauseRef.current
+                            && reachedTrackEnd
+                            && (!isPaused || wasPlaying);
+                        if (
+                            endedNaturally
+                            && tracks.length > 1
+                            && loadedTrack?.id === currentTrackIdRef.current
+                            && autoAdvanceTrackIdRef.current !== loadedTrack.id
+                        ) {
+                            autoAdvanceTrackIdRef.current = loadedTrack.id;
+                            playNextTrack();
+                        }
                     });
                     setControllerReady(true);
                 },
@@ -115,10 +217,11 @@ export default function SpotifyCompactPlayer({ url, title = "Listen on Spotify",
             controllerRef.current = null;
             setControllerReady(false);
         };
-    }, [api, spotifyOpenUrl]);
+    }, [api, metadata?.artist, playNextTrack, playTrack, spotifyOpenUrl, tracks]);
 
     function togglePlayback() {
         try {
+            manualPauseRef.current = isPlayingRef.current;
             controllerRef.current?.togglePlay();
         } catch {
             setApiError(true);
@@ -126,40 +229,43 @@ export default function SpotifyCompactPlayer({ url, title = "Listen on Spotify",
         }
     }
 
-    function restartPlayback() {
-        try {
-            controllerRef.current?.restart();
-        } catch {
-            setApiError(true);
-            setControllerReady(false);
-        }
+    function playPreviousTrack() {
+        if (!controllerReady || tracks.length < 2) return;
+
+        const currentIndex = tracks.findIndex((track) => track.id === currentTrackIdRef.current);
+        const previousIndex = currentIndex <= 0 ? tracks.length - 1 : currentIndex - 1;
+        playTrack(tracks[previousIndex]);
     }
 
     if (!spotify) {
         return (
             <div className={styles.empty}>
-                <p>Choose a record for the listening room by setting <code>NEXT_PUBLIC_SPOTIFY_FEATURED_URL</code>.</p>
+                <p>Choose a Spotify playlist in the listening room settings on <Link href="/playlist">the playlist page</Link>.</p>
                 <p>Your regular browsing and writing remain available without Spotify.</p>
             </div>
         );
     }
 
-    const trackName = metadata?.title || title;
-    const artistName = [metadata?.artist, metadata?.version].filter(Boolean).join(" · ") || "Spotify track";
-    const artworkUrl = metadata?.artworkUrl || "/images/music 2.jpg";
+    const trackName = currentTrack?.title || title;
+    const isPlaylist = spotify.type === "playlist";
+    const artistName = [currentTrack?.artist, currentTrack?.version].filter(Boolean).join(" · ") ||
+        (isPlaylist ? "Spotify playlist" : "Spotify track");
+    const artworkUrl = currentTrack?.artworkUrl || "/images/music 2.jpg";
     const embedUrl = `https://open.spotify.com/embed/${spotify.type}/${spotify.id}?utm_source=generator&theme=0`;
 
     return (
         <div className={styles.listeningPlayer}>
             <span className={styles.nowPlaying}>
                 <span aria-hidden="true">◆</span>
-                <Link href="/playlist">{isPlaying ? "NOW PLAYING · OPEN LISTENING ROOM ↗" : "THE LISTENING ROOM · VIEW PLAYLIST ↗"}</Link>
+                <Link href="/playlist">
+                    {isPlaying ? `NOW PLAYING · ${trackName}` : "THE LISTENING ROOM · VIEW PLAYLIST ↗"}
+                </Link>
             </span>
             <div className={styles.trackRow}>
                 <Link className={styles.trackArtwork} href="/playlist" aria-label="Open the listening room playlist">
                     <Image
                         src={artworkUrl}
-                        alt={metadata?.artworkUrl
+                        alt={currentTrack?.artworkUrl
                             ? `Album artwork for ${trackName} by ${artistName}`
                             : "A vintage record player in warm lamplight"}
                         fill
@@ -174,13 +280,13 @@ export default function SpotifyCompactPlayer({ url, title = "Listen on Spotify",
                         <button
                             type="button"
                             className={styles.transportButton}
-                            onClick={restartPlayback}
+                            onClick={playPreviousTrack}
                             disabled={!controllerReady}
-                            aria-label="Restart featured Spotify track"
-                            title="Restart track"
+                            aria-label="Play previous song in the default Spotify playlist"
+                            title="Previous track"
                         >
                             <svg viewBox="0 0 16 16" aria-hidden="true">
-                                <path d="M4.3 5.2A4.5 4.5 0 1 1 3.5 9M4 2.8v2.8H1.2" />
+                                <path d="M13 3.5v9L7 8zM6 3.5v9H4v-9z" />
                             </svg>
                         </button>
                         <button
@@ -188,11 +294,27 @@ export default function SpotifyCompactPlayer({ url, title = "Listen on Spotify",
                             className={`${styles.transportButton} ${styles.mainTransport}`}
                             onClick={togglePlayback}
                             disabled={!controllerReady}
-                            aria-label={isPlaying ? "Pause featured Spotify track" : "Play featured Spotify track"}
+                            aria-label={isPlaylist
+                                ? isPlaying ? "Pause default Spotify playlist" : "Play default Spotify playlist"
+                                : isPlaying ? "Pause featured Spotify track" : "Play featured Spotify track"}
                             title={isPlaying ? "Pause" : "Play"}
                         >
                             <PlayIcon paused={!isPlaying} />
                         </button>
+                        {tracks.length > 1 && (
+                            <button
+                                type="button"
+                                className={styles.transportButton}
+                                onClick={playNextTrack}
+                                disabled={!controllerReady}
+                                aria-label="Play next song in the default Spotify playlist"
+                                title="Next track"
+                            >
+                                <svg viewBox="0 0 16 16" aria-hidden="true">
+                                    <path d="M3 3.5v9l6-4.5zM10 3.5v9h2v-9z" />
+                                </svg>
+                            </button>
+                        )}
                     </div>
                 </div>
                 <div className={styles.spotifyBrand}>

@@ -1,6 +1,10 @@
-import Image from "next/image";
-import Link from "next/link";
-import styles from "./aboutPage.module.css";
+import { getAuthSession } from "@/utils/auth";
+import { defaultAboutContent } from "@/utils/aboutContent";
+import prisma from "@/utils/connect";
+import { getSafePostImageUrl } from "@/utils/imageUrl";
+import AboutPageContent from "./AboutPageContent";
+
+export const dynamic = "force-dynamic";
 
 export const metadata = {
     title: "About",
@@ -8,45 +12,24 @@ export const metadata = {
     alternates: { canonical: "/about" },
 };
 
-const links = [
-    { label: "GitHub", href: "https://github.com/niloy-farhan" },
-    { label: "LinkedIn", href: "https://www.linkedin.com/in/niloy-farhan-6067b422b/" },
-    { label: "X", href: "https://twitter.com/MrFarhanNiloy" },
-    { label: "Facebook", href: "https://facebook.com/nulll.me" },
-];
+export default async function AboutPage() {
+    const [savedContent, session] = await Promise.all([
+        prisma.pageContent.findUnique({ where: { slug: "about" } }),
+        getAuthSession(),
+    ]);
+    const savedValues = savedContent
+        ? { ...defaultAboutContent, ...JSON.parse(savedContent.content) }
+        : defaultAboutContent;
+    const content = {
+        ...savedValues,
+        profileImage: getSafePostImageUrl(savedValues.profileImage) || defaultAboutContent.profileImage,
+    };
+    const user = session?.user?.email
+        ? await prisma.user.findUnique({
+            where: { email: session.user.email },
+            select: { role: true },
+        })
+        : null;
 
-export default function AboutPage() {
-    return (
-        <main className={styles.container}>
-            <div className={styles.portrait}>
-                <Image src="/farhan.jpeg" alt="Portrait of Farhan Niloy" fill sizes="(max-width: 760px) 100vw, 42vw" />
-                <span>Dhaka, Bangladesh</span>
-            </div>
-            <article className={styles.copy}>
-                <span className={styles.kicker}>A note from the author</span>
-                <h1>Farhan<br /><em>Niloy</em></h1>
-                <p className={styles.lede}>Writer. Dreamer. Observer.</p>
-                <p>
-                    I work where artificial intelligence meets security research. My focus is
-                    operating-system-level vulnerability research, red-team operations, and
-                    penetration testing. I enjoy going beneath the interface, tracing how systems
-                    really behave, and turning broken assumptions into stronger defenses and useful tools.
-                </p>
-                <p>
-                    This journal is a quieter place for philosophy, science, technology, and curious
-                    ideas—the things I notice, question, and want to remember.
-                </p>
-                <div className={styles.details}>
-                    <a href="mailto:areyouokaynil@gmail.com">areyouokaynil@gmail.com</a>
-                    <a href="tel:+8801794102371">+880 1794102371</a>
-                </div>
-                <nav className={styles.social} aria-label="Social profiles">
-                    {links.map(({ label, href }) => (
-                        <a href={href} key={label} target="_blank" rel="noopener noreferrer">{label}</a>
-                    ))}
-                </nav>
-                <Link href="/contact" className={styles.contact}>Write a note <span aria-hidden="true">→</span></Link>
-            </article>
-        </main>
-    );
+    return <AboutPageContent content={content} isAdmin={user?.role === "ADMIN"} />;
 }

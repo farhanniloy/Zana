@@ -6,6 +6,7 @@ import { Suspense, useEffect, useRef, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useSession } from "next-auth/react";
 import dynamic from "next/dynamic";
+import { getSafePostImageUrl } from "@/utils/imageUrl";
 
 const RichTextEditor = dynamic(() => import('react-simple-wysiwyg'), { ssr: false });
 
@@ -40,14 +41,12 @@ const WritePageContent = () => {
     const slugParam = searchParams?.get ? searchParams.get('slug') : null;
 
     const [open, setOpen] = useState(false);
-    const [file, setFile] = useState(null);
     const [media, setMedia] = useState("");
     const [value, setValue] = useState("");
     const [title, setTitle] = useState("");
     const [postSlug, setPostSlug] = useState("");
     const [catSlugs, setCatSlugs] = useState([]);
     const [summary, setSummary] = useState("");
-    const [uploading, setUploading] = useState(false);
     const [saving, setSaving] = useState(false);
     const [isEdit, setIsEdit] = useState(false);
     const [categories, setCategories] = useState([]);
@@ -58,6 +57,7 @@ const WritePageContent = () => {
     const [showMediaModal, setShowMediaModal] = useState(false);
     const [mediaType, setMediaType] = useState("image");
     const [mediaUrl, setMediaUrl] = useState("");
+    const [thumbnailUrl, setThumbnailUrl] = useState("");
     const [youtubeId, setYoutubeId] = useState("");
     const editorRef = useRef(null);
     const editorContainerRef = useRef(null);
@@ -261,36 +261,6 @@ const WritePageContent = () => {
     }, [router, status]);
 
     useEffect(() => {
-        if (!file) return;
-        const reader = new FileReader();
-        reader.onload = async () => {
-            try {
-                setUploading(true);
-                const dataUrl = reader.result;
-                const res = await fetch('/api/uploads', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ filename: file.name, data: dataUrl }),
-                });
-                if (res.ok) {
-                    const json = await res.json();
-                    setMedia(json.url);
-                } else {
-                    console.error('Upload failed', await res.text());
-                    alert('Image upload failed');
-                }
-            } catch (err) {
-                console.error(err);
-                alert('Upload error: ' + err.message);
-            } finally {
-                setUploading(false);
-                setFile(null);
-            }
-        };
-        reader.readAsDataURL(file);
-    }, [file]);
-
-    useEffect(() => {
         if (!slugParam) return;
         (async () => {
             try {
@@ -302,6 +272,7 @@ const WritePageContent = () => {
                     setSummary(post.summary || '');
                     setValue(post.desc || '');
                     setMedia(post.img || '');
+                    setThumbnailUrl(post.img || '');
                     setCatSlugs(
                         post.categories?.map((category) => category.categorySlug) ||
                         (post.catSlug ? [post.catSlug] : []),
@@ -687,6 +658,15 @@ const WritePageContent = () => {
         }
     };
 
+    const useThumbnailUrl = () => {
+        const safeUrl = getSafePostImageUrl(thumbnailUrl);
+        if (!safeUrl?.startsWith("https://")) {
+            alert("Enter a valid HTTPS image URL.");
+            return;
+        }
+        setMedia(safeUrl);
+    };
+
     return (
         <div className={styles.container}>
             <div className={styles.header}>
@@ -722,6 +702,60 @@ const WritePageContent = () => {
                 onChange={(e) => setSummary(e.target.value)}
                 rows={3}
             />
+
+            <section className={styles.thumbnailSection} aria-labelledby="thumbnail-heading">
+                <div className={styles.thumbnailDetails}>
+                    <h2 id="thumbnail-heading">Thumbnail image</h2>
+                    <p>Choose the image shown on your post card and at the top of your post.</p>
+                    <label className={styles.thumbnailUrlLabel} htmlFor="thumbnail-url">
+                        Use an image hosted elsewhere
+                    </label>
+                    <input
+                        id="thumbnail-url"
+                        type="url"
+                        inputMode="url"
+                        placeholder="https://example.com/image.jpg"
+                        value={thumbnailUrl}
+                        onChange={(e) => setThumbnailUrl(e.target.value)}
+                        className={styles.thumbnailUrlInput}
+                        aria-label="External thumbnail image URL"
+                    />
+                    <div className={styles.thumbnailActions}>
+                        <button
+                            type="button"
+                            className={styles.thumbnailButton}
+                            onClick={useThumbnailUrl}
+                        >
+                            Use image URL
+                        </button>
+                        {media && (
+                            <button
+                                type="button"
+                                className={styles.thumbnailRemove}
+                                onClick={() => {
+                                    setMedia('');
+                                    setThumbnailUrl('');
+                                }}
+                            >
+                                Remove
+                            </button>
+                        )}
+                    </div>
+                </div>
+                {media ? (
+                    <div className={styles.thumbnailPreview}>
+                        <Image
+                            src={media}
+                            alt="Selected post thumbnail preview"
+                            width={480}
+                            height={270}
+                            unoptimized
+                        />
+                    </div>
+                ) : (
+                    <div className={styles.thumbnailPlaceholder}>No thumbnail selected</div>
+                )}
+            </section>
 
             <div className={styles.categorySection}>
                 <div className={styles.categorySelector}>
@@ -799,22 +833,6 @@ const WritePageContent = () => {
 
                 {open && (
                     <div className={styles.add}>
-                        <input
-                            type="file"
-                            id="image"
-                            accept="image/*"
-                            onChange={(e) => setFile(e.target.files?.[0] ?? null)}
-                            style={{ display: 'none' }}
-                        />
-                        <button
-                            className={styles.addButton}
-                            type="button"
-                            title="Upload featured image from device"
-                            onClick={() => document.getElementById('image')?.click()}
-                        >
-                            <Image src="/image.png" alt="Upload" width={16} height={16} />
-                        </button>
-
                         <button
                             className={styles.addButton}
                             type="button"
@@ -1086,10 +1104,10 @@ const WritePageContent = () => {
                 <button
                     className={styles.publish}
                     onClick={handleSubmit}
-                    disabled={uploading || saving}
+                    disabled={saving}
                     type="button"
                 >
-                    {uploading || saving ? 'Saving...' : isEdit ? 'Update Post' : 'Publish'}
+                    {saving ? 'Saving...' : isEdit ? 'Update Post' : 'Publish'}
                 </button>
             </div>
         </div>

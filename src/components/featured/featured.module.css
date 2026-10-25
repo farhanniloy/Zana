@@ -17,6 +17,17 @@
     filter: sepia(.3) saturate(.78) brightness(.78) contrast(1.06);
 }
 
+.grain {
+    position: absolute;
+    z-index: 1;
+    inset: 0;
+    background: url('/grain.svg') repeat;
+    background-size: 150px 150px;
+    mix-blend-mode: soft-light;
+    opacity: .2;
+    pointer-events: none;
+}
+
 .hero::before {
     position: absolute;
     z-index: 1;
@@ -38,8 +49,11 @@
 .heroText {
     position: relative;
     z-index: 2;
+    width: 100%;
+    min-width: 0;
     max-width: 510px;
     padding: clamp(28px, 7vw, 76px);
+    box-sizing: border-box;
 }
 
 .welcome {
@@ -98,10 +112,12 @@
     }
 
     .heroText {
+        width: calc(100% - 24px);
+        max-width: none;
         margin: 0 12px;
         padding: 26px 18px;
         border: 1px solid rgba(232, 223, 206, .16);
-        background: rgba(25, 17, 11, .58);
+        background: rgba(25, 17, 11, .34);
     }
 
     .hero h1 {

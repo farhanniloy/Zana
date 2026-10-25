@@ -1,153 +1,110 @@
 .container {
-    width: min(100% - 36px, 920px);
-    margin: 0 auto;
-    padding: 34px 0 72px;
+    box-sizing: border-box;
+    width: min(100%, 960px);
+    margin: 44px auto 72px;
+    padding: 0 24px 40px;
     color: var(--textColor);
 }
 
-.infoContainer {
-    align-items: center;
-    gap: 50px;
-}
-
-.textContainer {
-    margin-top: 50px;
-}
-
-.avatar {
-    border-radius: 50%;
-    object-fit: cover;
-}
-
-.user {
-    display: flex;
-    align-items: center;
-    gap: 9px;
-}
-
-.userImageContainer {
-    width: 30px;
-    height: 30px;
-    position: relative;
-}
-
-.userTextContainer {
-    display: flex;
-    flex-direction: column;
-    gap: 1px;
-}
-
-.title {
-    max-width: 850px;
-    margin: 12px 0 20px;
-    color: var(--textColor);
-    font: 500 clamp(40px, 7vw, 72px)/1.02 var(--serif);
-    letter-spacing: -.045em;
+.topline {
+    margin-bottom: 38px;
 }
 
 .back {
-    display: inline-flex;
-    margin: 0 0 32px;
     color: var(--softTextColor);
     font: 13px/1.4 var(--serif);
-}
-
-.baack {
-    cursor: pointer;
-    margin-top: 4px;
-    font-size: 15px;
+    transition: color .2s ease;
 }
 
 .back:hover {
     color: var(--parchment);
 }
 
-.top {
-    margin: 10px;
+.back:focus-visible,
+.articleMeta a:focus-visible,
+.tags a:focus-visible,
+.postNav > a:focus-visible {
+    border-radius: 1px;
+    outline: 1px solid var(--parchment);
+    outline-offset: 4px;
 }
 
-.lin {
+.articleHeader {
+    max-width: 760px;
+    margin-bottom: 30px;
+}
+
+.title {
+    margin: 0 0 12px;
+    color: var(--textColor);
+    font: 500 clamp(40px, 5.2vw, 64px)/.98 var(--serif);
+    letter-spacing: -.035em;
+    text-wrap: balance;
+}
+
+.articleMeta {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px;
     color: var(--textColor2);
-    font-size: 12px;
+    font: 13px/1.5 var(--serif);
 }
 
-.headingMeta {
-   display: flex;
-   align-items: center;
-   gap: 6px;
-   margin-top: 50px;
+.articleMeta a {
+    color: var(--parchment);
 }
 
-.symbol {
-   color: var(--textColor2);
-   font-size: 15px;
-   letter-spacing: 0.18em;
-   font-weight: 500;
+.articleMeta a:hover {
+    color: var(--textColor);
 }
 
-.dot {
-   color: var(--textColor2);
-   font-size: 18px;
-   font-weight: 700;
-   margin-right: 4px;
+.pending {
+    padding-left: 8px;
+    border-left: 1px solid var(--surface-border);
+    color: var(--parchment);
 }
 
-.uploadedDate {
-   color: var(--textColor2);
-   font-size: 13px;
-   letter-spacing: .01em;
-   font-weight: 400;
-   text-transform: lowercase;
+.adminControls {
+    margin-top: 16px;
 }
- 
+
 .imageContainer {
-    width: 100%;
-    height: clamp(240px, 44vw, 430px);
     position: relative;
-    margin: 28px 0 12px;
+    box-sizing: border-box;
+    width: 100%;
+    aspect-ratio: 2.12 / 1;
+    margin: 0 auto;
     overflow: hidden;
-    border: 1px solid var(--surface-border);
     background: var(--surface);
+    box-shadow: 0 18px 42px rgba(0, 0, 0, .2);
 }
 
 .image {
     object-fit: cover;
     object-position: center;
+    filter: sepia(.12) saturate(.82) contrast(1.04);
 }
 
 .content {
-    width: min(100%, 740px);
-    margin: 0;
-    margin-inline: auto;
+    width: 100%;
+    margin: 0 auto;
 }
 
-.post {
-    margin: 0;
-}
-
-.solid {
-    border-top: .1px dotted grey;
-    margin: 65px 0 70px;
-}
-
-/*
- * The editor stores Quill's HTML, including its ql-* classes and inline
- * image dimensions. Keep this element a Quill document so the browser uses
- * the same whitespace, alignment, typography, and list behavior as the
- * editor rather than applying article-specific approximations.
- */
 .description {
     box-sizing: border-box;
     width: 100%;
+    max-width: 680px;
     min-width: 0;
     height: auto;
+    margin: 0 auto;
+    padding: 34px 0 0;
     overflow: visible;
-    padding: 30px 0;
     color: var(--newTextColor);
     font-family: var(--serif);
     font-size: 19px;
     font-weight: 400;
-    line-height: 1.9;
+    line-height: 1.82;
     letter-spacing: 0;
     text-align: left;
     white-space: pre-wrap;
@@ -165,7 +122,7 @@
 }
 
 .description :where(p, ol, ul, pre, blockquote, h1, h2, h3, h4, h5, h6) {
-    margin: 0 0 1em;
+    margin: 0 0 .9em;
     padding: 0;
 }
 
@@ -215,6 +172,7 @@
 }
 
 .description ol li {
+    list-style-type: none;
     counter-reset: list-1 list-2 list-3 list-4 list-5 list-6 list-7 list-8 list-9;
     counter-increment: list-0;
 }
@@ -248,10 +206,11 @@
 }
 
 .description blockquote {
-    margin: 1em 0;
+    margin: 1.2em 0;
     padding-left: 1em;
-    border-left: 3px solid var(--strtextColor);
+    border-left: 1px solid var(--parchment);
     color: var(--textColor2);
+    font-style: italic;
 }
 
 .description pre,
@@ -261,21 +220,18 @@
 
 .description mark {
     padding: 0 .15em;
-    border-radius: 3px;
 }
 
 .description code {
     padding: .1em .3em;
-    border-radius: 4px;
-    background: rgba(0, 0, 0, .25);
+    background: rgba(0, 0, 0, .2);
     font-size: .9em;
 }
 
 .description pre {
     overflow-x: auto;
     padding: 16px;
-    border-radius: 8px;
-    background: rgba(0, 0, 0, .35);
+    background: rgba(0, 0, 0, .2);
 }
 
 .description .ql-syntax {
@@ -285,9 +241,10 @@
 .description a {
     color: var(--parchment);
     text-decoration: underline;
+    text-decoration-color: color-mix(in srgb, var(--parchment) 45%, transparent);
+    text-underline-offset: 3px;
 }
 
-/* Do not replace inline image widths with a block layout or auto width. */
 .description img {
     display: inline-block;
     max-width: 100%;
@@ -377,228 +334,157 @@
 .description .ql-indent-8:not(.ql-direction-rtl) { padding-left: 24em; }
 .description .ql-indent-9:not(.ql-direction-rtl) { padding-left: 27em; }
 
-@media screen and (max-width: 768px) {
-    .description {
-        padding: 20px 16px;
-    }
-
-    .title {
-        font-size: clamp(38px, 8vw, 58px);
-    }
+.tags {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 8px;
+    width: min(100%, 680px);
+    margin: 28px auto 0;
+    color: var(--softTextColor);
+    font: 12px/1.5 var(--typewriter);
 }
 
-@media screen and (max-width: 640px) {
+.topicLabel {
+    margin-right: 3px;
+    color: var(--softTextColor);
+    letter-spacing: .04em;
+}
+
+.tag {
+    display: inline-flex;
+    align-items: baseline;
+    gap: 8px;
+}
+
+.tag a {
+    color: var(--parchment);
+    text-transform: capitalize;
+    transition: color .2s ease;
+}
+
+.tag a:hover {
+    color: var(--textColor);
+}
+
+.postNav {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    column-gap: 28px;
+    width: min(100%, 680px);
+    margin: 54px auto 0;
+    padding: 20px 0 18px;
+    border-top: 1px solid var(--surface-border);
+    border-bottom: 1px solid var(--surface-border);
+}
+
+.postNavHeading {
+    grid-column: 1 / -1;
+    margin: 0 0 2px;
+    color: var(--softTextColor);
+    font: 10px/1.4 var(--typewriter);
+    letter-spacing: .08em;
+    text-transform: uppercase;
+}
+
+.postNav > a {
+    display: grid;
+    align-content: start;
+    gap: 8px;
+    min-width: 0;
+    color: var(--textColor);
+    font: 16px/1.4 var(--serif);
+    transition: color .2s ease;
+}
+
+.postNav > a:first-of-type {
+    padding-right: 20px;
+}
+
+.postNav > a:last-child {
+    padding-left: 24px;
+    border-left: 1px solid var(--surface-border);
+    text-align: right;
+}
+
+.postNav > a span {
+    color: var(--softTextColor);
+    font: 12px/1.4 var(--serif);
+    transition: color .2s ease;
+}
+
+.postNav > a strong {
+    font-weight: 500;
+    overflow-wrap: anywhere;
+}
+
+.postNav > a:hover {
+    color: var(--parchment);
+}
+
+.postNav > a:hover span {
+    color: var(--parchment);
+}
+
+@media (max-width: 640px) {
     .container {
-        width: min(100% - 24px, 1180px);
+        width: 100%;
+        margin: 30px auto 48px;
+        padding: 0 18px 28px;
     }
 
-    .description {
-        padding: 20px 0;
+    .topline {
+        margin-bottom: 28px;
+    }
+
+    .articleHeader {
+        margin-bottom: 22px;
     }
 
     .title {
-        font-size: clamp(36px, 10vw, 48px);
+        font-size: clamp(36px, 9vw, 46px);
     }
-}
 
-.articleHeader {
-    max-width: 850px;
-    margin: 0 auto;
-}
-
-.kicker {
-    color: var(--parchment);
-    font: 9px/1.4 var(--typewriter);
-    letter-spacing: .04em;
-    text-transform: uppercase;
-}
-
-.articleMeta {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 8px;
-    align-items: center;
-    color: var(--softTextColor);
-    font: 12px/1.5 var(--serif);
-}
-
-.articleMeta a:hover {
-    color: var(--parchment);
-}
-
-.pending {
-    padding: 3px 7px;
-    border: 1px solid var(--surface-border);
-    color: var(--parchment);
-}
-
-.tags {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 8px;
-    align-items: center;
-    margin-top: 17px;
-    color: var(--softTextColor);
-    font: 11px/1.4 var(--sans);
-}
-
-.tags a {
-    padding: 4px 9px;
-    border: 1px solid var(--surface-border);
-    color: var(--textColor2);
-    text-transform: capitalize;
-}
-
-.tags a:hover {
-    border-color: var(--parchment);
-    color: var(--parchment);
-}
-
-.adminControls {
-    margin-top: 16px;
-}
-
-.postNav {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 15px;
-    padding: 20px 0;
-    border-top: 1px solid var(--surface-border);
-    border-bottom: 1px solid var(--surface-border);
-}
-
-.postNav > a {
-    display: grid;
-    gap: 6px;
-    padding: 12px;
-    border: 1px solid var(--surface-border);
-    color: var(--textColor);
-    font-family: var(--serif);
-}
-
-.postNav > a:last-child {
-    text-align: right;
-}
-
-.postNav > a:hover {
-    background: var(--surface);
-}
-
-.postNav > a span {
-    color: var(--parchment);
-    font: 10px/1.4 var(--sans);
-    letter-spacing: .08em;
-    text-transform: uppercase;
-}
-
-.postNav > a strong {
-    font-size: 15px;
-    font-weight: 400;
-}
-
-@media screen and (max-width: 520px) {
-    .postNav {
-        grid-template-columns: 1fr;
+    .articleMeta {
+        gap: 6px;
+        font-size: 12px;
     }
-}
 
-.articleHeader {
-    max-width: 850px;
-    margin: 0 auto;
-}
+    .imageContainer {
+        aspect-ratio: 1.6 / 1;
+    }
 
-.kicker {
-    color: var(--parchment);
-    font: 9px/1.4 var(--typewriter);
-    letter-spacing: .04em;
-    text-transform: uppercase;
-}
+    .description {
+        padding-top: 24px;
+        font-size: 17px;
+        line-height: 1.74;
+    }
 
-.articleMeta {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 8px;
-    align-items: center;
-    color: var(--softTextColor);
-    font: 12px/1.5 var(--serif);
-}
+    .tags {
+        margin-top: 22px;
+        font-size: 11px;
+    }
 
-.articleMeta a:hover {
-    color: var(--parchment);
-}
-
-.pending {
-    padding: 3px 7px;
-    border: 1px solid var(--surface-border);
-    color: var(--parchment);
-}
-
-.tags {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 8px;
-    align-items: center;
-    margin-top: 17px;
-    color: var(--softTextColor);
-    font: 11px/1.4 var(--sans);
-}
-
-.tags a {
-    padding: 4px 9px;
-    border: 1px solid var(--surface-border);
-    color: var(--textColor2);
-    text-transform: capitalize;
-}
-
-.tags a:hover {
-    border-color: var(--parchment);
-    color: var(--parchment);
-}
-
-.adminControls {
-    margin-top: 16px;
-}
-
-.postNav {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 15px;
-    padding: 20px 0;
-    border-top: 1px solid var(--surface-border);
-    border-bottom: 1px solid var(--surface-border);
-}
-
-.postNav > a {
-    display: grid;
-    gap: 6px;
-    padding: 12px;
-    border: 1px solid var(--surface-border);
-    color: var(--textColor);
-    font-family: var(--serif);
-}
-
-.postNav > a:last-child {
-    text-align: right;
-}
-
-.postNav > a:hover {
-    background: var(--surface);
-}
-
-.postNav > a span {
-    color: var(--parchment);
-    font: 10px/1.4 var(--sans);
-    letter-spacing: .08em;
-    text-transform: uppercase;
-}
-
-.postNav > a strong {
-    font-size: 15px;
-    font-weight: 400;
-}
-
-@media screen and (max-width: 520px) {
     .postNav {
-        grid-template-columns: 1fr;
+        grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+        column-gap: 12px;
+        margin-top: 42px;
+        padding: 18px 0;
+    }
+
+    .postNavHeading {
+        margin-bottom: 2px;
+    }
+
+    .postNav > a:first-of-type {
+        padding-right: 8px;
+    }
+
+    .postNav > a:last-child {
+        padding-left: 12px;
+    }
+
+    .postNav > a strong {
+        font-size: 14px;
     }
 }

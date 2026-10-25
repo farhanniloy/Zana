@@ -1,6 +1,4 @@
 import styles from "./copyright.module.css"
-import {FaCopyright} from "react-icons/fa6";
-import {FaGithub} from "react-icons/fa";
 
 const Copyright = () => {
     return(
@@ -9,12 +7,10 @@ const Copyright = () => {
             href="https://nilll.vercel.app"
             target="_blank"
             rel="noopener noreferrer"
-            aria-label="All rights reserved by @nil. View source."
+            aria-label="Designed and developed by @nil. Visit the author's website."
         >
             <span className={styles.text}>
-                <FaCopyright aria-hidden="true" /> All rights reserved by <strong>@nil</strong>
-                <span> | </span>
-                <span><FaGithub aria-hidden="true" /> source</span>
+                Designed &amp; developed by <strong>@nil</strong>
             </span>
         </a>
     )

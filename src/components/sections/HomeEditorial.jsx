@@ -1,27 +1,21 @@
 import Image from "next/image";
+import { randomInt } from "node:crypto";
 import Link from "next/link";
 import { ClosingNote } from "@/components/footer/Footer";
 import prisma from "@/utils/connect";
 import Featured from "@/components/featured/Featured";
 import WritingCard from "@/components/writing/WritingCard";
 import SpotifyCompactPlayer from "@/components/spotify/SpotifyCompactPlayer";
-import {
-    getFeaturedSpotifyTrackMetadata,
-    getFeaturedSpotifyTrackUrl,
-} from "@/utils/spotifyConfig";
+import { getSpotifyPlaylistConfig } from "@/utils/spotifyConfig";
+import { defaultAboutContent } from "@/utils/aboutContent";
+import { getSafePostImageUrl } from "@/utils/imageUrl";
+import { getSpotifyPlaylistTracks } from "@/utils/spotifyPlaylistTracks";
 import styles from "./homeEditorial.module.css";
-
-const featuredTrack = getFeaturedSpotifyTrackUrl();
-const featuredTrackMetadata = getFeaturedSpotifyTrackMetadata(featuredTrack);
 
 const getWriting = () =>
     prisma.post.findMany({
         where: {
             approved: true,
-            NOT: [
-                { catSlug: "notebook" },
-                { categories: { some: { categorySlug: "notebook" } } },
-            ],
         },
         take: 6,
         orderBy: { createdAt: "desc" },
@@ -50,24 +44,61 @@ const formatDate = (date) =>
     new Intl.DateTimeFormat("en", { day: "numeric", month: "short", year: "numeric" }).format(new Date(date));
 
 export default async function HomeEditorial() {
-    const [writings, notebook] = await Promise.all([getWriting(), getNotebook()]);
+    const [writings, notebook, savedAbout, savedPlaylists] = await Promise.all([
+        getWriting(),
+        getNotebook(),
+        prisma.pageContent.findUnique({ where: { slug: "about" }, select: { content: true } }),
+        prisma.pageContent.findUnique({ where: { slug: "playlists" }, select: { content: true } }),
+    ]);
+    const aboutContent = savedAbout
+        ? { ...defaultAboutContent, ...JSON.parse(savedAbout.content) }
+        : defaultAboutContent;
+    const aboutImage = getSafePostImageUrl(aboutContent.profileImage) || defaultAboutContent.profileImage;
+    const aboutName = [aboutContent.firstName, aboutContent.lastName].filter(Boolean).join(" ");
+    const aboutSummary = aboutContent.bioOne.length > 180
+        ? `${aboutContent.bioOne.slice(0, 180).trimEnd()}…`
+        : aboutContent.bioOne;
+    const playlistSettings = getSpotifyPlaylistConfig(savedPlaylists?.content);
+    const defaultPlaylist = playlistSettings.playlists.find(
+        (playlist) => playlist.id === playlistSettings.defaultId,
+    ) || playlistSettings.playlists[0];
+    const playlistTracks = await getSpotifyPlaylistTracks(defaultPlaylist.url);
+    const selectedTrack = playlistTracks.length
+        ? playlistTracks[randomInt(playlistTracks.length)]
+        : null;
 
     return (
         <main className={styles.home}>
             <Featured />
 
             <section className={styles.listening} aria-labelledby="listening-title">
+                <span className={styles.listeningGrain} aria-hidden="true" />
+                <Link
+                    className={styles.listeningLink}
+                    href="/playlist"
+                    aria-label="Open the listening room playlist"
+                />
                 <SpotifyCompactPlayer
-                    url={featuredTrack}
-                    title={`Featured Spotify track: ${featuredTrackMetadata.title}`}
-                    metadata={featuredTrackMetadata}
+                    url={selectedTrack?.uri || defaultPlaylist.url}
+                    title={`Default Spotify playlist: ${defaultPlaylist.title}`}
+                    tracks={playlistTracks}
+                    metadata={selectedTrack
+                        ? {
+                            id: selectedTrack.id,
+                            title: selectedTrack.title,
+                            artist: `From ${defaultPlaylist.title}`,
+                            artworkUrl: selectedTrack.artworkUrl,
+                        }
+                        : {
+                            title: defaultPlaylist.title,
+                            artist: "Selected listening-room playlist",
+                        }}
                 />
             </section>
 
             <section className={styles.section} aria-labelledby="writings-title">
                 <div className={styles.sectionHeading}>
                     <div>
-                        <span className={styles.sectionIndex}><span aria-hidden="true">+</span> WRITINGS</span>
                         <h2 id="writings-title">Writings</h2>
                     </div>
                     <Link href="/blog" className={styles.textLink}>All writings <span aria-hidden="true">→</span></Link>
@@ -124,19 +155,17 @@ export default async function HomeEditorial() {
             <section className={styles.about} aria-labelledby="about-title">
                 <div className={styles.portrait}>
                     <Image
-                        src="/farhan.jpeg"
-                        alt="Portrait of Farhan Niloy"
+                        src={aboutImage}
+                        alt={`Portrait of ${aboutName}`}
                         fill
                         sizes="(max-width: 760px) 40vw, (max-width: 1200px) 32vw, 400px"
+                        unoptimized={aboutImage.startsWith("https://")}
                     />
                 </div>
                 <div className={styles.aboutCopy}>
                     <span className={styles.sectionIndex}><span aria-hidden="true">+</span> ABOUT</span>
-                    <h2 id="about-title">Writer. Dreamer. Observer.</h2>
-                    <p>
-                        I work where artificial intelligence meets security research, and keep this
-                        space for the ideas, questions, and small discoveries that gather along the way.
-                    </p>
+                    <h2 id="about-title">{aboutContent.lede}</h2>
+                    <p>{aboutSummary}</p>
                     <Link href="/about" className={styles.textLink}>More about me <span aria-hidden="true">→</span></Link>
                 </div>
             </section>

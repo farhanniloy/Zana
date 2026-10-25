@@ -13,6 +13,7 @@ export default function Featured() {
                 priority
                 sizes="(max-width: 640px) 100vw, 1100px"
             />
+            <span className={styles.grain} aria-hidden="true" />
             <div className={styles.heroText}>
                 <span className={styles.welcome}>welcome,</span>
                 <h1 id="home-title">I write<br />things.</h1>

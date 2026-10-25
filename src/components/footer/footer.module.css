@@ -1,128 +1,197 @@
-.footer {
-    display: grid;
-    grid-template-columns: 1fr auto auto;
-    gap: 56px 26px;
-    align-items: center;
-    margin-top: 48px;
-    padding: 0 0 20px;
-    color: var(--softTextColor);
-}
-
 .closingNote {
     position: relative;
-    display: grid;
-    gap: 8px;
-    justify-items: center;
-    align-content: center;
-    box-sizing: border-box;
-    min-height: 144px;
-    margin-top: 50px;
-    padding: 38px 24px 34px;
-    border-top: 1px solid rgba(151, 113, 70, .24);
-    border-bottom: 1px solid rgba(151, 113, 70, .24);
+    display: flex;
+    width: min(100%, 900px);
+    min-height: 112px;
+    align-items: center;
+    justify-content: center;
+    gap: 14px;
+    margin: var(--home-section-space, 32px) auto 0;
+    padding: 20px 28px;
+    border: 1px solid rgba(151, 113, 70, .4);
     background:
-        linear-gradient(180deg, #1c140e 0%, rgba(28, 20, 14, .12) 30%, rgba(28, 20, 14, .12) 70%, #1c140e 100%),
-        linear-gradient(90deg, rgba(28, 20, 14, .62), rgba(58, 38, 23, .28) 50%, rgba(28, 20, 14, .68)),
-        url('/wood-planks.png'),
+        radial-gradient(ellipse at center, rgba(102, 70, 40, .32), rgba(28, 20, 14, .32) 72%),
         #1c140e;
-    background-size: auto, auto, cover, auto;
-    background-position: center, center, center 48%, center;
-    background-repeat: no-repeat, no-repeat, no-repeat, repeat;
     color: var(--textColor);
     text-align: center;
 }
 
-.closingNote::before {
+.closingNote::after {
     position: absolute;
-    z-index: 0;
-    inset: 0;
-    background:
-        radial-gradient(ellipse at center, transparent 28%, rgba(17, 9, 5, .22) 100%),
-        repeating-linear-gradient(0deg, transparent 0 5px, rgba(17, 9, 5, .14) 6px, transparent 7px 12px),
-        url('/grain.svg') repeat;
-    background-size: auto, auto, 150px 150px;
+    inset: 5px;
+    border: 1px solid rgba(151, 113, 70, .19);
     content: "";
-    opacity: .36;
-    mix-blend-mode: soft-light;
     pointer-events: none;
 }
 
-.closingNote p {
-    position: relative;
-    z-index: 1;
-    font: italic clamp(16px, 2vw, 22px)/1.4 var(--typewriter);
+.quoteMark {
+    display: grid;
+    width: 42px;
+    height: 42px;
+    flex: 0 0 auto;
+    place-items: center;
+    border: 1px solid rgba(179, 152, 112, .45);
+    border-radius: 50%;
+    color: var(--parchment);
+    font: 32px/.8 var(--serif);
+    padding-top: 8px;
 }
 
-.closingNote cite {
-    position: relative;
-    z-index: 1;
+.quoteCopy {
+    display: grid;
+    gap: 5px;
+    justify-items: start;
+}
+
+.quoteCopy p {
+    color: var(--ivory);
+    font: italic clamp(17px, 2vw, 21px)/1.3 var(--serif);
+}
+
+.quoteCopy cite {
     color: var(--parchment);
-    font: 11px/1.4 var(--serif);
+    font: 12px/1.4 var(--serif);
+}
+
+.footer {
+    position: relative;
+    display: flex;
+    min-height: 76px;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    margin-top: 18px;
+    padding: 16px 4px 12px;
+    border-top: 1px solid rgba(151, 113, 70, .25);
+    color: var(--softTextColor);
+}
+
+.footer::before {
+    position: absolute;
+    top: -9px;
+    left: 50%;
+    padding: 0 12px;
+    background: var(--bg);
+    color: var(--bronze);
+    content: "❧";
+    font: 15px/1 var(--serif);
+    transform: translateX(-50%);
+}
+
+.signature {
+    display: flex;
+    min-width: 0;
+    align-items: center;
+    gap: 9px;
+}
+
+.signatureMark {
+    display: grid;
+    width: 29px;
+    height: 29px;
+    flex: 0 0 auto;
+    place-items: center;
+    border: 1px solid rgba(151, 113, 70, .4);
+    border-radius: 50%;
+    color: var(--parchment);
+    font: 13px/1 var(--serif);
 }
 
 .logo {
     color: var(--textColor);
-    font: 500 clamp(19px, 2vw, 24px)/1 var(--serif);
+    font: 500 24px/1 var(--serif);
+    letter-spacing: .02em;
 }
 
-.signature p {
-    margin-top: 5px;
-    font: italic 12px/1.5 var(--serif);
+.signatureCaption {
+    padding-left: 9px;
+    border-left: 1px solid rgba(151, 113, 70, .3);
+    color: var(--softTextColor);
+    font: italic 12px/1.3 var(--serif);
 }
 
-.footerLinks,
-.socialLinks {
+.footerLinks {
     display: flex;
     flex-wrap: wrap;
     justify-content: flex-end;
-    gap: 10px 17px;
+    gap: 8px clamp(16px, 2.5vw, 30px);
 }
 
-.footerLinks a,
-.socialLinks a {
+.footerLinks a {
     color: var(--softTextColor);
-    font: 11px/1.4 var(--serif);
+    font: 13px/1.4 var(--serif);
+    transition: color .2s ease;
 }
 
-.footerLinks a:hover,
-.socialLinks a:hover {
-    color: var(--parchment);
+.footerLinks a:hover {
+    color: var(--ivory);
 }
 
-@media (max-width: 800px) {
-    .footer {
-        grid-template-columns: 1fr 1fr;
-    }
-
-    .signature {
-        grid-column: 1 / -1;
-    }
-
-    .footerLinks,
-    .socialLinks {
-        justify-content: flex-start;
-    }
-}
-
-@media (max-width: 520px) {
-    .footer {
-        grid-template-columns: 1fr;
-        gap: 40px;
-        margin-top: 32px;
-    }
-
-    .signature {
-        grid-column: auto;
-    }
-
+@media (max-width: 640px) {
     .closingNote {
-        min-height: 124px;
-        margin-top: 36px;
-        padding: 28px 14px 24px;
+        min-height: 98px;
+        gap: 12px;
+        padding: 16px 18px;
     }
 
-    .footerLinks,
-    .socialLinks {
-        display: none;
+    .quoteMark {
+        width: 36px;
+        height: 36px;
+        font-size: 28px;
+    }
+
+    .quoteCopy p {
+        font-size: 17px;
+    }
+
+    .quoteCopy cite {
+        font-size: 11px;
+    }
+
+    .footer {
+        min-height: 72px;
+        gap: 16px;
+        margin-top: 16px;
+        padding: 16px 2px 12px;
+    }
+
+    .signature {
+        gap: 7px;
+    }
+
+    .signatureMark {
+        width: 25px;
+        height: 25px;
+        font-size: 11px;
+    }
+
+    .logo {
+        font-size: 21px;
+    }
+
+    .signatureCaption {
+        padding-left: 7px;
+        font-size: 11px;
+    }
+
+    .footerLinks {
+        gap: 6px 14px;
+    }
+
+    .footerLinks a {
+        font-size: 12px;
+    }
+}
+
+@media (max-width: 420px) {
+    .footer {
+        align-items: center;
+        flex-direction: column;
+        gap: 12px;
+        padding: 16px 2px 12px;
+    }
+
+    .footerLinks {
+        justify-content: center;
     }
 }

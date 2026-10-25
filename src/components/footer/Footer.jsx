@@ -1,18 +1,14 @@
 import Link from "next/link";
 import styles from "./footer.module.css";
 
-const socialLinks = [
-    { label: "GitHub", href: "https://github.com/niloy-farhan" },
-    { label: "LinkedIn", href: "https://www.linkedin.com/in/niloy-farhan-6067b422b/" },
-    { label: "X", href: "https://twitter.com/MrFarhanNiloy" },
-    { label: "Facebook", href: "https://facebook.com/nulll.me" },
-];
-
 export function ClosingNote() {
     return (
         <blockquote className={styles.closingNote}>
-            <p>“But how could you live and have no story to tell?”</p>
-            <cite>— Fyodor Dostoevsky</cite>
+            <span className={styles.quoteMark} aria-hidden="true">“</span>
+            <div className={styles.quoteCopy}>
+                <p>But how could you live and have no story to tell?</p>
+                <cite>— Fyodor Dostoevsky</cite>
+            </div>
         </blockquote>
     );
 }
@@ -21,8 +17,9 @@ export default function Footer() {
     return (
         <footer className={styles.footer}>
             <div className={styles.signature}>
+                <span className={styles.signatureMark} aria-hidden="true">✦</span>
                 <Link href="/" className={styles.logo}>Zana</Link>
-                <p>Pages, thoughts, and small things worth keeping.</p>
+                <span className={styles.signatureCaption}>A personal journal</span>
             </div>
             <nav className={styles.footerLinks} aria-label="Footer navigation">
                 <Link href="/blog">Writings</Link>
@@ -31,11 +28,6 @@ export default function Footer() {
                 <Link href="/about">About</Link>
                 <Link href="/archive">Archive</Link>
             </nav>
-            <div className={styles.socialLinks} aria-label="Social profiles">
-                {socialLinks.map(({ label, href }) => (
-                    <a href={href} key={label} target="_blank" rel="noopener noreferrer">{label}</a>
-                ))}
-            </div>
         </footer>
     );
 }

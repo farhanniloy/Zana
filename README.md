@@ -15,6 +15,11 @@ seeds the preview content. The local database is the default when `DATABASE_URL`
 is not set to PostgreSQL. Set `DATABASE_URL` to a PostgreSQL connection string to
 use the existing backend instead. To recreate the local schema and re-apply the
 sample content without deleting existing rows, run `npm run db:local:setup`.
+Local setup also creates an admin account (`admin@local.test`) and saves its
+generated password in the ignored file `prisma/local-admin.credentials`. Use
+those credentials at `/login` to test the admin users and moderation screens.
+The preview seeds one pending post for moderation testing. These are local
+SQLite preview fixtures; they are not added to the PostgreSQL backend.
 
 The local preview keeps page data and site fonts on disk. Sign-in through Google
 or GitHub, remote media, and external links still require a network connection.
@@ -23,17 +28,17 @@ or GitHub, remote media, and external links still require a network connection.
 
 The homepage uses Spotify's official Embed iFrame API for its compact listening-room
 controls; the playlist page uses Spotify's full playlist embed. Both use Spotify's
-real player and need no API credentials. The homepage controls require a network
-connection to Spotify's Embed iFrame API and fall back to a visible official track
-embed if the API cannot load. The
-homepage defaults to the first track in the listening-room playlist. Set
-`NEXT_PUBLIC_SPOTIFY_FEATURED_TRACK_URL` to choose another track there, and optionally
-set `NEXT_PUBLIC_SPOTIFY_FEATURED_TRACK_TITLE` and
-`NEXT_PUBLIC_SPOTIFY_FEATURED_TRACK_ARTIST` for its displayed metadata. The legacy
-`NEXT_PUBLIC_SPOTIFY_FEATURED_URL` remains supported for track or playlist links.
-For one or more playlist embeds, set `NEXT_PUBLIC_SPOTIFY_PLAYLIST_URLS` to
-comma-separated playlist URLs and optionally set matching labels with
-`NEXT_PUBLIC_SPOTIFY_PLAYLIST_TITLES`.
+real player and need no API credentials. On each homepage request, the player chooses
+a random track from the selected default playlist's publicly available Spotify page.
+Track metadata and album artwork are cached for up to 24 hours; Spotify playback events
+update the displayed "Now playing" title as tracks change. The homepage controls require
+a network connection to Spotify's Embed iFrame API and fall back to a visible official
+track embed if the API cannot load. Admins can manage any number of playlists on
+`/playlist`, choose the default, and edit each playlist's title and description. The
+selected default is used by the homepage player. Existing
+`NEXT_PUBLIC_SPOTIFY_PLAYLIST_URLS` and `NEXT_PUBLIC_SPOTIFY_PLAYLIST_TITLES` values are
+used as initial defaults until playlists are saved through the admin editor. The legacy
+`NEXT_PUBLIC_SPOTIFY_FEATURED_URL` remains supported as a playlist fallback.
 
 ## Getting Started
 

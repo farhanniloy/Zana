@@ -1,0 +1,16 @@
+export const defaultAboutContent = {
+    profileImage: "/farhan.jpeg",
+    location: "Dhaka, Bangladesh",
+    kicker: "A note from the author",
+    firstName: "Farhan",
+    lastName: "Niloy",
+    lede: "Writer. Dreamer. Observer.",
+    bioOne: "I work where artificial intelligence meets security research. My focus is operating-system-level vulnerability research, red-team operations, and penetration testing. I enjoy going beneath the interface, tracing how systems really behave, and turning broken assumptions into stronger defenses and useful tools.",
+    bioTwo: "This journal is a quieter place for philosophy, science, technology, and curious ideas—the things I notice, question, and want to remember.",
+    email: "areyouokaynil@gmail.com",
+    phone: "+880 1794102371",
+    github: "https://github.com/niloy-farhan",
+    linkedin: "https://www.linkedin.com/in/farhan-niloy-6067b422b/",
+    x: "https://twitter.com/MrFarhanNiloy",
+    facebook: "https://facebook.com/nulll.me",
+};

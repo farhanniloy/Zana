@@ -2,6 +2,7 @@ node_modules/
 .next/
 prisma/local.db
 prisma/local-auth.secret
+prisma/local-admin.credentials
 .env
 .env.*
 !.env.example

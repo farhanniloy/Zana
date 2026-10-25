@@ -29,6 +29,7 @@ export default function WritingCard({ post, variant = "standard" }) {
                     src={post.img || "/images/hero image 2.jpg"}
                     alt=""
                     fill
+                    unoptimized={post.img?.startsWith("https://")}
                     sizes={variant === "feature" ? "(max-width: 760px) 100vw, 55vw" : "(max-width: 760px) 100vw, 33vw"}
                     className={styles.image}
                 />

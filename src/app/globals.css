@@ -136,7 +136,7 @@
 
 :root {
     color-scheme: dark;
-    --bg: #1c140e;
+    --bg: #17110b;
     --textColor: #e4d2b1;
     --newTextColor: #e4d2b1;
     --textColor2: #c5ac84;
@@ -283,7 +283,7 @@ img {
     background: url('/grain.svg') repeat;
     background-size: 220px 220px;
     content: "";
-    opacity: .51;
+    opacity: .64;
     pointer-events: none;
     mix-blend-mode: soft-light;
 }
@@ -295,7 +295,7 @@ img {
 @media (max-width: 640px) {
     .container::before {
         background-size: 280px 280px;
-        opacity: .29;
+        opacity: .46;
     }
 
     .light .container::before {

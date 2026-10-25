@@ -1,15 +1,46 @@
 import { createRequire } from "node:module";
+import { randomBytes } from "node:crypto";
+import { readFileSync, writeFileSync } from "node:fs";
 import { resolve } from "node:path";
 import { pathToFileURL } from "node:url";
 
 const require = createRequire(import.meta.url);
 const { PrismaClient } = require("@prisma/local-preview-client");
+const bcrypt = require("bcryptjs");
 const databaseUrl =
   process.env.LOCAL_DATABASE_URL ||
   pathToFileURL(resolve("prisma/local.db")).href;
+const adminEmail = "admin@local.test";
+const adminCredentialsPath = resolve("prisma/local-admin.credentials");
 const prisma = new PrismaClient({
   datasources: { db: { url: databaseUrl } },
 });
+
+function getLocalAdminPassword() {
+  try {
+    const credentials = JSON.parse(readFileSync(adminCredentialsPath, "utf8"));
+    if (credentials.email !== adminEmail || typeof credentials.password !== "string") {
+      throw new Error(`Invalid local admin credentials file: ${adminCredentialsPath}`);
+    }
+    return credentials.password;
+  } catch (error) {
+    if (error.code !== "ENOENT") throw error;
+  }
+
+  const password = randomBytes(24).toString("base64url");
+  const credentials = `${JSON.stringify({ email: adminEmail, password }, null, 2)}\n`;
+  try {
+    writeFileSync(adminCredentialsPath, credentials, { flag: "wx", mode: 0o600 });
+    return password;
+  } catch (error) {
+    if (error.code !== "EEXIST") throw error;
+    const existing = JSON.parse(readFileSync(adminCredentialsPath, "utf8"));
+    if (existing.email !== adminEmail || typeof existing.password !== "string") {
+      throw new Error(`Invalid local admin credentials file: ${adminCredentialsPath}`);
+    }
+    return existing.password;
+  }
+}
 
 const categories = [
   { slug: "philosophy", title: "Philosophy" },
@@ -101,9 +132,39 @@ const posts = [
     categorySlugs: ["programs", "philosophy", "notebook"],
     daysAgo: 27,
   },
+  {
+    slug: "a-note-awaiting-moderation",
+    title: "A Note Awaiting Moderation",
+    summary: "A local preview post for testing the moderation workflow.",
+    desc: "<p>This sample post is intentionally waiting for review. Use the local admin account to approve or reject it from the moderation screen.</p>",
+    img: "/images/notebook 4.jpg",
+    catSlug: "philosophy",
+    categorySlugs: ["philosophy"],
+    daysAgo: 0,
+    approved: false,
+  },
 ];
 
 async function main() {
+  const adminPassword = getLocalAdminPassword();
+  const adminPasswordHash = await bcrypt.hash(adminPassword, 12);
+  await prisma.user.upsert({
+    where: { email: adminEmail },
+    update: {
+      name: "Local Admin",
+      username: "local-admin",
+      password: adminPasswordHash,
+      role: "ADMIN",
+    },
+    create: {
+      email: adminEmail,
+      name: "Local Admin",
+      username: "local-admin",
+      password: adminPasswordHash,
+      role: "ADMIN",
+    },
+  });
+
   const author = await prisma.user.upsert({
     where: { email: "nil@local.test" },
     update: { name: "Nil", username: "nil", image: "/farhan.jpeg" },
@@ -124,12 +185,12 @@ async function main() {
   }
 
   for (const postData of posts) {
-    const { categorySlugs, daysAgo, ...content } = postData;
+    const { categorySlugs, daysAgo, approved = true, ...content } = postData;
     const createdAt = new Date(Date.now() - daysAgo * 24 * 60 * 60 * 1000);
     const post = await prisma.post.upsert({
       where: { slug: content.slug },
-      update: { ...content, createdAt, approved: true },
-      create: { ...content, createdAt, userEmail: author.email, approved: true },
+      update: { ...content, createdAt, approved },
+      create: { ...content, createdAt, userEmail: author.email, approved },
     });
 
     await prisma.postCategory.deleteMany({ where: { postId: post.id } });
@@ -171,7 +232,7 @@ async function main() {
   }
 
   console.log(
-    `Local preview database ready: ${posts.length} posts, ${categories.length} categories, ${sampleComments.length} comments.`,
+    `Local preview database ready: ${posts.length} posts, ${categories.length} categories, ${sampleComments.length} comments. Admin: ${adminEmail} (credentials in prisma/local-admin.credentials).`,
   );
 }
 

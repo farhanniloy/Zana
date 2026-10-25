@@ -149,6 +149,7 @@
 
 .playlistCover {
     position: relative;
+    isolation: isolate;
     min-height: 0;
     aspect-ratio: .68;
     overflow: hidden;
@@ -159,6 +160,17 @@
 .playlistCover img {
     object-fit: cover;
     filter: sepia(.35) saturate(.68) brightness(.72) contrast(1.08);
+}
+
+.playlistCoverGrain {
+    position: absolute;
+    z-index: 1;
+    inset: 0;
+    background: url("/grain.svg") repeat;
+    background-size: 132px 132px;
+    mix-blend-mode: soft-light;
+    opacity: .2;
+    pointer-events: none;
 }
 
 .playlistSpotifyLink {
@@ -253,6 +265,138 @@
 .playlistPlayer iframe {
     height: 352px;
     border-radius: 12px;
+}
+
+.playlistAdminActions {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 16px;
+}
+
+.playlistAdminButton,
+.playlistCancelButton,
+.playlistRemoveButton {
+    min-height: 40px;
+    padding: 9px 14px;
+    border: 1px solid var(--surface-border);
+    background: var(--button-surface);
+    color: var(--button-text);
+    cursor: pointer;
+    font: 13px var(--serif);
+}
+
+.playlistCancelButton,
+.playlistRemoveButton {
+    background: transparent;
+    color: var(--textColor);
+}
+
+.playlistAdminButton:disabled,
+.playlistCancelButton:disabled,
+.playlistRemoveButton:disabled {
+    cursor: not-allowed;
+    opacity: .55;
+}
+
+.playlistEditor {
+    display: grid;
+    gap: 16px;
+    margin-bottom: 28px;
+    padding: 20px;
+    border: 1px solid var(--surface-border);
+    background: var(--surface);
+}
+
+.playlistEditorHeading,
+.playlistEditorItemActions,
+.playlistEditorActions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+}
+
+.playlistEditorHeading h2 {
+    margin: 7px 0 4px;
+    color: var(--textColor);
+    font: 500 26px/1.15 var(--serif);
+}
+
+.playlistEditorHeading p {
+    margin: 0;
+    color: var(--softTextColor);
+    font: 14px/1.5 var(--serif);
+}
+
+.playlistEditorItem {
+    display: grid;
+    gap: 12px;
+    min-width: 0;
+    margin: 0;
+    padding: 16px;
+    border: 1px solid var(--surface-border);
+}
+
+.playlistEditorItem legend {
+    padding: 0 6px;
+    color: var(--parchment);
+    font: 12px var(--typewriter);
+}
+
+.playlistEditorItem > label {
+    display: grid;
+    gap: 6px;
+    color: var(--softTextColor);
+    font: 12px/1.4 var(--typewriter);
+}
+
+.playlistEditorItem input[type="text"],
+.playlistEditorItem input[type="url"],
+.playlistEditorItem textarea {
+    box-sizing: border-box;
+    width: 100%;
+    min-height: 40px;
+    padding: 9px 11px;
+    border: 1px solid var(--surface-border);
+    border-radius: 0;
+    background: var(--bg);
+    color: var(--textColor);
+    font: 14px/1.5 var(--serif);
+}
+
+.playlistEditorItem textarea {
+    resize: vertical;
+}
+
+.defaultPlaylistChoice {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--textColor);
+    font: 13px/1.4 var(--serif);
+}
+
+.defaultPlaylistChoice input {
+    accent-color: var(--parchment);
+}
+
+.playlistEditorFooter {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+}
+
+.playlistEditorActions {
+    justify-content: flex-end;
+}
+
+.playlistEditorError {
+    flex: 1 1 100%;
+    margin: 0;
+    color: #e8a19a;
 }
 
 @media (max-width: 600px) {

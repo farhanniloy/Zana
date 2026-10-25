@@ -151,9 +151,10 @@ const SinglePage = async ({ params }) => {
 
     return (
         <main className={styles.container}>
-            <Link href="/blog" className={styles.back}>← Back to writings</Link>
+            <div className={styles.topline}>
+                <Link href="/blog" className={styles.back}>← Writings</Link>
+            </div>
             <header className={styles.articleHeader}>
-                <span className={styles.kicker}>From the journal</span>
                 <h1 className={styles.title}>{data.title}</h1>
                 <div className={styles.articleMeta}>
                     <time dateTime={new Date(data.createdAt).toISOString()}>{publishedDate}</time>
@@ -165,18 +166,13 @@ const SinglePage = async ({ params }) => {
                     </Link>
                     {!data.approved && <span className={styles.pending}>Pending review</span>}
                 </div>
-                <nav className={styles.tags} aria-label="Article categories">
-                    {categoryLinks.map(({ slug: categorySlug, title }) => (
-                        <Link href={`/category/${encodeURIComponent(categorySlug)}`} key={categorySlug}>{title}</Link>
-                    ))}
-                </nav>
                 <div className={styles.adminControls}>
                     <AdminPostControls slug={slug} canManage={isOwner || isAdmin} />
                 </div>
             </header>
             {data?.img && (
                 <div className={styles.imageContainer}>
-                    <Image src={data.img} alt={`Illustration for ${data.title}`} fill className={styles.image} sizes="(max-width: 760px) 100vw, 900px" priority />
+                    <Image src={data.img} alt={`Illustration for ${data.title}`} fill className={styles.image} sizes="(max-width: 760px) 100vw, 920px" preload unoptimized={data.img.startsWith("https://")} />
                 </div>
             )}
             <article className={styles.content}>
@@ -185,26 +181,31 @@ const SinglePage = async ({ params }) => {
                     dangerouslySetInnerHTML={{ __html: sanitizePostHtml(data?.desc) }}
                 />
                 {categoryLinks.length > 0 && (
-                    <nav className={styles.tags} aria-label="More in this collection">
-                        <span>Filed under</span>
-                        {categoryLinks.map(({ slug: categorySlug, title }) => (
-                            <Link href={`/category/${encodeURIComponent(categorySlug)}`} key={categorySlug}>{title}</Link>
+                    <nav className={styles.tags} aria-label="Topics">
+                        <span className={styles.topicLabel}>Filed under</span>
+                        {categoryLinks.map(({ slug: categorySlug, title }, index) => (
+                            <span className={styles.tag} key={categorySlug}>
+                                <Link href={`/category/${encodeURIComponent(categorySlug)}`}>{title}</Link>
+                                {index < categoryLinks.length - 1 && <span aria-hidden="true">·</span>}
+                            </span>
                         ))}
                     </nav>
                 )}
                 <nav className={styles.postNav} aria-label="Browse other writings">
+                    <h2 className={styles.postNavHeading}>Continue reading</h2>
                     {previousPost ? (
                         <Link href={`/posts/${encodeURIComponent(previousPost.slug)}`}>
-                            <span>← Previous</span><strong>{previousPost.title}</strong>
+                            <span>← Previous writing</span>
+                            <strong>{previousPost.title}</strong>
                         </Link>
                     ) : <span />}
                     {nextPost ? (
                         <Link href={`/posts/${encodeURIComponent(nextPost.slug)}`}>
-                            <span>Next →</span><strong>{nextPost.title}</strong>
+                            <span>Next writing →</span>
+                            <strong>{nextPost.title}</strong>
                         </Link>
                     ) : <span />}
                 </nav>
-                <div className={styles.solid} />
                 <Comments postSlug={slug} />
             </article>
         </main>

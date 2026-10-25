@@ -137,6 +137,113 @@
   font-size:12px;
 }
 
+.thumbnailSection{
+  display:grid;
+  grid-template-columns:minmax(220px, 1fr) minmax(240px, 360px);
+  align-items:center;
+  gap:24px;
+  padding:20px;
+  border:1px solid var(--surface-border);
+  background:color-mix(in srgb, var(--surface) 82%, transparent);
+}
+
+.thumbnailDetails{
+  display:flex;
+  flex-direction:column;
+  align-items:flex-start;
+  gap:8px;
+}
+
+.thumbnailDetails h2{
+  margin:0;
+  color:var(--textColor);
+  font-size:16px;
+  font-weight:600;
+}
+
+.thumbnailDetails p{
+  margin:0 0 6px;
+  color:var(--softTextColor);
+  font-size:13px;
+  line-height:1.5;
+}
+
+.thumbnailUrlLabel{
+  color:var(--softTextColor);
+  font-size:12px;
+}
+
+.thumbnailUrlInput{
+  box-sizing:border-box;
+  width:100%;
+  min-height:40px;
+  padding:9px 11px;
+  border:1px solid var(--surface-border);
+  background:var(--bg);
+  color:var(--textColor);
+  font:13px var(--serif);
+}
+
+.thumbnailUrlInput:focus{
+  outline:1px solid var(--parchment);
+  outline-offset:1px;
+}
+
+.thumbnailActions{
+  display:flex;
+  flex-wrap:wrap;
+  gap:10px;
+}
+
+.thumbnailButton,
+.thumbnailRemove{
+  min-height:40px;
+  padding:8px 12px;
+  border:1px solid var(--surface-border);
+  background:var(--button-surface);
+  color:var(--button-text);
+  cursor:pointer;
+  font:inherit;
+}
+
+.thumbnailButton:disabled,
+.thumbnailRemove:disabled{
+  cursor:wait;
+  opacity:.65;
+}
+
+.thumbnailRemove{
+  background:transparent;
+  color:var(--textColor);
+}
+
+.thumbnailPreview,
+.thumbnailPlaceholder{
+  width:100%;
+  aspect-ratio:16 / 9;
+}
+
+.thumbnailPreview{
+  overflow:hidden;
+  background:var(--bg);
+}
+
+.thumbnailPreview img{
+  display:block;
+  width:100%;
+  height:100%;
+  object-fit:cover;
+}
+
+.thumbnailPlaceholder{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  border:1px dashed var(--surface-border);
+  color:var(--softTextColor);
+  font-size:13px;
+}
+
 .categorySection{
   display:grid;
   grid-template-columns:minmax(240px, 1fr) minmax(300px, 1.25fr);
@@ -616,6 +723,7 @@
   .header h1{ font-size:24px; }
   .input{ font-size:22px; }
   .categorySection{ grid-template-columns:1fr; padding:15px; }
+  .thumbnailSection{ grid-template-columns:1fr; padding:15px; }
   .dateSelector{ grid-template-columns:1fr 1fr; }
   .dateSelector label{ margin-top:4px; }
 
@@ -646,6 +754,7 @@
 
   .input,
   .textAreaSummary,
+  .thumbnailUrlInput,
   .slugInput,
   .select,
   .dateInput,
