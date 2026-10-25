@@ -47,6 +47,7 @@ const securityHeaders = [
 ];
 
 const nextConfig = {
+    distDir: process.env.PLAYWRIGHT_TEST === '1' ? '.next-playwright' : '.next',
     serverExternalPackages: ['@prisma/local-preview-client'],
     images: {
         remotePatterns: [

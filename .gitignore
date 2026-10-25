@@ -1,8 +1,12 @@
 node_modules/
 .next/
+.next-playwright/
+test-results/
+playwright-report/
 prisma/local.db
 prisma/local-auth.secret
 prisma/local-admin.credentials
+.playwright/
 .env
 .env.*
 !.env.example

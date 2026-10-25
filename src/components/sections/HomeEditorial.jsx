@@ -123,7 +123,7 @@ export default async function HomeEditorial() {
                         <Image src="/images/notebook 1.jpg" alt="A collection of handwritten journal pages and sketches" fill sizes="(max-width: 760px) 50vw, 25vw" />
                     </div>
                     <div className={styles.notebookImage}>
-                        <Image src="/images/notebook 4.jpg" alt="A bundle of handwritten letters tied with string" fill sizes="(max-width: 760px) 50vw, 25vw" />
+                        <Image src="/images/notebook 3.jpg" alt="A handwritten story on aged paper beside an ink bottle" fill sizes="(max-width: 760px) 50vw, 25vw" />
                     </div>
                     <div className={styles.notebookImage}>
                         <Image src="/images/notebook 6.jpg" alt="A coffee cup beside handwritten journal pages" fill sizes="(max-width: 760px) 50vw, 25vw" />
