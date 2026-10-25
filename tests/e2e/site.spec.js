@@ -13,7 +13,7 @@ async function signInAsLocalAdmin(page) {
     await page.getByPlaceholder("Password").fill(credentials.password);
     await page.getByRole("button", { name: "Sign in", exact: true }).click();
     await expect(page).toHaveURL("/");
-    await expect(page.getByRole("link", { name: "Moderation" })).toBeVisible();
+    await expect(page.getByRole("link", { name: "Moderation", exact: true })).toBeVisible();
 }
 
 test("public browsing works at mobile and desktop widths", async ({ page }) => {
