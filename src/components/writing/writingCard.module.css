@@ -165,3 +165,50 @@
         padding: 18px;
     }
 }
+
+@media (max-width: 900px) {
+    .meta {
+        font-size: 13px;
+    }
+
+    .title {
+        font-size: clamp(21px, 2.8vw, 24px);
+        line-height: 1.12;
+    }
+
+    .excerpt {
+        font-size: 15px;
+        line-height: 1.6;
+    }
+
+    .tags a {
+        font-size: 10px;
+    }
+
+    .readLink {
+        font-size: 15px;
+    }
+
+    .home .excerpt {
+        font-size: 14px;
+    }
+
+    .home .title {
+        font-size: clamp(21px, 2.8vw, 24px);
+    }
+
+    .home .readLink {
+        font-size: 14px;
+    }
+}
+
+@media (max-width: 600px) {
+    .title,
+    .home .title {
+        font-size: 22px;
+    }
+
+    .tags a {
+        font-size: 11px;
+    }
+}

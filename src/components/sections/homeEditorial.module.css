@@ -38,9 +38,9 @@
     z-index: 0;
     inset: 0;
     background: url('/grain.svg') repeat;
-    background-size: 132px 132px;
+    background-size: 260px 260px;
     mix-blend-mode: soft-light;
-    opacity: .24;
+    opacity: .1;
     pointer-events: none;
 }
 
@@ -272,7 +272,19 @@
     min-width: 0;
 }
 
+@media (min-width: 761px) and (max-width: 1024px) {
+    .listeningGrain {
+        background-size: 320px 320px;
+        opacity: .075;
+    }
+}
+
 @media (max-width: 760px) {
+    .listeningGrain {
+        background-size: 380px 380px;
+        opacity: .045;
+    }
+
     .about {
         grid-template-columns: minmax(0, .9fr) minmax(0, 1.1fr);
         gap: 12px 16px;
@@ -370,6 +382,11 @@
 }
 
 @media (max-width: 520px) {
+    .listeningGrain {
+        background-size: 440px 440px;
+        opacity: .035;
+    }
+
     .writingGrid {
         grid-template-columns: 1fr;
     }

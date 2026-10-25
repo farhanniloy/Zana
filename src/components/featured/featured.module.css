@@ -22,9 +22,9 @@
     z-index: 1;
     inset: 0;
     background: url('/grain.svg') repeat;
-    background-size: 150px 150px;
+    background-size: 260px 260px;
     mix-blend-mode: soft-light;
-    opacity: .2;
+    opacity: .09;
     pointer-events: none;
 }
 
@@ -105,7 +105,19 @@
     font: italic 12px/1.4 var(--serif);
 }
 
+@media (min-width: 641px) and (max-width: 1024px) {
+    .grain {
+        background-size: 320px 320px;
+        opacity: .07;
+    }
+}
+
 @media (max-width: 640px) {
+    .grain {
+        background-size: 380px 380px;
+        opacity: .04;
+    }
+
     .hero {
         min-height: 440px;
         margin-top: 10px;
@@ -132,5 +144,12 @@
     .heroNote {
         right: 20px;
         bottom: 17px;
+    }
+}
+
+@media (max-width: 380px) {
+    .grain {
+        background-size: 440px 440px;
+        opacity: .03;
     }
 }

@@ -35,4 +35,13 @@
     .container {
         padding: 34px 0 40px;
     }
+
+    .kicker {
+        font-size: 11px;
+    }
+
+    .header p {
+        font-size: 17px;
+        line-height: 1.6;
+    }
 }

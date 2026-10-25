@@ -49,6 +49,15 @@ test("public browsing works at mobile and desktop widths", async ({ page }) => {
     await page.goto("/blog?q=playwright-no-matching-post");
     await expect(page.getByText(/No writings match this shelf/)).toBeVisible();
     await expect(page.getByRole("searchbox")).toHaveValue("playwright-no-matching-post");
+    await expect(page.locator("main header > span")).toHaveCSS("font-size", "11px");
+    await expect(page.locator("form input[type=search]")).toHaveCSS("font-size", "16px");
+    await expect(page.locator("form button")).toHaveCSS("font-size", "15px");
+
+    await page.goto("/blog");
+    const firstCard = page.locator("article").first();
+    await expect(firstCard.locator("time")).toHaveCSS("font-size", "13px");
+    await expect(firstCard.locator("h3")).toHaveCSS("font-size", "22px");
+    await expect(firstCard.locator("p")).toHaveCSS("font-size", "15px");
 });
 
 test("admin routes require authentication and moderation can approve a pending post", async ({ page }) => {
