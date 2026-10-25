@@ -1,12 +1,14 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 160">
-  <filter id="grain">
-    <feTurbulence type="fractalNoise" baseFrequency=".78" numOctaves="3" stitchTiles="stitch" seed="17"/>
-    <feColorMatrix type="saturate" values="0" result="mono"/>
-    <feComponentTransfer in="mono">
-      <feFuncR type="linear" slope="2.1" intercept="-.62"/>
-      <feFuncG type="linear" slope="2.1" intercept="-.62"/>
-      <feFuncB type="linear" slope="2.1" intercept="-.62"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256">
+  <filter id="paperTexture">
+    <feTurbulence type="fractalNoise" baseFrequency=".045" numOctaves="2" stitchTiles="stitch" seed="17" result="paperCloud"/>
+    <feTurbulence type="fractalNoise" baseFrequency=".48" numOctaves="2" stitchTiles="stitch" seed="8" result="paperFiber"/>
+    <feBlend in="paperCloud" in2="paperFiber" mode="soft-light" result="paperBlend"/>
+    <feColorMatrix in="paperBlend" type="saturate" values="0" result="paperMono"/>
+    <feComponentTransfer in="paperMono">
+      <feFuncR type="linear" slope=".68" intercept=".16"/>
+      <feFuncG type="linear" slope=".68" intercept=".16"/>
+      <feFuncB type="linear" slope=".68" intercept=".16"/>
     </feComponentTransfer>
   </filter>
-  <path filter="url(#grain)" opacity=".46" d="M0 0h160v160H0z"/>
+  <path filter="url(#paperTexture)" opacity=".28" d="M0 0h256v256H0z"/>
 </svg>

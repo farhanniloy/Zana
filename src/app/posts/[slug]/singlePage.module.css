@@ -447,7 +447,11 @@
 
     .articleMeta {
         gap: 6px;
-        font-size: 12px;
+        font-size: 13px;
+    }
+
+    .back {
+        font-size: 14px;
     }
 
     .imageContainer {
@@ -462,8 +466,10 @@
 
     .tags {
         margin-top: 22px;
-        font-size: 11px;
+        font-size: 12px;
     }
+
+    .postNavHeading { font-size: 11px; }
 
     .postNav {
         grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
@@ -486,5 +492,9 @@
 
     .postNav > a strong {
         font-size: 14px;
+    }
+
+    .postNav > a span {
+        font-size: 13px;
     }
 }

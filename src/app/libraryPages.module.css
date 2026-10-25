@@ -167,9 +167,9 @@
     z-index: 1;
     inset: 0;
     background: url("/grain.svg") repeat;
-    background-size: 132px 132px;
+    background-size: 260px 260px;
     mix-blend-mode: soft-light;
-    opacity: .2;
+    opacity: .085;
     pointer-events: none;
 }
 
@@ -420,7 +420,19 @@
 
 }
 
+@media (min-width: 761px) and (max-width: 1024px) {
+    .playlistCoverGrain {
+        background-size: 320px 320px;
+        opacity: .065;
+    }
+}
+
 @media (max-width: 760px) {
+    .playlistCoverGrain {
+        background-size: 380px 380px;
+        opacity: .04;
+    }
+
     .playlist {
         grid-template-columns: minmax(0, .72fr) minmax(0, 1fr);
         gap: 18px;
