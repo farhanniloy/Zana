@@ -270,7 +270,7 @@ img {
         linear-gradient(115deg, rgba(91, 55, 27, .1), transparent 44%, rgba(9, 5, 2, .2)),
         var(--bg);
     background-blend-mode: soft-light, normal, normal, normal, normal, normal;
-    background-size: 460px 460px, auto, auto, auto, auto, auto;
+    background-size: 500px 500px, auto, auto, auto, auto, auto;
     color: var(--textColor);
 }
 
@@ -285,7 +285,7 @@ img {
 
 @media (min-width: 641px) and (max-width: 1024px) {
     .container {
-        background-size: 360px 360px, auto, auto, auto, auto, auto;
+        background-size: 390px 390px, auto, auto, auto, auto, auto;
     }
 }
 
@@ -297,7 +297,7 @@ img {
             radial-gradient(ellipse at 82% 38%, rgba(119, 71, 34, .09), transparent 44%),
             radial-gradient(ellipse at 50% 70%, transparent 30%, rgba(9, 5, 2, .34) 100%),
             linear-gradient(115deg, rgba(91, 55, 27, .1), transparent 44%, rgba(9, 5, 2, .2));
-        background-size: 280px 280px, auto, auto, auto, auto, auto;
+        background-size: 250px 250px, auto, auto, auto, auto, auto;
     }
 }
 
