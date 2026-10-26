@@ -66,8 +66,10 @@ test("public browsing works at mobile and desktop widths", async ({ page }) => {
         });
         expect(background.color).toBe("#160e07");
         if (width <= 640) {
-            expect(background.image).not.toContain("leather-patina.svg");
+            expect(background.image).toContain("leather-patina.svg");
             expect(background.image).toContain("radial-gradient");
+            const expectedTextureSize = width <= 380 ? "800px 800px" : "720px 720px";
+            expect(background.size.startsWith(expectedTextureSize)).toBe(true);
         } else {
             expect(background.image).toContain("leather-patina.svg");
             const expectedTextureSize = width <= 1024 ? "800px 800px" : "900px 900px";
