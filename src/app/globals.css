@@ -270,7 +270,7 @@ img {
         linear-gradient(115deg, rgba(91, 55, 27, .1), transparent 44%, rgba(9, 5, 2, .2)),
         var(--bg);
     background-blend-mode: soft-light, normal, normal, normal, normal, normal;
-    background-size: 900px 900px, auto, auto, auto, auto, auto;
+    background-size: 460px 460px, auto, auto, auto, auto, auto;
     color: var(--textColor);
 }
 
@@ -285,7 +285,7 @@ img {
 
 @media (min-width: 641px) and (max-width: 1024px) {
     .container {
-        background-size: 800px 800px, auto, auto, auto, auto, auto;
+        background-size: 360px 360px, auto, auto, auto, auto, auto;
     }
 }
 
