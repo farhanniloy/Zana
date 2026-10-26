@@ -28,6 +28,52 @@
     pointer-events: none;
 }
 
+.listeningFallback {
+    position: relative;
+    z-index: 1;
+    display: grid;
+    min-height: 82px;
+    align-content: center;
+    gap: 12px;
+}
+
+.listeningFallbackLabel {
+    width: 132px;
+    height: 10px;
+    overflow: hidden;
+    color: transparent;
+    font: 9px/1 var(--typewriter);
+    text-transform: uppercase;
+}
+
+.listeningFallback > div {
+    display: grid;
+    grid-template-columns: 58px minmax(0, 1fr) 140px;
+    gap: 14px;
+    align-items: center;
+}
+
+.listeningFallback > div > span {
+    height: 12px;
+    background: color-mix(in srgb, var(--parchment) 18%, transparent);
+    animation: listeningBreathe 1.4s ease-in-out infinite alternate;
+}
+
+.listeningFallback > div > span:first-child {
+    width: 58px;
+    height: 58px;
+}
+
+.listeningFallback > div > span:last-child {
+    width: 100%;
+}
+
+@keyframes listeningBreathe {
+    to {
+        opacity: .45;
+    }
+}
+
 .sectionIndex {
     display: block;
     color: var(--parchment);
@@ -98,8 +144,27 @@
     margin-top: 2px;
 }
 
+.writingFallbackCards {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 15px;
+}
+
+.writingFallbackCards > span {
+    min-height: 250px;
+    border: 1px solid var(--surface-border);
+    background: color-mix(in srgb, var(--parchment) 8%, transparent);
+}
+
+.writingFallback .sectionHeading > span {
+    width: 76px;
+    height: 12px;
+    background: color-mix(in srgb, var(--parchment) 12%, transparent);
+}
+
 @media (max-width: 900px) {
-    .writingGrid {
+    .writingGrid,
+    .writingFallbackCards {
         grid-template-columns: repeat(2, minmax(0, 1fr));
     }
 }
@@ -282,6 +347,19 @@
         padding: 18px 16px;
     }
 
+    .listeningFallback > div {
+        grid-template-columns: 56px minmax(0, 1fr);
+    }
+
+    .listeningFallback > div > span:first-child {
+        width: 56px;
+        height: 56px;
+    }
+
+    .listeningFallback > div > span:last-child {
+        display: none;
+    }
+
     .section {
         padding-right: 0;
         padding-left: 0;
@@ -355,8 +433,13 @@
         opacity: .035;
     }
 
-    .writingGrid {
+    .writingGrid,
+    .writingFallbackCards {
         grid-template-columns: 1fr;
+    }
+
+    .writingFallbackCards > span {
+        min-height: 160px;
     }
 
     .writingGrid > article {
@@ -440,5 +523,11 @@
     .aboutCopy p {
         font-size: 14px;
         line-height: 1.6;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .listeningFallback > div > span {
+        animation: none;
     }
 }

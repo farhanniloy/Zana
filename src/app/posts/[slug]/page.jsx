@@ -1,6 +1,8 @@
 export const dynamic = "force-dynamic";
 
 import styles from "./singlePage.module.css";
+import { cache } from "react";
+import { after } from "next/server";
 import Image from "next/image";
 import Link from 'next/link';
 import Comments from "@/components/comments/Comments";
@@ -11,9 +13,8 @@ import { getAuthSession } from '@/utils/auth';
 import AdminPostControls from '@/components/admin/AdminPostControls';
 import { sanitizePostHtml } from '@/utils/sanitizeHtml';
 
-const getData = async (slug) => {
+const getData = cache(async (slug) => {
     try {
-        // fetch post without incrementing first
         const post = await prisma.post.findUnique({
             where: { slug },
             include: {
@@ -31,7 +32,7 @@ const getData = async (slug) => {
         console.error('Error fetching post', err);
         return null;
     }
-};
+});
 
 export async function generateMetadata({ params }) {
     const { slug } = await params;
@@ -73,8 +74,7 @@ export async function generateMetadata({ params }) {
 const SinglePage = async ({ params }) => {
     const { slug } = await params;
 
-    const data = await getData(slug);
-    const session = await getAuthSession();
+    const [data, session] = await Promise.all([getData(slug), getAuthSession()]);
     // restrict viewing unapproved posts to owner or admin
     if (!data) {
         return (
@@ -95,7 +95,28 @@ const SinglePage = async ({ params }) => {
     }
 
     const isOwner = session?.user?.email === data.userEmail;
-    const isAdmin = !!(session && session.user && (await prisma.user.findUnique({ where: { email: session.user.email } }))?.role === 'ADMIN');
+    const [isAdmin, relatedPosts] = await Promise.all([
+        session?.user?.email
+            ? prisma.user.findUnique({
+                where: { email: session.user.email },
+                select: { role: true },
+            }).then((user) => user?.role === "ADMIN")
+            : false,
+        data.approved
+            ? Promise.all([
+                prisma.post.findFirst({
+                    where: { approved: true, createdAt: { gt: data.createdAt } },
+                    orderBy: { createdAt: "asc" },
+                    select: { slug: true, title: true },
+                }),
+                prisma.post.findFirst({
+                    where: { approved: true, createdAt: { lt: data.createdAt } },
+                    orderBy: { createdAt: "desc" },
+                    select: { slug: true, title: true },
+                }),
+            ])
+            : [null, null],
+    ]);
 
     if (!data.approved && !isOwner && !isAdmin) {
         return (
@@ -115,20 +136,7 @@ const SinglePage = async ({ params }) => {
         );
     }
 
-    const [previousPost, nextPost] = data.approved
-        ? await Promise.all([
-            prisma.post.findFirst({
-                where: { approved: true, createdAt: { gt: data.createdAt } },
-                orderBy: { createdAt: "asc" },
-                select: { slug: true, title: true },
-            }),
-            prisma.post.findFirst({
-                where: { approved: true, createdAt: { lt: data.createdAt } },
-                orderBy: { createdAt: "desc" },
-                select: { slug: true, title: true },
-            }),
-        ])
-        : [null, null];
+    const [previousPost, nextPost] = relatedPosts;
     const categoryLinks = [
         { slug: data.catSlug, title: data.catSlug },
         ...(data.categories || []).map(({ categorySlug, category }) => ({
@@ -144,10 +152,13 @@ const SinglePage = async ({ params }) => {
         year: "numeric",
     }).format(new Date(data.createdAt));
 
-    // increment views now that access is permitted
-    try {
-        await prisma.post.update({ where: { slug }, data: { views: { increment: 1 } } });
-    } catch (e) { console.warn('Failed to increment views', e); }
+    after(async () => {
+        try {
+            await prisma.post.update({ where: { slug }, data: { views: { increment: 1 } } });
+        } catch (error) {
+            console.warn('Failed to increment post views', error);
+        }
+    });
 
     return (
         <main className={styles.container}>

@@ -1,4 +1,5 @@
 import Image from "next/image";
+import { Suspense } from "react";
 import { randomInt } from "node:crypto";
 import Link from "next/link";
 import { ClosingNote } from "@/components/footer/Footer";
@@ -43,7 +44,53 @@ const getNotebook = () =>
 const formatDate = (date) =>
     new Intl.DateTimeFormat("en", { day: "numeric", month: "short", year: "numeric" }).format(new Date(date));
 
-export default async function HomeEditorial() {
+async function ListeningRoomPlayer({ playlist }) {
+    const playlistTracks = await getSpotifyPlaylistTracks(playlist.url);
+    const selectedTrack = playlistTracks.length
+        ? playlistTracks[randomInt(playlistTracks.length)]
+        : null;
+
+    return (
+        <SpotifyCompactPlayer
+            url={selectedTrack?.uri || playlist.url}
+            title={`Default Spotify playlist: ${playlist.title}`}
+            tracks={playlistTracks}
+            metadata={selectedTrack
+                ? {
+                    id: selectedTrack.id,
+                    title: selectedTrack.title,
+                    artist: `From ${playlist.title}`,
+                    artworkUrl: selectedTrack.artworkUrl,
+                }
+                : {
+                    title: playlist.title,
+                    artist: "Selected listening-room playlist",
+                }}
+        />
+    );
+}
+
+function ListeningRoomFallback() {
+    return (
+        <div className={styles.listeningFallback} aria-busy="true" aria-labelledby="listening-title">
+            <span className={styles.listeningFallbackLabel} id="listening-title">The listening room</span>
+            <div aria-hidden="true"><span /><span /><span /></div>
+        </div>
+    );
+}
+
+export default function HomeEditorial() {
+    return (
+        <main className={styles.home}>
+            <Featured />
+            <Suspense fallback={<HomeSectionsFallback />}>
+                <HomeSections />
+            </Suspense>
+        </main>
+    );
+}
+
+async function HomeSections() {
     const [writings, notebook, savedAbout, savedPlaylists] = await Promise.all([
         getWriting(),
         getNotebook(),
@@ -62,33 +109,14 @@ export default async function HomeEditorial() {
     const defaultPlaylist = playlistSettings.playlists.find(
         (playlist) => playlist.id === playlistSettings.defaultId,
     ) || playlistSettings.playlists[0];
-    const playlistTracks = await getSpotifyPlaylistTracks(defaultPlaylist.url);
-    const selectedTrack = playlistTracks.length
-        ? playlistTracks[randomInt(playlistTracks.length)]
-        : null;
 
     return (
-        <main className={styles.home}>
-            <Featured />
-
+        <>
             <section className={styles.listening} aria-labelledby="listening-title">
                 <span className={styles.listeningGrain} aria-hidden="true" />
-                <SpotifyCompactPlayer
-                    url={selectedTrack?.uri || defaultPlaylist.url}
-                    title={`Default Spotify playlist: ${defaultPlaylist.title}`}
-                    tracks={playlistTracks}
-                    metadata={selectedTrack
-                        ? {
-                            id: selectedTrack.id,
-                            title: selectedTrack.title,
-                            artist: `From ${defaultPlaylist.title}`,
-                            artworkUrl: selectedTrack.artworkUrl,
-                        }
-                        : {
-                            title: defaultPlaylist.title,
-                            artist: "Selected listening-room playlist",
-                        }}
-                />
+                <Suspense fallback={<ListeningRoomFallback />}>
+                    <ListeningRoomPlayer playlist={defaultPlaylist} />
+                </Suspense>
             </section>
 
             <section className={styles.section} aria-labelledby="writings-title">
@@ -162,6 +190,24 @@ export default async function HomeEditorial() {
                 </div>
             </section>
             <ClosingNote />
-        </main>
+        </>
+    );
+}
+
+function HomeSectionsFallback() {
+    return (
+        <>
+            <section className={styles.listening} aria-labelledby="listening-title">
+                <span className={styles.listeningGrain} aria-hidden="true" />
+                <ListeningRoomFallback />
+            </section>
+            <section className={`${styles.section} ${styles.writingFallback}`} aria-busy="true" aria-label="Loading recent writings">
+                <div className={styles.sectionHeading}>
+                    <h2>Writings</h2>
+                    <span />
+                </div>
+                <div className={styles.writingFallbackCards}><span /><span /><span /></div>
+            </section>
+        </>
     );
 }
