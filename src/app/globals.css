@@ -291,18 +291,13 @@ img {
 
 @media (max-width: 640px) {
     .container {
-        background:
-            radial-gradient(ellipse at 18% 9%, rgba(174, 106, 44, .12), transparent 42%),
-            linear-gradient(115deg, rgba(91, 55, 27, .08), transparent 48%, rgba(9, 5, 2, .16)),
-            var(--bg);
+        background-size: 720px 720px, auto, auto, auto, auto, auto;
     }
 }
 
 @media (max-width: 380px) {
     .container {
-        background-image:
-            radial-gradient(ellipse at 18% 9%, rgba(174, 106, 44, .1), transparent 44%),
-            linear-gradient(115deg, rgba(91, 55, 27, .06), transparent 48%, rgba(9, 5, 2, .14));
+        background-size: 800px 800px, auto, auto, auto, auto, auto;
     }
 }
 
