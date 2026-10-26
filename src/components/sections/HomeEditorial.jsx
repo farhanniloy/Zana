@@ -73,11 +73,6 @@ export default async function HomeEditorial() {
 
             <section className={styles.listening} aria-labelledby="listening-title">
                 <span className={styles.listeningGrain} aria-hidden="true" />
-                <Link
-                    className={styles.listeningLink}
-                    href="/playlist"
-                    aria-label="Open the listening room playlist"
-                />
                 <SpotifyCompactPlayer
                     url={selectedTrack?.uri || defaultPlaylist.url}
                     title={`Default Spotify playlist: ${defaultPlaylist.title}`}
@@ -120,20 +115,17 @@ export default async function HomeEditorial() {
                 </div>
                 <div className={styles.notebookCollage} aria-label="Reading and writing photographs">
                     <div className={styles.notebookImage}>
-                        <Image src="/images/notebook 1.jpg" alt="A collection of handwritten journal pages and sketches" fill sizes="(max-width: 760px) 50vw, 25vw" />
+                        <Image src="/images/notebook 1.jpg" alt="A collection of handwritten journal pages and sketches" fill sizes="(max-width: 1024px) 35vw, 25vw" />
                     </div>
                     <div className={styles.notebookImage}>
-                        <Image src="/images/notebook 3.jpg" alt="A handwritten story on aged paper beside an ink bottle" fill sizes="(max-width: 760px) 50vw, 25vw" />
+                        <Image src="/images/notebook 3.jpg" alt="A handwritten story on aged paper beside an ink bottle" fill sizes="(max-width: 1024px) 35vw, 25vw" />
                     </div>
                     <div className={styles.notebookImage}>
-                        <Image src="/images/notebook 6.jpg" alt="A coffee cup beside handwritten journal pages" fill sizes="(max-width: 760px) 50vw, 25vw" />
-                    </div>
-                    <div className={styles.notebookImage}>
-                        <Image src="/images/notebook 7.jpg" alt="An open handwritten journal on a dark wooden desk" fill sizes="(max-width: 760px) 50vw, 25vw" />
+                        <Image src="/images/notebook 6.jpg" alt="A coffee cup beside handwritten journal pages" fill sizes="(max-width: 1024px) 35vw, 25vw" />
                     </div>
                 </div>
                 <div className={styles.notebookRoom}>
-                    <Image src="/images/hero image 2.jpg" alt="A warmly lit reading room filled with books" fill sizes="(max-width: 760px) 100vw, 40vw" />
+                    <Image src="/images/hero image 2.jpg" alt="A warmly lit reading room filled with books" fill sizes="(max-width: 760px) 45vw, 40vw" />
                 </div>
                 <div className={styles.notebookEntries}>
                     {notebook.length > 0 ? (

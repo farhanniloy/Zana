@@ -34,17 +34,6 @@
     font-size: 8px;
 }
 
-.nowPlaying a {
-    color: inherit;
-    text-decoration: none;
-    transition: color .2s ease;
-}
-
-.nowPlaying a:hover,
-.trackDetails h2 a:hover {
-    color: var(--ivory);
-}
-
 .trackRow {
     display: grid;
     grid-template-columns: 82px minmax(0, 1fr) minmax(150px, 190px);
@@ -65,12 +54,8 @@
 
 .trackArtwork img {
     object-fit: cover;
-    filter: sepia(.08) saturate(.86) brightness(.85) contrast(1.04);
+    filter: var(--editorial-image-filter);
     transition: filter .2s ease;
-}
-
-.trackArtwork:hover img {
-    filter: sepia(.04) saturate(.94) brightness(.96) contrast(1.02);
 }
 
 .trackDetails {
@@ -85,11 +70,6 @@
     letter-spacing: 0;
     text-overflow: ellipsis;
     white-space: nowrap;
-}
-
-.trackDetails h2 a {
-    color: inherit;
-    text-decoration: none;
 }
 
 .trackDetails > p {

@@ -1,4 +1,5 @@
 import xss from "xss";
+import { getGoogleDriveImageUrl } from "./imageUrl.js";
 
 const whiteList = {
     a: ["href", "target", "rel"],
@@ -52,6 +53,10 @@ export function sanitizePostHtml(value) {
         onTagAttr(tag, name, value, isWhiteAttr) {
             if (name === "href" || name === "src") {
                 if (value.startsWith("//")) return "";
+                if (tag === "img" && name === "src") {
+                    const driveImageUrl = getGoogleDriveImageUrl(value);
+                    if (driveImageUrl) return `src="${driveImageUrl}"`;
+                }
                 try {
                     const url = new URL(value, "https://example.invalid");
                     const allowedProtocols = tag === "a" ? ["http:", "https:", "mailto:"] : ["http:", "https:"];

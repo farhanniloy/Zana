@@ -7,7 +7,7 @@ export default function Featured() {
         <section className={styles.hero} aria-labelledby="home-title">
             <Image
                 className={styles.heroImage}
-                src="/images/hero image 34.jpg"
+                src="/images/Zana%20Hero%20Image.jpg"
                 alt=""
                 fill
                 priority
@@ -15,13 +15,12 @@ export default function Featured() {
             />
             <span className={styles.grain} aria-hidden="true" />
             <div className={styles.heroText}>
-                <span className={styles.welcome}>welcome,</span>
-                <h1 id="home-title">I write<br />things.</h1>
+                <span className={styles.welcome}>hiya!!,</span>
+                <h1 id="home-title">I&apos;m Zana</h1>
                 <p>
-                    A digital journal of thoughts, stories, and fragments.
-                    Exploring the beauty of words and the warmth of forgotten places.
+                    Welcome to my small world of words, where stories, thoughts and imagination come together. I live between the pages of old stories, music, the smell of coffee and the chaotic world of my creativity.
                 </p>
-                <Link className={styles.cta} href="/blog">Enter the library <span aria-hidden="true">→</span></Link>
+                <Link className={styles.cta} href="/blog">Dive into my thoughts <span aria-hidden="true">→</span></Link>
             </div>
             <span className={styles.heroNote}>A quiet corner for curious minds</span>
         </section>

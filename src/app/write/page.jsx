@@ -6,7 +6,7 @@ import { Suspense, useEffect, useRef, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useSession } from "next-auth/react";
 import dynamic from "next/dynamic";
-import { getSafePostImageUrl } from "@/utils/imageUrl";
+import { getGoogleDriveImageUrl, getSafePostImageUrl } from "@/utils/imageUrl";
 
 const RichTextEditor = dynamic(() => import('react-simple-wysiwyg'), { ssr: false });
 
@@ -58,6 +58,8 @@ const WritePageContent = () => {
     const [mediaType, setMediaType] = useState("image");
     const [mediaUrl, setMediaUrl] = useState("");
     const [thumbnailUrl, setThumbnailUrl] = useState("");
+    const [thumbnailSource, setThumbnailSource] = useState("url");
+    const [mediaImageSource, setMediaImageSource] = useState("url");
     const [youtubeId, setYoutubeId] = useState("");
     const editorRef = useRef(null);
     const editorContainerRef = useRef(null);
@@ -415,13 +417,17 @@ const WritePageContent = () => {
             let htmlToAdd = '';
             if (mediaType === 'image' && mediaUrl) {
                 try {
-                    const imageUrl = new URL(mediaUrl.trim());
-                    if (!['http:', 'https:'].includes(imageUrl.protocol)) {
+                    const imageUrl = mediaImageSource === "google-drive"
+                        ? getGoogleDriveImageUrl(mediaUrl)
+                        : new URL(mediaUrl.trim()).href;
+                    if (!imageUrl || (mediaImageSource !== "google-drive" && !/^https?:/i.test(imageUrl))) {
                         throw new Error('unsupported protocol');
                     }
-                    htmlToAdd = `<img src="${imageUrl.href}" style="max-width:100%; height:auto;" alt="Image" />`;
+                    htmlToAdd = `<img src="${imageUrl}" style="max-width:100%; height:auto;" alt="Image" />`;
                 } catch {
-                    alert('Please provide a valid remote image URL (http/https)');
+                    alert(mediaImageSource === "google-drive"
+                        ? 'Please provide a valid Google Drive image share link.'
+                        : 'Please provide a valid remote image URL (http/https)');
                     return;
                 }
             } else if (mediaType === 'youtube' && youtubeId) {
@@ -659,9 +665,13 @@ const WritePageContent = () => {
     };
 
     const useThumbnailUrl = () => {
-        const safeUrl = getSafePostImageUrl(thumbnailUrl);
+        const safeUrl = thumbnailSource === "google-drive"
+            ? getGoogleDriveImageUrl(thumbnailUrl)
+            : getSafePostImageUrl(thumbnailUrl);
         if (!safeUrl?.startsWith("https://")) {
-            alert("Enter a valid HTTPS image URL.");
+            alert(thumbnailSource === "google-drive"
+                ? "Enter a valid Google Drive image share link."
+                : "Enter a valid HTTPS image URL.");
             return;
         }
         setMedia(safeUrl);
@@ -707,26 +717,49 @@ const WritePageContent = () => {
                 <div className={styles.thumbnailDetails}>
                     <h2 id="thumbnail-heading">Thumbnail image</h2>
                     <p>Choose the image shown on your post card and at the top of your post.</p>
+                    <div className={styles.imageSources} role="group" aria-label="Thumbnail image source">
+                        <button
+                            type="button"
+                            className={`${styles.typeButton} ${thumbnailSource === "url" ? styles.active : ""}`}
+                            aria-pressed={thumbnailSource === "url"}
+                            onClick={() => setThumbnailSource("url")}
+                        >
+                            CDN / image URL
+                        </button>
+                        <button
+                            type="button"
+                            className={`${styles.typeButton} ${thumbnailSource === "google-drive" ? styles.active : ""}`}
+                            aria-pressed={thumbnailSource === "google-drive"}
+                            onClick={() => setThumbnailSource("google-drive")}
+                        >
+                            Google Drive
+                        </button>
+                    </div>
                     <label className={styles.thumbnailUrlLabel} htmlFor="thumbnail-url">
-                        Use an image hosted elsewhere
+                        {thumbnailSource === "google-drive" ? "Paste a Google Drive share link" : "Use an image hosted elsewhere"}
                     </label>
                     <input
                         id="thumbnail-url"
                         type="url"
                         inputMode="url"
-                        placeholder="https://example.com/image.jpg"
+                        placeholder={thumbnailSource === "google-drive"
+                            ? "https://drive.google.com/file/d/…/view"
+                            : "https://example.com/image.jpg"}
                         value={thumbnailUrl}
                         onChange={(e) => setThumbnailUrl(e.target.value)}
                         className={styles.thumbnailUrlInput}
-                        aria-label="External thumbnail image URL"
+                        aria-label={thumbnailSource === "google-drive" ? "Google Drive thumbnail share link" : "External thumbnail image URL"}
                     />
+                    {thumbnailSource === "google-drive" && (
+                        <p className={styles.driveHelp}>Set the file’s General access to “Anyone with the link” so readers can see it.</p>
+                    )}
                     <div className={styles.thumbnailActions}>
                         <button
                             type="button"
                             className={styles.thumbnailButton}
                             onClick={useThumbnailUrl}
                         >
-                            Use image URL
+                            {thumbnailSource === "google-drive" ? "Use Google Drive image" : "Use image URL"}
                         </button>
                         {media && (
                             <button
@@ -836,7 +869,7 @@ const WritePageContent = () => {
                         <button
                             className={styles.addButton}
                             type="button"
-                            title="Add remote image URL"
+                            title="Add image from URL or Google Drive"
                             onClick={() => {
                                 setMediaType('image');
                                 setMediaUrl('');
@@ -845,7 +878,7 @@ const WritePageContent = () => {
                                 setShowMediaModal(true);
                             }}
                         >
-                            <Image src="/image.png" alt="Remote image" width={16} height={16} />
+                            <Image src="/image.png" alt="Add image" width={16} height={16} />
                         </button>
 
                         <button
@@ -902,7 +935,10 @@ const WritePageContent = () => {
                             <div className={styles.mediaTypes}>
                                 <button
                                     className={`${styles.typeButton} ${mediaType === 'image' ? styles.active : ''}`}
-                                    onClick={() => setMediaType('image')}
+                                    onClick={() => {
+                                        setMediaType('image');
+                                        setMediaImageSource('url');
+                                    }}
                                     type="button"
                                 >
                                     Image URL
@@ -931,13 +967,38 @@ const WritePageContent = () => {
                             </div>
 
                             {mediaType === 'image' && (
-                                <input
-                                    type="text"
-                                    placeholder="Remote image URL (CDN / online image, e.g. https://...)"
-                                    value={mediaUrl}
-                                    onChange={(e) => setMediaUrl(e.target.value)}
-                                    className={styles.input}
-                                />
+                                <>
+                                    <div className={styles.imageSources} role="group" aria-label="Body image source">
+                                        <button
+                                            type="button"
+                                            className={`${styles.typeButton} ${mediaImageSource === "url" ? styles.active : ""}`}
+                                            aria-pressed={mediaImageSource === "url"}
+                                            onClick={() => setMediaImageSource("url")}
+                                        >
+                                            CDN / image URL
+                                        </button>
+                                        <button
+                                            type="button"
+                                            className={`${styles.typeButton} ${mediaImageSource === "google-drive" ? styles.active : ""}`}
+                                            aria-pressed={mediaImageSource === "google-drive"}
+                                            onClick={() => setMediaImageSource("google-drive")}
+                                        >
+                                            Google Drive
+                                        </button>
+                                    </div>
+                                    <input
+                                        type="text"
+                                        placeholder={mediaImageSource === "google-drive"
+                                            ? "https://drive.google.com/file/d/…/view"
+                                            : "Remote image URL (CDN / online image, e.g. https://...)"}
+                                        value={mediaUrl}
+                                        onChange={(e) => setMediaUrl(e.target.value)}
+                                        className={styles.input}
+                                    />
+                                    {mediaImageSource === "google-drive" && (
+                                        <p className={styles.driveHelp}>Set the file’s General access to “Anyone with the link” so readers can see it.</p>
+                                    )}
+                                </>
                             )}
 
                             {mediaType === 'youtube' && (

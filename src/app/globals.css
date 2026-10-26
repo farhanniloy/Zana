@@ -136,7 +136,7 @@
 
 :root {
     color-scheme: dark;
-    --bg: #1b1209;
+    --bg: #160e07;
     --textColor: #efdbb8;
     --newTextColor: #efdbb8;
     --textColor2: #cfb187;
@@ -163,6 +163,8 @@
     --bronze: #95683a;
     --parchment: #c9a16a;
     --ivory: #efdbb8;
+    --editorial-image-filter: sepia(.24) saturate(.88) brightness(.9) contrast(1.04);
+    --editorial-image-hover-filter: sepia(.18) saturate(.94) brightness(.96) contrast(1.03);
     --serif: 'Cormorant Garamond', 'Iowan Old Style', 'Baskerville', 'Palatino Linotype', Georgia, serif;
     --sans: 'IBM Plex Sans', 'Source Sans 3', 'Segoe UI', sans-serif;
     --typewriter: 'Special Elite', 'Courier New', monospace;
@@ -196,6 +198,8 @@
     --featured-button-border: rgba(64, 48, 37, .25);
     --featured-button-hover-bg: #bba384;
     --featured-button-hover-text: #17130f;
+    --editorial-image-filter: sepia(.18) saturate(.92) brightness(.94) contrast(1.02);
+    --editorial-image-hover-filter: sepia(.12) saturate(.96) brightness(.98) contrast(1.01);
 }
 
 * {
@@ -259,11 +263,14 @@ img {
     position: relative;
     min-height: 100vh;
     background:
-        radial-gradient(ellipse at 18% 9%, rgba(174, 106, 44, .16), transparent 38%),
-        radial-gradient(ellipse at 82% 38%, rgba(119, 71, 34, .1), transparent 44%),
+        url('/leather-patina.svg') repeat,
+        radial-gradient(ellipse at 18% 9%, rgba(174, 106, 44, .14), transparent 38%),
+        radial-gradient(ellipse at 82% 38%, rgba(119, 71, 34, .09), transparent 44%),
         radial-gradient(ellipse at 50% 70%, transparent 30%, rgba(9, 5, 2, .34) 100%),
-        linear-gradient(115deg, rgba(91, 55, 27, .12), transparent 44%, rgba(9, 5, 2, .2)),
+        linear-gradient(115deg, rgba(91, 55, 27, .1), transparent 44%, rgba(9, 5, 2, .2)),
         var(--bg);
+    background-blend-mode: soft-light, normal, normal, normal, normal, normal;
+    background-size: 900px 900px, auto, auto, auto, auto, auto;
     color: var(--textColor);
 }
 
@@ -276,52 +283,21 @@ img {
         var(--bg);
 }
 
-.container::before {
-    position: fixed;
-    z-index: 1000;
-    inset: 0;
-    background: url('/grain.svg') repeat;
-    background-size: 360px 360px;
-    content: "";
-    opacity: .2;
-    pointer-events: none;
-    mix-blend-mode: soft-light;
-}
-
-.light .container::before {
-    opacity: .1;
-}
-
 @media (min-width: 641px) and (max-width: 1024px) {
-    .container::before {
-        background-size: 420px 420px;
-        opacity: .14;
-    }
-
-    .light .container::before {
-        opacity: .07;
+    .container {
+        background-size: 800px 800px, auto, auto, auto, auto, auto;
     }
 }
 
 @media (max-width: 640px) {
-    .container::before {
-        background-size: 480px 480px;
-        opacity: .075;
-    }
-
-    .light .container::before {
-        opacity: .04;
+    .container {
+        background-size: 720px 720px, auto, auto, auto, auto, auto;
     }
 }
 
 @media (max-width: 380px) {
-    .container::before {
-        background-size: 560px 560px;
-        opacity: .055;
-    }
-
-    .light .container::before {
-        opacity: .03;
+    .container {
+        background-size: 800px 800px, auto, auto, auto, auto, auto;
     }
 }
 
