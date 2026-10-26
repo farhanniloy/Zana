@@ -94,7 +94,7 @@
 .description {
     box-sizing: border-box;
     width: 100%;
-    max-width: 100%;
+    max-width: 720px;
     min-width: 0;
     height: auto;
     margin: 0 auto;
@@ -343,7 +343,7 @@
     align-items: baseline;
     gap: 8px;
     width: 100%;
-    max-width: 100%;
+    max-width: 720px;
     margin: 28px auto 0;
     color: var(--softTextColor);
     font: 12px/1.5 var(--typewriter);
@@ -376,7 +376,7 @@
     grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
     column-gap: 28px;
     width: 100%;
-    max-width: 100%;
+    max-width: 720px;
     margin: 54px auto 0;
     padding: 20px 0 18px;
     border-top: 1px solid var(--surface-border);
@@ -447,7 +447,7 @@
     }
 
     .title {
-        font-size: clamp(28px, 8vw, 34px);
+        font-size: clamp(20px, 6.3vw, 26px);
     }
 
     .articleMeta {

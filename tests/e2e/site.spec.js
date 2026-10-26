@@ -22,12 +22,10 @@ test("public browsing works at mobile and desktop widths", async ({ page }) => {
         await page.goto("/");
         await expect(page.getByRole("heading", { name: "I'm Zana" })).toBeVisible();
 
-        const heroBorders = await page.locator('section[aria-labelledby="home-title"]').evaluate((element) => ({
-            borderWidth: getComputedStyle(element).borderTopWidth,
-            insetBorder: getComputedStyle(element, "::after").display,
-        }));
-        expect(heroBorders.borderWidth).toBe("1px");
-        expect(heroBorders.insetBorder).toBe("block");
+        const hero = page.locator('section[aria-labelledby="home-title"]');
+        await expect(hero).toHaveCSS("border-top-width", "1px");
+        await expect.poll(() => hero.evaluate((element) => getComputedStyle(element, "::after").display))
+            .toBe("block");
         await expect(page.locator('section[aria-labelledby="home-title"] img'))
             .toHaveCSS("filter", "sepia(0.24) saturate(0.88) brightness(0.9) contrast(1.04)");
         if (width <= 640) {
@@ -51,6 +49,20 @@ test("public browsing works at mobile and desktop widths", async ({ page }) => {
             expect(heroSpacing.top).toBeGreaterThanOrEqual(25);
             expect(heroSpacing.ctaToNote).toBeGreaterThanOrEqual(20);
             expect(heroSpacing.bottom).toBeGreaterThanOrEqual(17);
+        }
+        if (width <= 520) {
+            const about = page.locator('section[aria-labelledby="about-title"]');
+            const aboutCopy = about.locator(":scope > div").nth(1);
+            await expect(aboutCopy.locator("p")).toHaveCSS("font-size", "14px");
+            const aboutLayout = await about.evaluate((element) => ({
+                scrollWidth: element.scrollWidth,
+                clientWidth: element.clientWidth,
+                portraitWidth: element.querySelector("img").getBoundingClientRect().width,
+                copyWidth: element.querySelector("h2").parentElement.getBoundingClientRect().width,
+            }));
+            expect(aboutLayout.portraitWidth).toBeLessThanOrEqual(104);
+            expect(aboutLayout.copyWidth).toBeGreaterThan(aboutLayout.clientWidth * 0.8);
+            expect(aboutLayout.scrollWidth).toBeLessThanOrEqual(aboutLayout.clientWidth);
         }
         const cta = await page.getByRole("link", { name: "Dive into my thoughts" }).boundingBox();
         const note = await page.locator('section[aria-labelledby="home-title"] > span:last-child').boundingBox();
@@ -190,13 +202,72 @@ test("public browsing works at mobile and desktop widths", async ({ page }) => {
 });
 
 test("article titles scale down on smaller screens", async ({ page }) => {
-    const title = page.getByRole("heading", { name: "A Small Map of Attention" });
+    const title = page.getByRole("heading", { name: "Boundaries Make Systems Legible" });
 
-    for (const [width, expectedFontSize] of [[320, "28px"], [375, "30px"], [640, "34px"], [1280, "38px"]]) {
+    for (const width of [320, 368, 375, 640, 1280]) {
         await page.setViewportSize({ width, height: 900 });
-        await page.goto("/posts/a-small-map-of-attention");
+        await page.goto("/posts/boundaries-make-systems-legible");
         await expect(title).toBeVisible();
-        await expect(title).toHaveCSS("font-size", expectedFontSize);
+        await expect.poll(() => title.evaluate((element) => getComputedStyle(element).fontSize))
+            .not.toBe("");
+        const titleLayout = await title.evaluate((element) => {
+            const range = document.createRange();
+            range.selectNodeContents(element);
+            const lineTops = [...range.getClientRects()].map((rect) => rect.top);
+            return {
+                fontSize: Number.parseFloat(getComputedStyle(element).fontSize),
+                lineCount: new Set(lineTops).size,
+            };
+        });
+        if (width <= 640) {
+            expect(titleLayout.fontSize).toBeLessThanOrEqual(26);
+            expect(titleLayout.lineCount).toBe(1);
+        } else {
+            expect(titleLayout.fontSize).toBe(38);
+        }
+    }
+});
+
+test("article body keeps a readable measure on wide screens", async ({ page }) => {
+    for (const width of [390, 768, 1024, 1440]) {
+        await page.setViewportSize({ width, height: 900 });
+        await page.goto("/posts/boundaries-make-systems-legible");
+        const layout = await page.locator("main").evaluate((main) => ({
+            mainWidth: main.clientWidth,
+            imageWidth: main.querySelector("img").getBoundingClientRect().width,
+            bodyWidth: main.querySelector("article > .ql-editor").getBoundingClientRect().width,
+            topics: main.querySelector('nav[aria-label="Topics"]').getBoundingClientRect(),
+            postNav: main.querySelector('nav[aria-label="Browse other writings"]').getBoundingClientRect(),
+        }));
+
+        expect(layout.bodyWidth).toBeLessThanOrEqual(720);
+        expect(layout.topics.width).toBeLessThanOrEqual(720);
+        expect(layout.postNav.width).toBeLessThanOrEqual(720);
+        if (width <= 768) {
+            expect(layout.bodyWidth).toBe(layout.imageWidth);
+            expect(layout.topics.width).toBe(layout.imageWidth);
+            expect(layout.postNav.width).toBe(layout.imageWidth);
+        } else {
+            expect(layout.bodyWidth).toBeLessThan(layout.imageWidth);
+            expect(layout.topics.width).toBe(layout.bodyWidth);
+            expect(layout.postNav.width).toBe(layout.bodyWidth);
+        }
+    }
+});
+
+test("About portrait stays compact on phone widths", async ({ page }) => {
+    for (const width of [320, 390, 520]) {
+        await page.setViewportSize({ width, height: 844 });
+        await page.goto("/about");
+        const portrait = page.locator("main > div").first();
+        await expect(portrait).toBeVisible();
+
+        const portraitBox = await portrait.boundingBox();
+        const containerBox = await page.locator("main").boundingBox();
+        expect(portraitBox.width).toBeLessThanOrEqual(280);
+        expect(portraitBox.width).toBeLessThan(containerBox.width);
+        expect(Math.abs((portraitBox.x + portraitBox.width / 2) - (containerBox.x + containerBox.width / 2)))
+            .toBeLessThan(1);
     }
 });
 
