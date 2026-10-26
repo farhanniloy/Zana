@@ -274,11 +274,16 @@ test("admin can publish a post and add a comment", async ({ page }) => {
     await expect(page.locator("article .description img"))
         .toHaveAttribute("src", /drive\.google\.com\/thumbnail\?id=body_image_test_id/);
     await expect(page.getByRole("heading", { name: "Comments" })).toBeVisible();
+    await expect(page.getByRole("button", { name: "Delete", exact: true }).first()).toBeVisible();
 
     const comment = `Automated comment ${Date.now()}`;
     await page.getByPlaceholder("Write a comment...").fill(comment);
     await page.getByRole("button", { name: "Send" }).click();
-    await expect(page.getByText(comment)).toBeVisible();
+    const commentContent = page.getByText(comment);
+    await expect(commentContent).toBeVisible();
+    page.once("dialog", (dialog) => dialog.accept());
+    await commentContent.locator("xpath=..").getByRole("button", { name: "Delete" }).click();
+    await expect(commentContent).toHaveCount(0);
 });
 
 test("playlist page renders configured embeds and admin editing controls", async ({ page }) => {

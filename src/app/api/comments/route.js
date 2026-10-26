@@ -142,3 +142,52 @@ const makeAvatar = (seed, style) => `https://api.dicebear.com/6.x/${style}/svg?s
         );
     }
 };
+
+export const DELETE = async (req) => {
+    const csrfError = ensureCsrf(req);
+    if (csrfError) {
+        return csrfError;
+    }
+
+    const session = await getAuthSession();
+    if (!session?.user?.email) {
+        return NextResponse.json({ message: "Not authenticated" }, { status: 401 });
+    }
+
+    try {
+        const user = await prisma.user.findUnique({
+            where: { email: session.user.email },
+            select: { role: true },
+        });
+        if (!user) {
+            return NextResponse.json({ message: "Not authenticated" }, { status: 401 });
+        }
+        if (user.role !== "ADMIN") {
+            return NextResponse.json({ message: "Forbidden" }, { status: 403 });
+        }
+
+        let body;
+        try {
+            body = await req.json();
+        } catch {
+            return NextResponse.json({ message: "Invalid request body" }, { status: 400 });
+        }
+        if (typeof body?.id !== "string" || !body.id.trim()) {
+            return NextResponse.json({ message: "Comment ID is required" }, { status: 400 });
+        }
+
+        const comment = await prisma.comment.findUnique({
+            where: { id: body.id },
+            select: { id: true },
+        });
+        if (!comment) {
+            return NextResponse.json({ message: "Comment not found" }, { status: 404 });
+        }
+
+        await prisma.comment.delete({ where: { id: comment.id } });
+        return NextResponse.json({ message: "Comment deleted" });
+    } catch (error) {
+        console.error("Failed to delete comment", error);
+        return NextResponse.json({ message: "Failed to delete comment" }, { status: 500 });
+    }
+};

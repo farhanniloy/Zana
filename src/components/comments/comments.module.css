@@ -102,7 +102,8 @@
 }
 
 .button:focus-visible,
-.cancelReply:focus-visible {
+.cancelReply:focus-visible,
+.deleteButton:focus-visible {
     outline: 2px solid var(--parchment);
     outline-offset: 3px;
 }
@@ -167,6 +168,25 @@
     color: var(--softTextColor);
     cursor: pointer;
     font: 12px/1.3 var(--serif);
+}
+
+.metaRow .deleteButton {
+    padding: 2px 0;
+    border: 0;
+    background: transparent;
+    color: var(--softTextColor);
+    cursor: pointer;
+    font: 12px/1.3 var(--serif);
+}
+
+.metaRow .deleteButton:hover:not(:disabled) {
+    color: #e19a7c;
+    text-decoration: underline;
+}
+
+.metaRow .deleteButton:disabled {
+    cursor: wait;
+    opacity: .6;
 }
 
 .replyButton:hover {

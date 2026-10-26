@@ -32,6 +32,7 @@ const Comments = ({ postSlug }) => {
     const [name, setName] = useState("");
     const [submitting, setSubmitting] = useState(false);
     const [replyingTo, setReplyingTo] = useState(null);
+    const [deletingCommentId, setDeletingCommentId] = useState(null);
     const inputRef = useRef(null);
 
     useEffect(() => {
@@ -45,6 +46,29 @@ const Comments = ({ postSlug }) => {
         if (!mention.startsWith("@")) mention = `@${mention}`;
         setReplyingTo(mention);
         setDesc(`${mention} `);
+    };
+
+    const handleDelete = async (comment) => {
+        if (!window.confirm("Delete this comment? This cannot be undone.")) return;
+
+        setDeletingCommentId(comment.id);
+        try {
+            const response = await fetch("/api/comments", {
+                method: "DELETE",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ id: comment.id }),
+            });
+            const result = await response.json();
+            if (!response.ok) {
+                throw new Error(result.message || "Failed to delete comment");
+            }
+            await mutate();
+        } catch (error) {
+            console.error("Failed to delete comment", error);
+            alert(error.message || "Failed to delete comment");
+        } finally {
+            setDeletingCommentId(null);
+        }
     };
 
     const handleSubmit = async () => {
@@ -152,6 +176,15 @@ const Comments = ({ postSlug }) => {
                                             <div className={styles.metaRow}>
                                               <time className={styles.date} dateTime={new Date(item.createdAt).toISOString()}>{new Date(item.createdAt).toISOString().substring(0, 10)}</time>
                                               <button className={styles.replyButton} onClick={() => handleReply(item)}>Reply</button>
+                                              {session?.user?.role === "ADMIN" && (
+                                                <button
+                                                  className={styles.deleteButton}
+                                                  onClick={() => handleDelete(item)}
+                                                  disabled={deletingCommentId === item.id}
+                                                >
+                                                  {deletingCommentId === item.id ? "Deleting…" : "Delete"}
+                                                </button>
+                                              )}
                                             </div>
                                           </>
                                         );
@@ -162,6 +195,15 @@ const Comments = ({ postSlug }) => {
                                         <div className={styles.metaRow}>
                                           <time className={styles.date} dateTime={new Date(item.createdAt).toISOString()}>{new Date(item.createdAt).toISOString().substring(0, 10)}</time>
                                           <button className={styles.replyButton} onClick={() => handleReply(item)}>Reply</button>
+                                          {session?.user?.role === "ADMIN" && (
+                                            <button
+                                              className={styles.deleteButton}
+                                              onClick={() => handleDelete(item)}
+                                              disabled={deletingCommentId === item.id}
+                                            >
+                                              {deletingCommentId === item.id ? "Deleting…" : "Delete"}
+                                            </button>
+                                          )}
                                         </div>
                                       </>
                                     )}
