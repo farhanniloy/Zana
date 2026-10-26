@@ -64,13 +64,15 @@ test("public browsing works at mobile and desktop widths", async ({ page }) => {
                 color: getComputedStyle(document.documentElement).getPropertyValue("--bg").trim(),
             };
         });
-        expect(background.image).toContain("leather-patina.svg");
         expect(background.color).toBe("#160e07");
-        const expectedTextureSize = width <= 380 ? "800px 800px"
-            : width <= 640 ? "720px 720px"
-                : width <= 1024 ? "800px 800px"
-                    : "900px 900px";
-        expect(background.size.startsWith(expectedTextureSize)).toBe(true);
+        if (width <= 640) {
+            expect(background.image).not.toContain("leather-patina.svg");
+            expect(background.image).toContain("radial-gradient");
+        } else {
+            expect(background.image).toContain("leather-patina.svg");
+            const expectedTextureSize = width <= 1024 ? "800px 800px" : "900px 900px";
+            expect(background.size.startsWith(expectedTextureSize)).toBe(true);
+        }
 
         const listeningRoom = page.locator('section[aria-labelledby="listening-title"]');
         await expect(listeningRoom.getByRole("link", { name: "Open the Playlist" }))
