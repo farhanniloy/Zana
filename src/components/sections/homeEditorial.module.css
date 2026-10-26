@@ -418,4 +418,27 @@
     .notebook .textLink {
         font-size: 12px;
     }
+
+    .about {
+        grid-template-columns: minmax(0, 1fr);
+        gap: 14px;
+    }
+
+    .portrait,
+    .aboutCopy {
+        grid-column: 1;
+    }
+
+    .portrait {
+        width: clamp(88px, 26vw, 104px);
+    }
+
+    .about h2 {
+        font-size: clamp(24px, 6vw, 29px);
+    }
+
+    .aboutCopy p {
+        font-size: 14px;
+        line-height: 1.6;
+    }
 }
