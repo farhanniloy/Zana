@@ -291,6 +291,12 @@ img {
 
 @media (max-width: 640px) {
     .container {
+        background-image:
+            url('/leather-patina-mobile.webp'),
+            radial-gradient(ellipse at 18% 9%, rgba(174, 106, 44, .14), transparent 38%),
+            radial-gradient(ellipse at 82% 38%, rgba(119, 71, 34, .09), transparent 44%),
+            radial-gradient(ellipse at 50% 70%, transparent 30%, rgba(9, 5, 2, .34) 100%),
+            linear-gradient(115deg, rgba(91, 55, 27, .1), transparent 44%, rgba(9, 5, 2, .2));
         background-size: 720px 720px, auto, auto, auto, auto, auto;
     }
 }
