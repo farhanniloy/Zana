@@ -68,10 +68,10 @@ test("public browsing works at mobile and desktop widths", async ({ page }) => {
         if (width <= 640) {
             expect(background.image).toContain("leather-patina-mobile.webp");
             expect(background.image).toContain("radial-gradient");
-            expect(background.size.startsWith("250px 250px")).toBe(true);
+            expect(background.size.startsWith("500px 500px")).toBe(true);
         } else {
             expect(background.image).toContain("leather-patina.svg");
-            const expectedTextureSize = width <= 1024 ? "390px 390px" : "500px 500px";
+            const expectedTextureSize = "500px 500px";
             expect(background.size.startsWith(expectedTextureSize)).toBe(true);
         }
 
@@ -187,6 +187,17 @@ test("public browsing works at mobile and desktop widths", async ({ page }) => {
     await expect(firstCard.locator("time")).toHaveCSS("font-size", "13px");
     await expect(firstCard.locator("h3")).toHaveCSS("font-size", "22px");
     await expect(firstCard.locator("p")).toHaveCSS("font-size", "15px");
+});
+
+test("article titles scale down on smaller screens", async ({ page }) => {
+    const title = page.getByRole("heading", { name: "A Small Map of Attention" });
+
+    for (const [width, expectedFontSize] of [[320, "28px"], [375, "30px"], [640, "34px"], [1280, "38px"]]) {
+        await page.setViewportSize({ width, height: 900 });
+        await page.goto("/posts/a-small-map-of-attention");
+        await expect(title).toBeVisible();
+        await expect(title).toHaveCSS("font-size", expectedFontSize);
+    }
 });
 
 test("admin users are readable and fit on narrow screens", async ({ page }) => {

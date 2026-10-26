@@ -446,6 +446,10 @@
         margin-bottom: 32px;
     }
 
+    .title {
+        font-size: clamp(28px, 8vw, 34px);
+    }
+
     .articleMeta {
         gap: 6px;
         font-size: 13px;
