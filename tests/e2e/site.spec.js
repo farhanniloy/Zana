@@ -71,7 +71,7 @@ test("public browsing works at mobile and desktop widths", async ({ page }) => {
             expect(background.size.startsWith("280px 280px")).toBe(true);
         } else {
             expect(background.image).toContain("leather-patina.svg");
-            const expectedTextureSize = width <= 1024 ? "800px 800px" : "900px 900px";
+            const expectedTextureSize = width <= 1024 ? "360px 360px" : "460px 460px";
             expect(background.size.startsWith(expectedTextureSize)).toBe(true);
         }
 
