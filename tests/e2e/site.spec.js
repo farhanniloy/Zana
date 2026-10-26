@@ -21,6 +21,22 @@ test("public browsing works at mobile and desktop widths", async ({ page }) => {
         await page.setViewportSize({ width, height: 900 });
         await page.goto("/");
         await expect(page.getByRole("heading", { name: "I'm Zana" })).toBeVisible();
+        await expect(page.getByRole("switch"))
+            .toHaveCSS("border-top-width", "0px");
+        if (width <= 980) {
+            const menuButton = page.getByRole("button", { name: "Open navigation menu" });
+            await expect(menuButton).toHaveCSS("border-top-width", "0px");
+            const lineWidths = await menuButton.locator("span").evaluateAll((lines) =>
+                lines.map((line) => ({
+                    width: line.getBoundingClientRect().width,
+                    height: getComputedStyle(line).height,
+                    right: line.getBoundingClientRect().right,
+                })),
+            );
+            expect(lineWidths[0].width).toBeGreaterThan(lineWidths[1].width);
+            expect(lineWidths[0].height).toBe("0.75px");
+            expect(Math.abs(lineWidths[0].right - lineWidths[1].right)).toBeLessThan(1);
+        }
 
         const hero = page.locator('section[aria-labelledby="home-title"]');
         await expect(hero).toHaveCSS("border-top-width", "1px");
@@ -51,7 +67,7 @@ test("public browsing works at mobile and desktop widths", async ({ page }) => {
             expect(heroSpacing.bottom).toBeGreaterThanOrEqual(17);
         }
         if (width <= 520) {
-            const about = page.locator('section[aria-labelledby="about-title"]');
+            const about = page.locator('section[aria-labelledby="about-title"]:visible').last();
             const aboutCopy = about.locator(":scope > div").nth(1);
             await expect(aboutCopy.locator("p")).toHaveCSS("font-size", "14px");
             const aboutLayout = await about.evaluate((element) => ({
@@ -87,7 +103,7 @@ test("public browsing works at mobile and desktop widths", async ({ page }) => {
             expect(background.size.startsWith(expectedTextureSize)).toBe(true);
         }
 
-        const listeningRoom = page.locator('section[aria-labelledby="listening-title"]');
+        const listeningRoom = page.locator('section[aria-labelledby="listening-title"]:visible').last();
         await expect(listeningRoom.getByRole("link", { name: "Open the Playlist" }))
             .toHaveAttribute("href", "/playlist");
         const backgroundBeforeHover = await listeningRoom.evaluate((element) => getComputedStyle(element).backgroundColor);
@@ -95,7 +111,7 @@ test("public browsing works at mobile and desktop widths", async ({ page }) => {
         await expect.poll(() => listeningRoom.evaluate((element) => getComputedStyle(element).backgroundColor))
             .toBe(backgroundBeforeHover);
 
-        const notebookCollage = page.locator('[aria-label="Reading and writing photographs"]');
+        const notebookCollage = page.locator('[aria-label="Reading and writing photographs"]:visible').last();
         const collageImages = notebookCollage.locator(":scope > div");
         if (width <= 760) {
             await expect(notebookCollage).toBeVisible();
@@ -120,7 +136,7 @@ test("public browsing works at mobile and desktop widths", async ({ page }) => {
         await expect(homeWritingImage).toHaveCSS("filter", "sepia(0.36) saturate(0.68) brightness(0.74) contrast(1.06)");
         await expect(page.locator('[aria-labelledby="notebook-title"] img').first())
             .toHaveCSS("filter", "sepia(0.36) saturate(0.68) brightness(0.74) contrast(1.06)");
-        const notebookSection = page.locator('[aria-labelledby="notebook-title"]');
+        const notebookSection = page.locator('[aria-labelledby="notebook-title"]:visible').last();
         const notebookIntroBox = await notebookSection.locator(":scope > div").nth(0).boundingBox();
         const notebookRoom = notebookSection.getByRole("img", { name: "A warmly lit reading room filled with books" }).locator("xpath=..");
         if (width <= 760) {
@@ -188,7 +204,7 @@ test("public browsing works at mobile and desktop widths", async ({ page }) => {
     await expect(theme).not.toHaveAttribute("aria-checked", previousTheme);
 
     await page.goto("/blog?q=playwright-no-matching-post");
-    await expect(page.getByText(/No writings match this shelf/)).toBeVisible();
+    await expect(page.getByText(/No writings match this shelf/).last()).toBeVisible();
     await expect(page.getByRole("searchbox")).toHaveValue("playwright-no-matching-post");
     await expect(page.locator("main header > span")).toHaveCSS("font-size", "11px");
     await expect(page.locator("form input[type=search]")).toHaveCSS("font-size", "16px");
@@ -232,7 +248,7 @@ test("article body keeps a readable measure on wide screens", async ({ page }) =
     for (const width of [390, 768, 1024, 1440]) {
         await page.setViewportSize({ width, height: 900 });
         await page.goto("/posts/boundaries-make-systems-legible");
-        const layout = await page.locator("main").evaluate((main) => ({
+        const layout = await page.locator("main:visible:has(article > .ql-editor)").last().evaluate((main) => ({
             mainWidth: main.clientWidth,
             imageWidth: main.querySelector("img").getBoundingClientRect().width,
             bodyWidth: main.querySelector("article > .ql-editor").getBoundingClientRect().width,
