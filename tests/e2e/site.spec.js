@@ -68,10 +68,10 @@ test("public browsing works at mobile and desktop widths", async ({ page }) => {
         if (width <= 640) {
             expect(background.image).toContain("leather-patina-mobile.webp");
             expect(background.image).toContain("radial-gradient");
-            expect(background.size.startsWith("280px 280px")).toBe(true);
+            expect(background.size.startsWith("250px 250px")).toBe(true);
         } else {
             expect(background.image).toContain("leather-patina.svg");
-            const expectedTextureSize = width <= 1024 ? "360px 360px" : "460px 460px";
+            const expectedTextureSize = width <= 1024 ? "390px 390px" : "500px 500px";
             expect(background.size.startsWith(expectedTextureSize)).toBe(true);
         }
 
