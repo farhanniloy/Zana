@@ -54,7 +54,11 @@ const nextConfig = {
             { protocol: 'https', hostname: 'lh3.googleusercontent.com' },
             { protocol: 'https', hostname: 'firebasestorage.googleapis.com' },
             { protocol: 'https', hostname: 'plsn.com' },
+            { protocol: 'https', hostname: 'drive.google.com', pathname: '/thumbnail' },
             { protocol: 'https', hostname: 'image-cdn-ak.spotifycdn.com', pathname: '/image/**' },
+            { protocol: 'https', hostname: 'image-cdn-fa.spotifycdn.com', pathname: '/image/**' },
+            { protocol: 'https', hostname: 'i.scdn.co', pathname: '/**' },
+            { protocol: 'https', hostname: 'mosaic.scdn.co', pathname: '/**' },
         ],
     },
     async headers() {

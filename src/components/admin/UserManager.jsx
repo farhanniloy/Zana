@@ -1,5 +1,6 @@
 "use client"
 import { useEffect, useState } from 'react';
+import styles from './userManager.module.css';
 
 export default function UserManager(){
   const [users, setUsers] = useState([]);
@@ -40,36 +41,54 @@ export default function UserManager(){
   };
 
   return (
-    <div>
-      <h2>Users</h2>
-      {message && <div style={{marginBottom:12}}>{message}</div>}
+    <section className={styles.manager} aria-labelledby="users-heading">
+      <h2 id="users-heading" className={styles.heading}>Users</h2>
+      {message && <div className={styles.message} role="status">{message}</div>}
       {loading ? <div>Loading...</div> : (
-        <table style={{width:'100%', borderCollapse:'collapse'}}>
-          <thead>
-            <tr><th>Email</th><th>Name</th><th>Username</th><th>Role</th><th>Actions</th></tr>
-          </thead>
-          <tbody>
-            {users.map(u => (
-              <tr key={u.email} style={{borderTop:'1px solid #222'}}>
-                <td>{u.email}</td>
-                <td>{u.name}</td>
-                <td>
-                  <input defaultValue={u.username || ''} id={`username-${u.email}`} />
-                  <button onClick={()=>changeUsername(u.email, document.getElementById(`username-${u.email}`).value)}>Save</button>
-                </td>
-                <td>
-                  <select defaultValue={u.role} onChange={(e)=>changeRole(u.email, e.target.value)}>
-                    <option value="USER">USER</option>
-                    <option value="MODERATOR">MODERATOR</option>
-                    <option value="ADMIN">ADMIN</option>
-                  </select>
-                </td>
-                <td></td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+        <div className={styles.tableWrap}>
+          <table className={styles.table}>
+            <thead>
+              <tr><th>Email</th><th>Name</th><th>Username</th><th>Role</th><th>Actions</th></tr>
+            </thead>
+            <tbody>
+              {users.map(u => (
+                <tr key={u.email}>
+                  <td data-label="Email" className={styles.email}>{u.email}</td>
+                  <td data-label="Name">{u.name || '—'}</td>
+                  <td data-label="Username">
+                    <div className={styles.usernameControls}>
+                      <input
+                        defaultValue={u.username || ''}
+                        id={`username-${u.id}`}
+                        aria-label={`Username for ${u.email}`}
+                      />
+                      <button
+                        type="button"
+                        onClick={() => changeUsername(u.email, document.getElementById(`username-${u.id}`).value)}
+                        aria-label={`Save username for ${u.email}`}
+                      >
+                        Save
+                      </button>
+                    </div>
+                  </td>
+                  <td data-label="Role">
+                    <select
+                      defaultValue={u.role}
+                      onChange={(e) => changeRole(u.email, e.target.value)}
+                      aria-label={`Role for ${u.email}`}
+                    >
+                      <option value="USER">USER</option>
+                      <option value="MODERATOR">MODERATOR</option>
+                      <option value="ADMIN">ADMIN</option>
+                    </select>
+                  </td>
+                  <td data-label="Actions">—</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       )}
-    </div>
+    </section>
   );
 }

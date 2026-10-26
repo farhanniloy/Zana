@@ -1,11 +1,11 @@
-import Image from "next/image";
 import { SiSpotify } from "react-icons/si";
 import { getAuthSession } from "@/utils/auth";
 import prisma from "@/utils/connect";
 import SpotifyEmbed from "@/components/spotify/SpotifyEmbed";
 import { getSpotifyPlaylistConfig } from "@/utils/spotifyConfig";
-import { resolveSpotifyUrl } from "@/components/spotify/spotifyUrl";
+import { isSpotifyArtworkUrl, resolveSpotifyUrl } from "@/components/spotify/spotifyUrl";
 import PlaylistAdminEditor from "./PlaylistAdminEditor";
+import PlaylistArtwork from "./PlaylistArtwork";
 import styles from "../libraryPages.module.css";
 
 export const dynamic = "force-dynamic";
@@ -35,18 +35,14 @@ const getPlaylistArtwork = async (url) => {
         const metadata = await response.json();
         if (typeof metadata.thumbnail_url !== "string") return null;
 
-        const artwork = new URL(metadata.thumbnail_url);
-        if (
-            artwork.protocol !== "https:" ||
-            !["image-cdn-ak.spotifycdn.com", "i.scdn.co", "mosaic.scdn.co"].includes(artwork.hostname)
-        ) {
+        if (!isSpotifyArtworkUrl(metadata.thumbnail_url)) {
             console.warn("Spotify returned an untrusted playlist artwork URL", {
                 playlistId: spotify.id,
             });
             return null;
         }
 
-        return artwork.toString();
+        return metadata.thumbnail_url;
     } catch (error) {
         console.warn("Could not retrieve Spotify playlist artwork", {
             playlistId: spotify.id,
@@ -87,12 +83,10 @@ export default async function PlaylistPage() {
                             <section className={styles.playlist} key={playlist.id}>
                                 <div className={styles.playlistArtworkColumn}>
                                     <div className={styles.playlistCover}>
-                                        <Image
-                                            src={playlist.artwork || "/images/music 3.jpg"}
-                                            alt={playlist.artwork ? `Cover artwork for ${playlist.title}` : "A vintage turntable, records, and headphones in warm lamplight"}
-                                            fill
+                                        <PlaylistArtwork
+                                            artwork={playlist.artwork}
+                                            title={playlist.title}
                                             sizes="(max-width: 760px) 100vw, 330px"
-                                            unoptimized={Boolean(playlist.artwork)}
                                         />
                                         <span className={styles.playlistCoverGrain} aria-hidden="true" />
                                     </div>

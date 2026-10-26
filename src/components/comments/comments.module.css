@@ -6,6 +6,12 @@
     color: var(--textColor);
 }
 
+@media (min-width: 1024px) {
+    .container {
+        margin-top: 112px;
+    }
+}
+
 .login {
     margin: 10px;
     color: var(--softTextColor);
@@ -117,7 +123,7 @@
 .image {
     border: 1px solid var(--surface-border);
     object-fit: cover;
-    filter: sepia(.35) saturate(.8);
+    filter: var(--editorial-image-filter);
 }
 
 .avatarFallback {

@@ -2,8 +2,12 @@
     display: flex;
     flex-direction: column;
     min-width: 0;
-    border: 1px solid var(--surface-border);
-    background: color-mix(in srgb, var(--post-surface) 88%, transparent);
+    border: 1px solid color-mix(in srgb, var(--surface-border) 78%, transparent);
+    background: linear-gradient(
+        155deg,
+        color-mix(in srgb, var(--post-surface) 70%, var(--surface-hover)),
+        color-mix(in srgb, var(--post-surface) 84%, var(--surface-hover))
+    );
 }
 
 .cover {
@@ -16,13 +20,21 @@
 
 .image {
     object-fit: cover;
-    filter: sepia(.32) saturate(.7) brightness(.76) contrast(1.04);
+    filter: var(--editorial-image-filter);
     transition: transform .45s ease, filter .45s ease;
 }
 
 .card:hover .image {
     transform: scale(1.035);
-    filter: sepia(.24) saturate(.78) brightness(.86) contrast(1.02);
+    filter: var(--editorial-image-hover-filter);
+}
+
+.card:not(.home) .image {
+    filter: sepia(.36) saturate(.68) brightness(.74) contrast(1.06);
+}
+
+.card:not(.home):hover .image {
+    filter: sepia(.36) saturate(.68) brightness(.74) contrast(1.06);
 }
 
 .copy {
@@ -37,9 +49,9 @@
     display: flex;
     flex-wrap: wrap;
     gap: 8px;
-    color: var(--softTextColor);
+    color: var(--textColor2);
     font-family: var(--serif);
-    font-size: 12px;
+    font-size: 13px;
     letter-spacing: .035em;
 }
 
@@ -71,8 +83,8 @@
 }
 
 .tags a {
-    color: var(--parchment);
-    font: 9px/1.4 var(--typewriter);
+    color: var(--textColor2);
+    font: 10px/1.45 var(--typewriter);
     letter-spacing: .03em;
     text-transform: uppercase;
 }
@@ -128,6 +140,11 @@
     aspect-ratio: 1.5;
 }
 
+.home .image,
+.home:hover .image {
+    filter: sepia(.36) saturate(.68) brightness(.74) contrast(1.06);
+}
+
 .home .copy {
     padding: 13px 14px 14px;
 }
@@ -135,6 +152,7 @@
 .home .title {
     margin: 6px 0 5px;
     font-size: clamp(20px, 1.8vw, 23px);
+    color: color-mix(in srgb, var(--textColor) 82%, var(--parchment));
 }
 
 .home .excerpt {
@@ -210,5 +228,11 @@
 
     .tags a {
         font-size: 11px;
+    }
+}
+
+@media (max-width: 640px) {
+    .home .readLink {
+        display: none;
     }
 }

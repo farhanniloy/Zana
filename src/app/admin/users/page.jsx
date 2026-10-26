@@ -1,12 +1,13 @@
 import React from 'react';
 import UserManager from '@/components/admin/UserManager';
+import styles from './usersPage.module.css';
 
 const Page = () => {
   return (
-    <div style={{padding:20}}>
-      <h1>Admin — Users</h1>
+    <main className={styles.container}>
+      <h1 className={styles.title}>Admin — Users</h1>
       <UserManager />
-    </div>
+    </main>
   );
 };
 

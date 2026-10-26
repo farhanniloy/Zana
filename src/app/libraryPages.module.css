@@ -159,7 +159,7 @@
 
 .playlistCover img {
     object-fit: cover;
-    filter: sepia(.35) saturate(.68) brightness(.72) contrast(1.08);
+    filter: var(--editorial-image-filter);
 }
 
 .playlistCoverGrain {

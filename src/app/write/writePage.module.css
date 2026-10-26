@@ -173,6 +173,18 @@
   font-size:12px;
 }
 
+.imageSources{
+  display:flex;
+  flex-wrap:wrap;
+  gap:8px;
+}
+
+.driveHelp{
+  margin:0;
+  color:var(--softTextColor);
+  font:12px/1.5 var(--serif);
+}
+
 .thumbnailUrlInput{
   box-sizing:border-box;
   width:100%;
@@ -233,6 +245,8 @@
   width:100%;
   height:100%;
   object-fit:cover;
+  filter:var(--editorial-image-filter);
+  transition:filter .25s ease;
 }
 
 .thumbnailPlaceholder{
@@ -659,6 +673,8 @@
    max-width:100%;
    height:auto;
    cursor:pointer;
+   filter:var(--editorial-image-filter);
+   transition:filter .25s ease;
 }
 
 .imageSelection{

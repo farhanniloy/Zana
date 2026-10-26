@@ -240,7 +240,7 @@ export default function SpotifyCompactPlayer({ url, title = "Listen on Spotify",
     if (!spotify) {
         return (
             <div className={styles.empty}>
-                <p>Choose a Spotify playlist in the listening room settings on <Link href="/playlist">the playlist page</Link>.</p>
+                <p>Choose a Spotify playlist in the listening room settings.</p>
                 <p>Your regular browsing and writing remain available without Spotify.</p>
             </div>
         );
@@ -257,12 +257,10 @@ export default function SpotifyCompactPlayer({ url, title = "Listen on Spotify",
         <div className={styles.listeningPlayer}>
             <span className={styles.nowPlaying}>
                 <span aria-hidden="true">◆</span>
-                <Link href="/playlist">
-                    {isPlaying ? `NOW PLAYING · ${trackName}` : "THE LISTENING ROOM · VIEW PLAYLIST ↗"}
-                </Link>
+                {isPlaying ? `NOW PLAYING · ${trackName}` : "THE LISTENING ROOM"}
             </span>
             <div className={styles.trackRow}>
-                <Link className={styles.trackArtwork} href="/playlist" aria-label="Open the listening room playlist">
+                <div className={styles.trackArtwork}>
                     <Image
                         src={artworkUrl}
                         alt={currentTrack?.artworkUrl
@@ -272,9 +270,9 @@ export default function SpotifyCompactPlayer({ url, title = "Listen on Spotify",
                         sizes="(max-width: 600px) 56px, 58px"
                         unoptimized={Boolean(metadata?.artworkUrl)}
                     />
-                </Link>
+                </div>
                 <div className={styles.trackDetails}>
-                    <h2 id="listening-title"><Link href="/playlist">{trackName}</Link></h2>
+                    <h2 id="listening-title">{trackName}</h2>
                     <p>{artistName}</p>
                     <div className={styles.trackControls}>
                         <button
@@ -318,10 +316,10 @@ export default function SpotifyCompactPlayer({ url, title = "Listen on Spotify",
                     </div>
                 </div>
                 <div className={styles.spotifyBrand}>
-                    <a href={spotify.openUrl} target="_blank" rel="noopener noreferrer">
-                        <span>Open on Spotify</span>
+                    <Link href="/playlist">
+                        <span>Open the Playlist</span>
                         <SiSpotify aria-hidden="true" />
-                    </a>
+                    </Link>
                     <span className={styles.brandWave} role="img" aria-label="Decorative Spotify waveform">
                         <SiSpotify aria-hidden="true" />
                         {[7, 12, 5, 16, 9, 14, 6, 12, 8, 15, 5, 10, 6, 12, 4, 9].map((height, index) => (

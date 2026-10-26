@@ -30,14 +30,14 @@
 }
 
 .articleHeader {
-    max-width: 760px;
-    margin-bottom: 30px;
+    width: 100%;
+    margin-bottom: 40px;
 }
 
 .title {
     margin: 0 0 12px;
     color: var(--textColor);
-    font: 500 clamp(40px, 5.2vw, 64px)/.98 var(--serif);
+    font: 700 38px/1.1 var(--serif);
     letter-spacing: -.035em;
     text-wrap: balance;
 }
@@ -83,7 +83,7 @@
 .image {
     object-fit: cover;
     object-position: center;
-    filter: sepia(.12) saturate(.82) contrast(1.04);
+    filter: var(--editorial-image-filter);
 }
 
 .content {
@@ -94,7 +94,7 @@
 .description {
     box-sizing: border-box;
     width: 100%;
-    max-width: 680px;
+    max-width: 100%;
     min-width: 0;
     height: auto;
     margin: 0 auto;
@@ -102,9 +102,9 @@
     overflow: visible;
     color: var(--newTextColor);
     font-family: var(--serif);
-    font-size: 19px;
+    font-size: clamp(19px, 1.5vw, 21px);
     font-weight: 400;
-    line-height: 1.82;
+    line-height: 1.78;
     letter-spacing: 0;
     text-align: left;
     white-space: pre-wrap;
@@ -252,6 +252,9 @@
     margin: 0;
     vertical-align: middle;
     object-fit: contain;
+    border: 1px solid color-mix(in srgb, var(--surface-border) 72%, transparent);
+    filter: var(--editorial-image-filter);
+    box-shadow: 0 8px 24px rgba(12, 8, 5, .2);
 }
 
 .description .ql-video,
@@ -339,7 +342,8 @@
     flex-wrap: wrap;
     align-items: baseline;
     gap: 8px;
-    width: min(100%, 680px);
+    width: 100%;
+    max-width: 100%;
     margin: 28px auto 0;
     color: var(--softTextColor);
     font: 12px/1.5 var(--typewriter);
@@ -371,7 +375,8 @@
     display: grid;
     grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
     column-gap: 28px;
-    width: min(100%, 680px);
+    width: 100%;
+    max-width: 100%;
     margin: 54px auto 0;
     padding: 20px 0 18px;
     border-top: 1px solid var(--surface-border);
@@ -438,11 +443,7 @@
     }
 
     .articleHeader {
-        margin-bottom: 22px;
-    }
-
-    .title {
-        font-size: clamp(36px, 9vw, 46px);
+        margin-bottom: 32px;
     }
 
     .articleMeta {
@@ -460,8 +461,8 @@
 
     .description {
         padding-top: 24px;
-        font-size: 17px;
-        line-height: 1.74;
+        font-size: 19px;
+        line-height: 1.72;
     }
 
     .tags {

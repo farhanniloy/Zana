@@ -108,7 +108,7 @@
 
 .portrait img {
     object-fit: cover;
-    filter: sepia(.5) contrast(.95) brightness(.85);
+    filter: var(--editorial-image-filter);
 }
 
 .portrait span {

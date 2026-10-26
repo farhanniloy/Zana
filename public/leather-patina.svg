@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <filter id="leatherPatina" filterUnits="userSpaceOnUse" x="0" y="0" width="512" height="512">
+    <feTurbulence type="fractalNoise" baseFrequency=".009 .014" numOctaves="2" stitchTiles="stitch" seed="29" result="patina"/>
+    <feTurbulence type="fractalNoise" baseFrequency=".055 .08" numOctaves="3" stitchTiles="stitch" seed="11" result="grain"/>
+    <feTurbulence type="fractalNoise" baseFrequency=".17 .24" numOctaves="3" stitchTiles="stitch" seed="43" result="pores"/>
+    <feDisplacementMap in="patina" in2="grain" scale="34" xChannelSelector="R" yChannelSelector="G" result="wornPatches"/>
+    <feBlend in="wornPatches" in2="grain" mode="soft-light" result="scuffedLeather"/>
+    <feBlend in="scuffedLeather" in2="pores" mode="soft-light" result="leatherTexture"/>
+    <feColorMatrix in="leatherTexture" type="matrix" values="
+      0 0 0 0 .64
+      0 0 0 0 .43
+      0 0 0 0 .24
+      .4 .4 .4 0 -.42"/>
+  </filter>
+  <path filter="url(#leatherPatina)" d="M0 0h512v512H0z"/>
+</svg>

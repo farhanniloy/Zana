@@ -29,3 +29,18 @@ export function resolveSpotifyUrl(value) {
         return null;
     }
 }
+
+export function isSpotifyArtworkUrl(value) {
+    if (typeof value !== "string") return false;
+
+    try {
+        const url = new URL(value);
+        const hostname = url.hostname.toLowerCase();
+        const isSpotifyCdn = /^image-cdn-[a-z0-9-]+\.spotifycdn\.com$/.test(hostname);
+        const isScdn = ["i.scdn.co", "mosaic.scdn.co"].includes(hostname);
+
+        return url.protocol === "https:" && !url.username && !url.password && (isSpotifyCdn || isScdn);
+    } catch {
+        return false;
+    }
+}

@@ -68,6 +68,19 @@ rows:
 npm run db:local:setup
 ```
 
+To copy local posts, categories, comments, author display details, and About
+and playlist settings into an initialized PostgreSQL database, use its direct
+connection string and explicitly confirm the additive import:
+
+```bash
+DATABASE_URL='your-neon-direct-connection-string' \
+CONFIRM_LOCAL_CONTENT_IMPORT=yes npm run db:import-local
+```
+
+This does not import passwords, sessions, OAuth accounts, or credentials.
+Existing records in PostgreSQL are left unchanged. Review the target database
+carefully before running the import.
+
 ## Database and services
 
 When `DATABASE_URL` is not a PostgreSQL URL, the app uses the local SQLite

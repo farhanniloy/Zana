@@ -11,7 +11,8 @@
     "test:e2e": "playwright test",
     "seed": "node scripts/seed.js",
     "db:local:setup": "node scripts/setupLocalDb.mjs",
-    "seed:local": "node scripts/seedLocalDb.mjs"
+    "seed:local": "node scripts/seedLocalDb.mjs",
+    "db:import-local": "node scripts/importLocalContentToPostgres.mjs"
   },
   "dependencies": {
     "@auth/prisma-adapter": "^2.11.3",

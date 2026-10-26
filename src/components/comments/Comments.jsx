@@ -121,6 +121,7 @@ const Comments = ({ postSlug }) => {
                                         width={40}
                                         height={40}
                                         className={styles.image}
+                                        unoptimized
                                     />
                                 ) : item.avatar ? (
                                     <Image src={item.avatar} alt="" width={28} height={28} className={styles.image} unoptimized />
